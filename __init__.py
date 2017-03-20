@@ -1,4 +1,2 @@
 
-# from spif.py import spif
-
-#from readers import *
+# __init__.py for spif package root
