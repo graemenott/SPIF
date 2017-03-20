@@ -82,6 +82,7 @@ class Create(Write):
 
         def read_fin(self,fin):
             # Function to open and read raw data file
+            pass
 
 # ----------------------------------------------------------------------
 class Test():
@@ -140,6 +141,7 @@ def call(args):
             'instr':    List of instrument identifying strings
             'outfile':  Output SPIF file name. If not given then is
                         generated from inputs
+            'force_write': Boolean, True to overwrite existing SPIF
             'recurse':  Boolean, True to use recursive globbing
 
 
@@ -172,10 +174,25 @@ def call(args):
         infiles = [f for f in infiles[::] for i in args['instr']
                    if i in str(f)]
 
+    # Construct output filename if necessary
+    if args['outfile'] is None:
+        # Output filename built from common elements of input filenames
+        datestr = datetime.date.strftime(datetime.date.today(),'%Y%m%d_')
+        timestr = datetime.datetime.strftime(datetime.datetime.now(),
+                                             '-%H%M.spif')
+        instr_str = ''.join(sorted(args['instr']))
+        outfile = Path(datestr+instr_str+timestr)
+    else:
+        outfile = Path(args['outfile'])
+
+        if outfile.is_file() is True:
+            print('\nOutput file already exists;',
+                  '  {0}'.format(str(outfile)),
+                  'Use -f to overwrite',sep='\n')
+            return None
+
 
     pdb.set_trace()
-
-
 
     if args['dummy'] is True:
         data = dummy()
@@ -254,6 +271,10 @@ if __name__=='__main__':
                         help='Explicitly give output path/filename. ' +\
                         'If not given then filename is based on ' +\
                         'that of input file/s.')
+    parser.add_argument('-f', '--force', action='store_true',
+                        dest='force_write', default=False,
+                        help='Allow an existing outfile to be over-' +\
+                        'written.')
     parser.add_argument('-d', '--dummy', action='store_true',
                         dest='dummy', default=False,
                         help='Use dummy raw data dictionary to ' +\
