@@ -57,38 +57,89 @@ class Write():
 
 
 
-
 class Append(Write):
-        """
-        Sub-class of Write that appends data into an existing SPIF file.
-        Additional metadata etc is not required.
-        """
+    """
+    Sub-class of Write that appends data into an existing SPIF file.
+    Additional metadata etc is not required.
+    """
+    pass
+    # def __init__(self,fin,fout=None):
 
-        def __str__(self):
+    #     # Open the hdf5 file
+    #     self.spif = h5py.File(fout,'a')
 
-            return 'Write.Append() not yet implemented.'
+    # def __str__(self):
+
+    #     return 'Write.Append() not yet implemented.'
 
 
 class Create(Write):
-        """
-        Sub-class of Write that creates a SPIF file and writes data into
-        that file. All required metadata must also be supplied.
+    """
+    Sub-class of Write that creates a SPIF file and writes data into
+    that file. All required metadata must also be supplied.
 
-        """
+    """
+    pass
+    # def __init__(self,fin=[],fout=None,dummy=False):
 
-        def __init__(self,fin=[],fout=None,dummy=False):
+    #     Write.__init__(self,fin,fout,dummy)
 
-            Write.__init__(self,fin,fout,dummy)
+    #     # Open the hdf5 file
+    #     self.spif = h5py.File(fout,'w')
 
-        def read_fin(self,fin):
-            # Function to open and read raw data file
-            pass
+
+
+
+
+
+
+    # def read_fin(self,fin):
+    #     # Function to open and read raw data file
+    #     pass
+
 
 # ----------------------------------------------------------------------
 class Test():
     """
 
     """
+
+
+# ----------------------------------------------------------------------
+def reader_map(instr):
+    """
+    Function to map raw data filename conventions to the appropriate
+    raw data reader. The filename string is a common substring of the
+    raw data filenames and is used to select data files with the
+        --instr=instr
+    option of __main__
+
+    Input args:
+        instr:      instrument identifying string
+
+    Returns:
+        reader:     function for reading raw data file
+
+    NOTE: There is a cludge here as there is no identifying string in
+    PADS2 CIP files to distinguish between gray and monoscale. The
+    number appended to the string Imagefile depends on the order they
+    occur in the PADS.ini and the number. Currently it is set up so that
+    grayscale is first and monoscale is second. The rmap dict may need
+    to be changed for certain set ups.
+    """
+
+    rmap = {dmt.CIPgs(ver=3):   ['CIP Grayscale'],
+            dmt.CIP(ver=3):     ['CIP'],
+            dmt.CIPgs(ver=2):   ['Imagefile'],
+            dmt.CIP(ver=2):     ['Imagefile2'],
+            spec.twoDS:  [],
+            spec.CPI:    [],
+            spec.HVPS:   []}
+
+    for k,v in rmap.items():
+        if instr in v:
+            return k
+
 
 # ----------------------------------------------------------------------
 def dummy():
@@ -118,13 +169,44 @@ def test():
 
     """
 # ----------------------------------------------------------------------
-def write():
+def write(fin,instr,fout):
     """
     Shorthand function to allow user to write data into a SPIF file
     with;
         spif.write(f)
 
+    Input args:
+        fin     list of data filenames to read in. May either be
+                list of strings or pathlib path objects
+        instr   list of instrument id strings associated with each fin
+                Thus len(fin) == len(instr)
+        fout    filename of output SPIF file. May either be string
+                or pathlib path object
     """
+
+
+    """
+    Create spif file
+    Loop through each of the file names
+        Call reader until EOF returned
+            Returns some data dict
+            Create group if required
+            Write data dict into spif, append or overwite
+    """
+
+    with h5py.File(fout, 'w') as spif:
+
+        for f,i in zip(fin,instr):
+            # Determine correct reader
+            reader = reader_map(i)
+
+
+
+        dset = f.create_dataset(DATASET, data=0)
+        dset.attrs.create(ATTRIBUTE, wdata, dtype=dtype)
+
+
+
 
 # ----------------------------------------------------------------------
 def call(args):
@@ -150,7 +232,7 @@ def call(args):
 
     # Convert glob/s to list of discrete files
     # Path also removes any non-existant filesnames
-    path_obj = Path('.')
+#    path_obj = Path('.')
     if args['recurse'] is True:
         path_mod = '**/'
     else:
@@ -159,8 +241,10 @@ def call(args):
     infiles = []
     for f in args['files']:
         # Create a list of Path objects
-        infiles_ = [f_ for f_ in path_obj.glob(path_mod+f) if f_.exists()]
-        infiles.extend(infiles_)
+        path = Path(f)
+        infiles_ = [f_ for f_ in path.parents[0].glob(path_mod+path.name)
+                    if f_.exists()]
+        infiles.extend(sorted(infiles_))
 
     if len(infiles) == 0:
         print('\nNo valid input files.')
@@ -170,9 +254,14 @@ def call(args):
     # Currently this involves searching for a instr string within the
     # filename only. Bit crude.
     if len(args['instr']) != 0:
+        pdb.set_trace()
+        fstr = [(f,i) for f in infiles[::]
+                for i in args['instr'] if i in str(f)]
 
-        infiles = [f for f in infiles[::] for i in args['instr']
-                   if i in str(f)]
+        # Create two lists of input filename strings and associated
+        # instrument id string
+        infiles, instr_strs = zip(*fstr)
+
 
     # Construct output filename if necessary
     if args['outfile'] is None:
