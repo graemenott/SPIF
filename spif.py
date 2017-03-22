@@ -26,15 +26,22 @@ import pdb
 default_root = {
     'title': 'SPIF-Single Particle Image Format',
     'institution': 'SPIF Working Group',
-    'source': 'version 0.1',
+    'source': 'spif.py',
     'references': '../docs/SPIF_definition.pdf',
-    'history': datetime.datetime.now(tz=pytz.utc),
-    # NOTE: pytz probably not the best way to include tz info.
-    # Fine for UTC.
-    'comment': [datetime.datetime.now(tz=pytz.utc),
-                'Initial implementation',''],
-    'project': None,
-    'start_date': None}
+    'history': datetime.datetime.strftime(datetime.datetime.now(tz=pytz.utc),
+                                          '%Y-%m-%dT%H:%M%z'),
+    # NOTE: pytz probably not the best way to include tz info, ok for UTC.
+    # for v3.6 can use datetime.datetime.isoformat(x,timespec='minutes')
+    'comment': '{t}: {c}'.format(
+             t=datetime.datetime.strftime(datetime.datetime.now(tz=pytz.utc),
+                                        '%Y-%m-%dT%H:%M%z'),
+             c='initial implementation'),
+    # Implement this by reading a file changelog
+    'spif_version': '0.1dev',
+    'hdf5_version': h5py.version.hdf5_version,
+    'h5py_version': h5py.version.version,
+    'project': '',      # ??
+    'start_date': ''}   # ??
 
 
 
@@ -109,10 +116,10 @@ class Test():
 def reader_map(instr):
     """
     Function to map raw data filename conventions to the appropriate
-    raw data reader. The filename string is a common substring of the
+    raw data reader. The instr string is a common substring of the
     raw data filenames and is used to select data files with the
-        --instr=instr
-    option of __main__
+    --instr=instr option of __main__(). Due to overlaps in the instr
+    strings, instr must be matched exactly.
 
     Input args:
         instr:      instrument identifying string
@@ -128,14 +135,19 @@ def reader_map(instr):
     to be changed for certain set ups.
     """
 
-    rmap = {dmt.CIPgs(ver=3):   ['CIP Grayscale'],
-            dmt.CIP(ver=3):     ['CIP'],
-            dmt.CIPgs(ver=2):   ['Imagefile'],
-            dmt.CIP(ver=2):     ['Imagefile2'],
-            spec.twoDS:  [],
-            spec.CPI:    [],
-            spec.HVPS:   []}
+    # Each list of strings can have many instr strings. However, each
+    # of these strings must be unique within rmap.
+    rmap = {readers.CIPgs_PADS3:    ['CIP Grayscale'],
+            readers.CIP_PADS3:      ['CIP'],
+            readers.CIPgs_PADS2:    ['Imagefile'],
+            readers.CIP_PADS2:      ['Imagefile2'],
+            readers.twoDS:          [],
+            readers.CPI:            [],
+            readers.HVPS:           [],
+            readers.dummy_CIPgs:    ['dummy']}
 
+    # Search rmap dictionary for exact match to instr string.
+    # Will only return the first instance.
     for k,v in rmap.items():
         if instr in v:
             return k
@@ -148,10 +160,11 @@ def dummy():
     file for testing purposes.
     """
 
-    fred = readers.dummy_CIPgs()
 
-    pdb.set_trace()
-    return readers.dummy_CIPgs()
+    # write(fin,'dummy',):
+
+    # pdb.set_trace()
+    # return readers.dummy_CIPgs()
 
 # ----------------------------------------------------------------------
 def read():
@@ -194,16 +207,196 @@ def write(fin,instr,fout):
             Write data dict into spif, append or overwite
     """
 
-    with h5py.File(fout, 'w') as spif:
+    # def walk_dict(d,g):
+    #     # Create list of group variable names
+    #     eof = False
+    #     for k, v in d.items():
+    #         pdb.set_trace()
+    #         if isinstance(v, dict):
+    #         # Create a group based on current v
+    #             g.create_group(k)
+
+    #             walk_dict(v,g)
+    #         else:
+    #             print("{0} : {1}".format(k, v))
+
+    #             if k == 'value':
+    #                 # If k is the key 'value' then write this to the
+    #                 # h5 file as a dataset with associated attributes.
+    #                 g.create_dataset(str(g), data=v)#, dtype=None)
+    #             elif k == 'EOF':
+    #                 # End of File maker
+    #                 eof = True
+    #             else:
+    #                 g.attrs[k] = v
+
+    #     return eof
+
+    """
+    NOTE:
+        Read a (dataset) scalar:
+            spif['1CIP Grayscale/channels'][()]
+
+        Read an attribute:
+            spif.attrs['title']
+
+        Print off all groups:
+            fred = lambda x: print(x)
+            spif.visit(fred)
+    """
+
+    test_dict = {
+                'rootname': 'fred',
+                'rootnumber': 0,
+                'root': {
+                    'group1name': 'bob',
+                    'group1number': 1,
+                    'group1': {
+                        'data1': {'value': [1,2,3,4,5],
+                                 'comment': 'Nothing to see here'},
+                        'group2name': 'Alice',
+                        'group2number': 2,
+                        'group2': {
+                            'data2': {'value': [10,20,30,40],
+                                      'comment': 'Nothing else'}}}}}
+
+    print_x = lambda x: print(x)
+
+    def walk_dict(d,g):
+        # Create list of group variable names
+
+        #pdb.set_trace()
+        #eof = False
+        print ('\nwalk_dict(d,{})\n'.format(g))
+
+        for k, v in d.items():
+            #pdb.set_trace()
+            print ('** for k={} loop:'.format(k))
+            if isinstance(v, dict):
+                # Create a group based on current k string
+#                print(' g={}'.format(g),end='')
+#                g += k+'/'
+#                print('  ->  g={}\n'.format(g))
+                walk_dict(v,g+k+'/')
+            else:
+                # Strip last variable off g as the variables are
+                # presented as groups in the data dictionary
+                g_ = g[:-1].rsplit('/',1)[0]
+
+#                print("  {0}{1}: {2}".format(g, k, v))
+                #pdb.set_trace()
+
+                # Create group if required
+                #### Should this be moved before recursive call?
+                if g[:-1] != '' and spif.get(g[:-1]) is None:
+                    print(' Adding group {}'.format(g[:-1]))
+                    spif.create_group(g[:-1])
+                    spif.visit(print_x)
+                    print()
+
+                if k == 'value':
+                    # If k is the key 'value' then write this to the
+                    # h5 file as a dataset with associated attributes.
+
+                    #### Can this be removed? ####
+                    #### Must differentiate between variables and attributes
+                    #### with 'value', even in root (eg changelog) ####
+
+                    if g[:-1] == '':
+                        # Attempt to write dataset directly into root of
+                        # spif file. In this case use the k value
+                        key = k
+                    else:
+                        # Remove trailing '/' from g
+                        key = g[:-1]
+
+                    if v is None:
+                        if '_FillValue' in d:
+                            # value not given so use _FillValue
+                            spif.create_dataset(key, data=d['_FillValue'])
+                        else:
+                            # value not given so use empty string
+                            spif.create_dataset(key, data='')
+                    else:
+                        pdb.set_trace()
+                        spif.create_dataset(key, data=v)#, dtype=None)
+
+                elif k == 'ancillary_variables':
+                    # Create link to another variable
+                    # What happens if it hasn't been created?
+                    print('linkage?')
+                elif k == 'EOF':
+                    # End of File maker
+                    eof = True
+                else:
+                    # Write attributes for this dataset
+                    # Convert any None entries into emptry strings
+                    print(' Adding attribute: {}'.format(k))
+                    #pdb.set_trace()
+                    if g[:-1] == '':
+                        # Write attribute into root of SPIF file
+                        if v is None:
+                            spif.attrs[k] = ''
+                        else:
+                            spif.attrs[k] = v
+                        print([k for k in spif.attrs])
+                    else:
+                        # Write attribute into group
+                        if v is None:
+                            spif[g[:-1]].attrs[k] = ''
+                        else:
+                            spif[g[:-1]].attrs[k] = v
+
+                        print([k for k in spif[g[:-1]].attrs])
+                    print()
+
+        #print ('\ndel {}\n'.format(g))
+        #del g
+        #pdb.set_trace()
+
+
+
+        return
+
+
+    # Create a fixed length ascii dtype from string x
+    type_S = lambda x: 'S' + str(len(x))
+    # Create a None dtype
+    type_N = lambda x: None
+
+
+
+    with h5py.File(str(fout), 'w') as spif:
+
+        # Create root and write default root attributes
+
+        for k,v in default_root.items():
+            spif.attrs[k] = v
 
         for f,i in zip(fin,instr):
-            # Determine correct reader
+            # Loop through each input file and write into same spif file
+
+            pdb.set_trace()
+
+            # Determine correct reader function
             reader = reader_map(i)
 
+            while True:
+                # Read multiple data dictionaries from reader as required
 
+                data = reader()
 
-        dset = f.create_dataset(DATASET, data=0)
-        dset.attrs.create(ATTRIBUTE, wdata, dtype=dtype)
+                # Create root group and write metadata into root
+                eof = False
+                pdb.set_trace()
+                #walk_dict(data,'')
+                walk_dict(test_dict,'')
+
+                if eof is True:
+                    break
+
+        pdb.set_trace()
+#         dset.attrs.create(ATTRIBUTE, wdata, dtype=dtype)
 
 
 
@@ -246,22 +439,32 @@ def call(args):
                     if f_.exists()]
         infiles.extend(sorted(infiles_))
 
-    if len(infiles) == 0:
+    if len(infiles) == 0 and args['dummy'] is False:
         print('\nNo valid input files.')
         return None
 
     # Remove any files for instruments that are not required
     # Currently this involves searching for a instr string within the
     # filename only. Bit crude.
-    if len(args['instr']) != 0:
-        pdb.set_trace()
+    if len(args['instr']) != 0 and args['dummy'] is False:
+
         fstr = [(f,i) for f in infiles[::]
                 for i in args['instr'] if i in str(f)]
 
         # Create two lists of input filename strings and associated
         # instrument id string
-        infiles, instr_strs = zip(*fstr)
+        if len(fstr) == 0:
+            infiles = []
+            instr_strs = []
+        else:
+            infiles, instr_strs = zip(*fstr)
 
+    # Create dummy instrument if required.
+    if args['dummy'] is True:
+        args['instr'] = ['dummy']
+        args['write'] = True
+        infiles = ['']
+        instr_strs = ['dummy']
 
     # Construct output filename if necessary
     if args['outfile'] is None:
@@ -283,10 +486,9 @@ def call(args):
 
     pdb.set_trace()
 
-    if args['dummy'] is True:
-        data = dummy()
+    if args['write'] is True:
 
-
+        write(infiles, instr_strs, outfile)
 
 
 # ----------------------------------------------------------------------
