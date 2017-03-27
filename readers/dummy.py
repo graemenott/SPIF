@@ -5,10 +5,10 @@ python:   3.4
 author:   Graeme Nott
 email:    graeme.nott@faam.ac.uk
 created:  Mar 2017
-modified: 
+modified:
 
 Functions that act as dummy readers of different instruments. That is they
-don't read actual data they produce a dictionary of artificial data to pass to 
+don't read actual data they produce a dictionary of artificial data to pass to
 spif.py
 
 notes:
@@ -33,10 +33,7 @@ def dummy_CIPgs():
     p = os.path.abspath(__file__)
     particle_file = os.path.join(os.path.dirname(p),'CIP15GS_ImageData.csv')
 
-    pdb.set_trace()
-
     # Load particle image data
-
     particle_image = np.genfromtxt(particle_file,
                                    delimiter=',',dtype=int)
 
@@ -44,7 +41,6 @@ def dummy_CIPgs():
     # Define an example instrument group for DMT CIP15 grayscale data
     # Create top-level dictionary for the CIP
     d = {'1CIP Grayscale': {}}
-
 
     # Create root attributes for this instrument group
     d['1CIP Grayscale'] = {
@@ -156,6 +152,9 @@ def dummy_CIPgs():
             '_FillValue': -9999.,
             'comment': None}}
         # etc
+
+    # Indicate to spif.py that there is no more information to come.
+    d['1CIP Grayscale']['EOF'] = True
 
     return d
 
