@@ -195,45 +195,15 @@ def write(fin,instr,fout):
                 Thus len(fin) == len(instr)
         fout    filename of output SPIF file. May either be string
                 or pathlib path object
-    """
 
-
-    """
     Create spif file
     Loop through each of the file names
         Call reader until EOF returned
             Returns some data dict
             Create group if required
             Write data dict into spif, append or overwite
-    """
 
-    # def walk_dict(d,g):
-    #     # Create list of group variable names
-    #     eof = False
-    #     for k, v in d.items():
-    #         pdb.set_trace()
-    #         if isinstance(v, dict):
-    #         # Create a group based on current v
-    #             g.create_group(k)
-
-    #             walk_dict(v,g)
-    #         else:
-    #             print("{0} : {1}".format(k, v))
-
-    #             if k == 'value':
-    #                 # If k is the key 'value' then write this to the
-    #                 # h5 file as a dataset with associated attributes.
-    #                 g.create_dataset(str(g), data=v)#, dtype=None)
-    #             elif k == 'EOF':
-    #                 # End of File maker
-    #                 eof = True
-    #             else:
-    #                 g.attrs[k] = v
-
-    #     return eof
-
-    """
-    NOTE:
+    NOTES:
         Read a (dataset) scalar:
             spif['1CIP Grayscale/channels'][()]
 
@@ -253,83 +223,117 @@ def write(fin,instr,fout):
                     'group1number': 1,
                     'group1': {
                         'data1': {'value': [1,2,3,4,5],
-                                 'comment': 'Nothing to see here'},
+                                 'comment': 'Nothing to see here',
+                                 'EOF': True},
                         'group2name': 'Alice',
                         'group2number': 2,
                         'group2': {
                             'data2': {'value': [10,20,30,40],
                                       'comment': 'Nothing else'}}}}}
 
+    global endof_data_stream
+
     print_x = lambda x: print(x)
 
-    def walk_dict(d,g):
-        # Create list of group variable names
+    def walk_data_dict(d,g):
+        """
+        Function to recursively walk through an arbitrary data
+        dictionary and create equivalent spif data structures.
 
+        Input args:
+            d:      data dictionary
+            g:      string placeholder for depth within recursion
+
+        NOTE:   This function writes directly to the h5 file, 'spif', as
+                defined in the parent function.
+
+        *** This function will only write to a file, it will not append
+            data to an existing file. It will fail badly.
+            This needs to be changed.
+
+        """
+        # Allow writing to the variable endof_data_stream
+        global endof_data_stream
         #pdb.set_trace()
-        #eof = False
-        print ('\nwalk_dict(d,{})\n'.format(g))
+
+#        print ('\nwalk_dict(d,{})\n'.format(g))
 
         for k, v in d.items():
-            #pdb.set_trace()
-            print ('** for k={} loop:'.format(k))
-            if isinstance(v, dict):
-                # Create a group based on current k string
-#                print(' g={}'.format(g),end='')
-#                g += k+'/'
-#                print('  ->  g={}\n'.format(g))
-                walk_dict(v,g+k+'/')
-            else:
-                # Strip last variable off g as the variables are
-                # presented as groups in the data dictionary
-                g_ = g[:-1].rsplit('/',1)[0]
 
-#                print("  {0}{1}: {2}".format(g, k, v))
+#            print ('** for k={} loop:'.format(k))
+            if isinstance(v, dict) and 'value' not in v:
+                # This subdictionary is converted into a h5 group
+
+                # Create a group based on current k string
+                # Need to seperate root and non-root instances (?)
+                if g == '' and spif.get(k) is None:
+                    print(' Adding group {}'.format(g+k+'/'))
+                    spif.create_group(k)
+                elif spif.get(k) is None:
+                    print(' Adding group {}'.format(g+k+'/'))
+                    spif[g].create_group(k)
+                else:
+                    print(' Existant group {}'.format(g+k+'/'))
+                spif.visit(print_x)
+                print()
+
+                # Recurse into sub-dictionary k
+                walk_data_dict(v,g+k+'/')
+
+            elif isinstance(v, dict):
+                # Item will not be converted into h5 group.
+                # If isinstance(v, dict) is True -> convert to Dataset
+
+                print(' Adding dataset {}'.format(g+k))
                 #pdb.set_trace()
 
-                # Create group if required
-                #### Should this be moved before recursive call?
-                if g[:-1] != '' and spif.get(g[:-1]) is None:
-                    print(' Adding group {}'.format(g[:-1]))
-                    spif.create_group(g[:-1])
-                    spif.visit(print_x)
-                    print()
+                if g[:-1] == '':
+                    # Attempt to write dataset directly into root of
+                    # spif file. In this case use the k value
+                    key = k
+                else:
+                    # Remove trailing '/' from g
+                    key = g+k
 
-                if k == 'value':
-                    # If k is the key 'value' then write this to the
-                    # h5 file as a dataset with associated attributes.
-
-                    #### Can this be removed? ####
-                    #### Must differentiate between variables and attributes
-                    #### with 'value', even in root (eg changelog) ####
-
-                    if g[:-1] == '':
-                        # Attempt to write dataset directly into root of
-                        # spif file. In this case use the k value
-                        key = k
+                if v is None:
+                    if '_FillValue' in d:
+                        # value not given so use _FillValue
+                        spif.create_dataset(key, data=d['_FillValue'])
                     else:
-                        # Remove trailing '/' from g
-                        key = g[:-1]
+                        # value not given so use empty string
+                        spif.create_dataset(key, data='')
+                else:
+                    #pdb.set_trace()
+                    spif.create_dataset(key, data=v['value'])#, dtype=None)
 
-                    if v is None:
-                        if '_FillValue' in d:
-                            # value not given so use _FillValue
-                            spif.create_dataset(key, data=d['_FillValue'])
-                        else:
-                            # value not given so use empty string
-                            spif.create_dataset(key, data='')
-                    else:
-                        pdb.set_trace()
-                        spif.create_dataset(key, data=v)#, dtype=None)
+#                spif.create_dataset(g+k, data=v)
 
-                elif k == 'ancillary_variables':
+                # Recurse into Dataset sub-dict and create attributes
+                walk_data_dict(v,g+k+'/')
+
+            elif k == 'value':
+                # dictionaries with 'value' attribute have already been
+                # converted to a dataset so can ignore these
+                #print('Ignore this!')
+                continue
+
+            else:
+                # If isinstance(v, dict) is False -> convert to Attribute
+                # Create attributes
+
+                print("  {0}{1}: {2}".format(g, k, v))
+                #pdb.set_trace()
+
+                if k == 'ancillary_variables':
                     # Create link to another variable
                     # What happens if it hasn't been created?
                     print('linkage?')
-                elif k == 'EOF':
-                    # End of File maker
-                    eof = True
+                elif k.upper() == 'EOF':
+                    # End of data file maker
+                    endof_data_stream = v
+                    print('endof_data_stream is',endof_data_stream)
                 else:
-                    # Write attributes for this dataset
+                    # Write attributes for this dataset or group
                     # Convert any None entries into emptry strings
                     print(' Adding attribute: {}'.format(k))
                     #pdb.set_trace()
@@ -350,20 +354,7 @@ def write(fin,instr,fout):
                         print([k for k in spif[g[:-1]].attrs])
                     print()
 
-        #print ('\ndel {}\n'.format(g))
-        #del g
-        #pdb.set_trace()
-
-
-
         return
-
-
-    # Create a fixed length ascii dtype from string x
-    type_S = lambda x: 'S' + str(len(x))
-    # Create a None dtype
-    type_N = lambda x: None
-
 
 
     with h5py.File(str(fout), 'w') as spif:
@@ -376,28 +367,21 @@ def write(fin,instr,fout):
         for f,i in zip(fin,instr):
             # Loop through each input file and write into same spif file
 
-            pdb.set_trace()
-
             # Determine correct reader function
             reader = reader_map(i)
 
-            while True:
+            # Variable marks the end of a stream of data from a single file
+            endof_data_stream = False
+            while endof_data_stream is False:
                 # Read multiple data dictionaries from reader as required
-
                 data = reader()
 
-                # Create root group and write metadata into root
-                eof = False
-                pdb.set_trace()
-                #walk_dict(data,'')
-                walk_dict(test_dict,'')
+                # Walk through data dictionary and write to open spif file
+                walk_data_dict(data,'')
+#                walk_data_dict(test_dict,'')
 
-                if eof is True:
-                    break
-
-        pdb.set_trace()
-#         dset.attrs.create(ATTRIBUTE, wdata, dtype=dtype)
-
+    # Finished reading all input files and spif output file is closed
+    return
 
 
 
