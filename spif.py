@@ -154,33 +154,30 @@ def reader_map(instr):
 
 
 # ----------------------------------------------------------------------
-def dummy():
-    """
-    Function to create a dummy data dictionary for writing to a SPIF
-    file for testing purposes.
-    """
-
-
-    # write(fin,'dummy',):
-
-    # pdb.set_trace()
-    # return readers.dummy_CIPgs()
-
-# ----------------------------------------------------------------------
-def read():
+def read(fin):
     """
     Shorthand function to allow user to read SPIF files with;
         spif.read(f)
 
     """
+
+    print('\nNot yet implemented\n')
+
+    return
+
 # ----------------------------------------------------------------------
-def test():
+def test(fin):
     """
     Shorthand function to allow user to test whether the input SPIF file
     meets definted standards for the format with;
         spif.test()
 
     """
+
+    test_d = read(fin)
+
+    return
+
 # ----------------------------------------------------------------------
 def write(fin,instr,fout):
     """
@@ -215,22 +212,6 @@ def write(fin,instr,fout):
             spif.visit(fred)
     """
 
-    test_dict = {
-                'rootname': 'fred',
-                'rootnumber': 0,
-                'root': {
-                    'group1name': 'bob',
-                    'group1number': 1,
-                    'group1': {
-                        'data1': {'value': [1,2,3,4,5],
-                                 'comment': 'Nothing to see here',
-                                 'EOF': True},
-                        'group2name': 'Alice',
-                        'group2number': 2,
-                        'group2': {
-                            'data2': {'value': [10,20,30,40],
-                                      'comment': 'Nothing else'}}}}}
-
     global endof_data_stream
 
     print_x = lambda x: print(x)
@@ -261,21 +242,24 @@ def write(fin,instr,fout):
         for k, v in d.items():
 
 #            print ('** for k={} loop:'.format(k))
-            if isinstance(v, dict) and 'value' not in v:
+
+            if isinstance(v, dict) and \
+               'value' not in [v_.lower() for v_ in v]:
                 # This subdictionary is converted into a h5 group
 
                 # Create a group based on current k string
                 # Need to seperate root and non-root instances (?)
                 if g == '' and spif.get(k) is None:
-                    print(' Adding group {}'.format(g+k+'/'))
+                    #print(' Adding group {}'.format(g+k+'/'))
                     spif.create_group(k)
                 elif spif.get(k) is None:
-                    print(' Adding group {}'.format(g+k+'/'))
+                    #print(' Adding group {}'.format(g+k+'/'))
                     spif[g].create_group(k)
                 else:
-                    print(' Existant group {}'.format(g+k+'/'))
-                spif.visit(print_x)
-                print()
+                    # Group already exists so do nothing
+                    #print(' Existant group {}'.format(g+k+'/'))
+                    pass
+                #spif.visit(print_x)
 
                 # Recurse into sub-dictionary k
                 walk_data_dict(v,g+k+'/')
@@ -284,34 +268,32 @@ def write(fin,instr,fout):
                 # Item will not be converted into h5 group.
                 # If isinstance(v, dict) is True -> convert to Dataset
 
-                print(' Adding dataset {}'.format(g+k))
-                #pdb.set_trace()
+                #print(' Adding dataset {}'.format(g+k))
 
                 if g[:-1] == '':
                     # Attempt to write dataset directly into root of
                     # spif file. In this case use the k value
                     key = k
                 else:
-                    # Remove trailing '/' from g
                     key = g+k
 
-                if v is None:
-                    if '_FillValue' in d:
+                if v['value'] is None:
+                    if '_fillvalue' in [v_.lower() for v_ in v]:
                         # value not given so use _FillValue
-                        spif.create_dataset(key, data=d['_FillValue'])
+                        spif.create_dataset(key, data=v['_FillValue'])
+                    elif 'units' in [v_.lower() for v_ in v]:
+                        # If units are given then assume requires a number
+                        spif.create_dataset(key, data=np.nan)
                     else:
                         # value not given so use empty string
                         spif.create_dataset(key, data='')
                 else:
-                    #pdb.set_trace()
                     spif.create_dataset(key, data=v['value'])#, dtype=None)
-
-#                spif.create_dataset(g+k, data=v)
 
                 # Recurse into Dataset sub-dict and create attributes
                 walk_data_dict(v,g+k+'/')
 
-            elif k == 'value':
+            elif k.lower() == 'value':
                 # dictionaries with 'value' attribute have already been
                 # converted to a dataset so can ignore these
                 #print('Ignore this!')
@@ -321,29 +303,29 @@ def write(fin,instr,fout):
                 # If isinstance(v, dict) is False -> convert to Attribute
                 # Create attributes
 
-                print("  {0}{1}: {2}".format(g, k, v))
+                #print("  {0}{1}: {2}".format(g, k, v))
                 #pdb.set_trace()
 
-                if k == 'ancillary_variables':
+                if k.lower() == 'ancillary_variables':
                     # Create link to another variable
                     # What happens if it hasn't been created?
-                    print('linkage?')
+                    pass
                 elif k.upper() == 'EOF':
                     # End of data file maker
                     endof_data_stream = v
-                    print('endof_data_stream is',endof_data_stream)
+                    #print('endof_data_stream is',endof_data_stream)
                 else:
                     # Write attributes for this dataset or group
                     # Convert any None entries into emptry strings
-                    print(' Adding attribute: {}'.format(k))
-                    #pdb.set_trace()
+                    #print(' Adding attribute: {}'.format(k))
+
                     if g[:-1] == '':
                         # Write attribute into root of SPIF file
                         if v is None:
                             spif.attrs[k] = ''
                         else:
                             spif.attrs[k] = v
-                        print([k for k in spif.attrs])
+                        #print([k for k in spif.attrs])
                     else:
                         # Write attribute into group
                         if v is None:
@@ -351,8 +333,8 @@ def write(fin,instr,fout):
                         else:
                             spif[g[:-1]].attrs[k] = v
 
-                        print([k for k in spif[g[:-1]].attrs])
-                    print()
+                        #print([k for k in spif[g[:-1]].attrs])
+                    #print()
 
         return
 
@@ -364,8 +346,10 @@ def write(fin,instr,fout):
         for k,v in default_root.items():
             spif.attrs[k] = v
 
+        print('Reading...')
         for f,i in zip(fin,instr):
             # Loop through each input file and write into same spif file
+            print('\t{}'.format(f))
 
             # Determine correct reader function
             reader = reader_map(i)
@@ -378,8 +362,8 @@ def write(fin,instr,fout):
 
                 # Walk through data dictionary and write to open spif file
                 walk_data_dict(data,'')
-#                walk_data_dict(test_dict,'')
 
+        print('\nWritten:',str(fout))
     # Finished reading all input files and spif output file is closed
     return
 
@@ -467,12 +451,17 @@ def call(args):
                   'Use -f to overwrite',sep='\n')
             return None
 
-
-    pdb.set_trace()
-
     if args['write'] is True:
 
         write(infiles, instr_strs, outfile)
+
+    elif args['read'] is True:
+
+        read(infiles)
+
+    elif args['test'] is True:
+
+        test(infiles)
 
 
 # ----------------------------------------------------------------------
@@ -487,21 +476,24 @@ if __name__=='__main__':
     description = 'Program to produce, read, and test Single Particle'+\
                   ' Image Format (SPIF) files.\n {0}'.format(version)
     epilog = 'Usage examples.\n' +\
+             'Create a SPIF file with default filename based ' +\
+             'on dummy data;\n' +\
+             "$ python3 spif.py fred --dummy\n" +\
              'Create a SPIF file with default filename based on a '+\
-             'single instrument raw data file ;\n' +\
-             " $ python3 spif.py 'Imagefile_1CIP Grayscale_"+\
-             "20170215114606'\n"+\
+             'single instrument raw data file;\n' +\
+             " $ python3 spif.py 'Imagefile_1CIP Grayscale_" +\
+             "20170215114606'\n" +\
              'Create a SPIF file with a customised filename based ' +\
-             'on a single instrument raw data file ;\n' +\
-             " $ python3 spif.py 'Imagefile_1CIP Grayscale_"+\
+             'on a single instrument raw data file;\n' +\
+             " $ python3 spif.py 'Imagefile_1CIP Grayscale_" +\
              "20170215114606' -o outputfile.spif\n" +\
              'Create a SPIF file with default filename based on all ' +\
-             'raw data files from a single instrument ;' +\
+             'raw data files from a single instrument;\n' +\
              " $ python3 spif.py data_dir/ -i '1CIP Grayscale'\n" +\
              'Create a SPIF file with default filename based on all ' +\
-             'raw data files from two different instruments ;' +\
+             'raw data files from two different instruments;\n' +\
              " $ python3 spif.py data_dir/ -i '1CIP Grayscale' 4CIP\n"+\
-             'Read a SPIF file and return a pickle file;' +\
+             'Read a SPIF file and return a pickle file;\n' +\
              " $ python3 spif.py file.spif -r -o file.pickle\n"
 
     parser = argparse.ArgumentParser(usage=usage,
