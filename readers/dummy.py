@@ -7,13 +7,26 @@ email:    graeme.nott@faam.ac.uk
 created:  Mar 2017
 modified:
 
-Functions that act as dummy readers of different instruments. That is they
-don't read actual data they produce a dictionary of artificial data to pass to
-spif.py
+Functions that act as dummy readers of different instruments. That is
+they don't read actual data they produce a dictionary of artificial data
+to pass to spif.py. Full specifications for the spif dictionaries are
+contained in associated documentation; SPIF-Single Particle Image Format
+document.
 
-notes:
-All scalar strings will be stored with np.string_()
-All lists of strings will be stored with dtype='Sn' where n is the max length of the strings in the list
+Requirements, reserved keys, and writer behaviours:
+
+- For each dataset variable, the data is stored in an item with the key 'value'.
+- The 'ancillary_variables' key is used to link one dataset to another.
+This is usually a dataset of errors/uncertainties of a dataset. The
+value of this item should be the key of the linked dataset.
+- None values will be converted to the _FillValue if this attribute has
+been set for the dataset, numpy.nan for a dataset which has units (and
+thus is assumed to be a number), or an empty string otherwise.
+
+Notes:
+Currently all h5 dtypes are handled automatically. Thus the dtype of a
+dataset should be given explicitly in the numpy array.
+
 """
 import numpy as np
 import os.path
@@ -77,7 +90,7 @@ def dummy_CIPgs():
             'comment': "Manufacturer's nominal separation only"},
         'arm_seperation_err': {
             'value': None,
-            'long_name': 'Uncertainty of physical distance between probe arms',
+            'long_name':'Uncertainty of physical distance between probe arms',
             'units': 'millimetres',
             'comment': 'Uncertainty unknown'},
         'anti-shatter_tips': {
@@ -94,7 +107,7 @@ def dummy_CIPgs():
             'comment': None},
         'channels': {
             'value': 1,
-            'long_name': 'Number of measurement changes of probe',
+            'long_name': 'Number of measurement channels of probe',
             'comment': None}}
 
     # Define the core sub-dictionary for storing of 2D image data
