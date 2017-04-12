@@ -11,6 +11,9 @@ Program to create and read Single Particle Image Format (SPIF) files.
 
 """
 
+## Add paticle zero-time indicies for each particle
+
+
 import sys, os.path
 import datetime, pytz
 
@@ -84,6 +87,128 @@ def reader_map(instr):
     for k,v in rmap.items():
         if instr in v:
             return k
+
+
+
+# ----------------------------------------------------------------------
+class spif:
+    """
+    Class to define a spif object
+    """
+
+    def __init__(self, instr=''):
+        """
+        Create a new spif object which is defined by the instr string id
+        """
+        self.instr = instr
+
+        # Create a groups dictionary
+        self.groups = {'root': {}}
+
+
+    def __str__(self):
+
+        return 'spif object - {0}'.format(self.instr)
+
+
+    def set_attr(self,key,value,parent='root'):
+        """
+        Create a attribute of a group or variable with a given 
+        key,value pair. Any existing attribute is destroyed in the
+        process
+        """
+
+    def set_var(self,key,value,parent='root'):
+        """
+        Create a variable with a given key,value pair.
+        Any existing variable is destroyed in the process
+        """
+
+        # Use standard np functions to create, or append instead of a
+        # seperate append_var
+
+    def append_var(self,key,value,parent='root'):
+        """
+        Append value to an existing variable with designated key
+        If variable does not already exist then create on.
+        """
+
+    def get_allgroups(self):
+        """
+        Get all groups created as a dictionary
+        """
+
+        return self.groups
+
+    def get_group(self,group):
+        """
+        Get the contents of a given group
+        """
+
+    def get_attr(self,key,parent=)
+
+
+# ----------------------------------------------------------------------
+class group(spif):
+    """
+    Class to define a spif object group and the contents
+    """
+
+    def __init__(self,parent):
+        """
+        Initialisation of a sub-class for definition of groups and contents
+
+        parent is the class above
+        """
+        parent = self.parent
+
+        # Add this group of all_groups dictionary (necessary?)
+        # Initialise some lists of all attributes and variables in this group
+        attrs = []
+        vars = []
+
+
+   def set_attr(self,key,value,apply_to=self):
+        """
+        Create a attribute of a group or variable with a given 
+        key,value pair. Any existing attribute is destroyed in the
+        process
+        """
+
+        self.attrs.append(key)
+
+    def set_grp(self,key):
+        """
+        Create a subgroup within this group with name key
+        """
+
+        group = group
+    def set_var(self,key,value,):
+        """
+        Create a variable with a given key,value pair.
+        Any existing variable is destroyed in the process
+        """
+
+        # Use standard np functions to create, or append instead of a
+        # seperate append_var
+
+        self.vars.append(key)
+
+    def get_attr(self):
+
+
+# ----------------------------------------------------------------------
+def create(fin):
+    """
+    Shorthand function to allow user to read input files and create a 
+    spif object with;
+        spif.create(f)
+
+    """
+
+    print('\nNot yet implemented\n')
+
+    return
 
 
 # ----------------------------------------------------------------------
