@@ -25,8 +25,13 @@ import readers
 
 import pdb
 
+
+
+# Do some python version checking
+assert sys.version_info >= (3,4)
+
 # Define default root attributes of SPIF file
-default_root = {
+default_spif_attrib = {
     'title': 'SPIF-Single Particle Image Format',
     'institution': 'SPIF Working Group',
     'source': 'spif.py',
@@ -43,6 +48,10 @@ default_root = {
     'spif_version': '0.1dev',
     'hdf5_version': h5py.version.hdf5_version,
     'h5py_version': h5py.version.version,
+    'python_version': '{0}.{1}.{2}-{3}'.format(sys.version_info.major,
+                                               sys.version_info.minor,
+                                               sys.version_info.micro,
+                                               sys.version_info.releaselevel)
     'project': '',      # ??
     'start_date': ''}   # ??
 
@@ -93,59 +102,85 @@ def reader_map(instr):
 # ----------------------------------------------------------------------
 class spif:
     """
-    Class to define a spif object
+    Parent class to define spif objects. 
     """
 
     def __init__(self, instr=''):
         """
         Create a new spif object which is defined by the instr string id
         """
-        self.instr = instr
 
-        # Create a groups dictionary
-        self.groups = {'root': {}}
+        for k,v in default_spif_attrib.items():
+            setattr(self,k,v)
+
+        # String designation of root of spif
+        self.path = '/'
 
 
     def __str__(self):
+        """
+        Function prints out the structure of the spif object in human-readable
+        form. Sub-groups are marked with a double asterix.
+        """
 
-        return 'spif object - {0}'.format(self.instr)
+        # Create string of all attributes first
+        attrib_str = '\n'.join(
+            [' '+k for k,v in sorted(self.__dict__.items()) if
+             isinstance(v,spif) is False])
+
+        var_str = '\n'.join(
+            [' {}\t**'.format(k) for k,v in sorted(self.__dict__.items()) if
+             isinstance(v,spif) is True])
+
+        return '\n{0}\n{1}\n{2}\n'.format(self.path,attrib_str,var_str)
 
 
-    def set_attr(self,key,value,parent='root'):
+    def set_attr(self,key,value):
         """
         Create a attribute of a group or variable with a given 
         key,value pair. Any existing attribute is destroyed in the
         process
         """
+        setattr(self,key,value)
 
-    def set_var(self,key,value,parent='root'):
-        """
-        Create a variable with a given key,value pair.
-        Any existing variable is destroyed in the process
-        """
 
-        # Use standard np functions to create, or append instead of a
-        # seperate append_var
+    def get_group(self,name):
+        """
+        Returns the contents of a group as a dictionary
+        """
+        return getattr(self,name).__dict__
 
-    def append_var(self,key,value,parent='root'):
-        """
-        Append value to an existing variable with designated key
-        If variable does not already exist then create on.
-        """
 
-    def get_allgroups(self):
+    def set_group(self,name,kwargs=None):
         """
-        Get all groups created as a dictionary
+        Create a sub-group within the spif object
+        Creates an instance of the class group
         """
+        _tmp = group(self.path+name+'/',**kwargs)
+        setattr(self,name,_tmp)
 
-        return self.groups
 
-    def get_group(self,group):
+    def get_data(self,name,data_only=True):
         """
-        Get the contents of a given group
+        Function to return the data and attributes (if data_only is False)
+        from within a dataset instance
         """
+        dataset = getattr(self,name).__dict__
+        
+        if data_only is True:
+            return dataset['_data_']
+        else:
+            return dataset
 
-    def get_attr(self,key,parent=)
+
+    def set_data(self,name,data,kwargs=None):
+        """
+        Create a dataset within the spif object
+        Creates an instance of the dataset group
+        """
+        _tmp = dataset(self.path+name+'/',data,**kwargs)
+        setattr(self,name,_tmp)
+
 
 
 # ----------------------------------------------------------------------
@@ -154,47 +189,94 @@ class group(spif):
     Class to define a spif object group and the contents
     """
 
-    def __init__(self,parent):
+    def __init__(self,path,**grp_attrib):
         """
         Initialisation of a sub-class for definition of groups and contents
 
         parent is the class above
         """
-        parent = self.parent
+        # Create instrument root attributes
+        for k,v in grp_attrib.items():
+            setattr(self,k,v)
 
-        # Add this group of all_groups dictionary (necessary?)
-        # Initialise some lists of all attributes and variables in this group
-        attrs = []
-        vars = []
+        self.type = 'grp'
+        self.path = path
 
 
-   def set_attr(self,key,value,apply_to=self):
+class dataset(spif):
+    """
+    Class to define dataset objects
+    """
+
+    def __init__(self,path,data,**var_attrib):
         """
-        Create a attribute of a group or variable with a given 
-        key,value pair. Any existing attribute is destroyed in the
-        process
-        """
-
-        self.attrs.append(key)
-
-    def set_grp(self,key):
-        """
-        Create a subgroup within this group with name key
+        Initialisation of a sub-class for definition of variables and
+        associated attributes
         """
 
-        group = group
-    def set_var(self,key,value,):
+        # Write dataset data into instance
+        self.set_data(data) 
+
+        # Create variable attributes
+        for k,v in var_attrib.items():
+            setattr(self,k,v)
+
+        self.type = 'data'
+        self.path = path
+
+
+    def set_data(self,value):
         """
-        Create a variable with a given key,value pair.
-        Any existing variable is destroyed in the process
+        Create the data for the dataset. This is stored in an internal _data_
+        variable. Variable name chosen to minimise possibility of clash with
+        user-defined variable names
         """
 
-        # Use standard np functions to create, or append instead of a
-        # seperate append_var
+        self._data_ = value
 
-        self.vars.append(key)
 
-    def get_attr(self):
+        # def append(self,var_):
+        #     """
+        #     Function to append to an existing spifvar.
+        #         If this is an attribute then use string methods to append
+        #         If this is a variable then use native append for var type
+        #         If group then exit as this doesn't make any sense
+
+        #     Note that this function has been written for future-proofing.
+        #     Users should normally use inbuilt methods specific to the
+        #     variable type being used.
+        #     """
+
+        #     if self.type == 'grp':
+        #         return None
+        #     if self.type == 'attr':
+        #         self.var = self.var.join(', ' + var_)
+        #     elif self.type == 'var':
+        #         if type(self.var) == str:
+        #             # If string then make into a single element list of string
+        #             self.var = [self.var[:]]     
+        #         if type(self.var) == list:
+        #             # If list then append new element to end of list
+        #             try:
+        #                 # Assume that var_ is also an iterable
+        #                 self.var.extend(var_)
+        #             except TypeError:
+        #                 self.var.append(var_)                
+        #         if type(self.var) in [int,float]:
+        #             # If var is a scalar then create an array and append
+        #             self.var = np.atleast_1d(self.var).append(var_)
+        #         elif type(self.var) == np.ndarray:
+        #             # If var_ has the same dimension as self.var then expand
+        #             # first dimension. If this is not possible due to a 
+        #             # dimension mismatch then extend zeroth dimension.
+        #             try:
+        #                 self.var = np.stack((self.var[:],var_))
+        #             except ValueError as e:
+        #                 self.var = np.append(self.var[:],var_)
+        #     else:
+        #         return None
+                        
+
 
 
 # ----------------------------------------------------------------------
