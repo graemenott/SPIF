@@ -31,13 +31,13 @@ dataset should be given explicitly in the numpy array.
 import numpy as np
 import os.path
 
-from spif import spif
+import spif
 
 import pdb
 
 
 # Create a bare-bones object
-d = spif()
+d = spif.Spif()
 
 
 def dummy_CIPgs():
@@ -61,7 +61,7 @@ def dummy_CIPgs():
     d.eof = True
 
     # Create a group for CIP GS and populate instrument attributes
-    d.set_group('1CIP_Grayscale',
+    d.group('CIP_Grayscale1',
        {'instrument_long_name': 'Cloud Imaging Probe - Grayscale',
         'institution': 'Facility for Airborne Atmospheric Research (FAAM)',
         'reference': 'http://dropletmeasurement.com/products/airborne/CIP',
@@ -73,53 +73,53 @@ def dummy_CIPgs():
         'comment': 'CIP15-1 was mounted starboard upper-outer canister'})
 
     # Create variables for CIP GS
-    d.1CIP_Grayscale.set_data('pixels',
+    d.CIP_Grayscale1.dataset('pixels',
         np.arange(64, dtype=int),
         {'long_name': 'Vector of pixel numbers for CIP15',
              'comment': None})
-    d.1CIP_Grayscale.set_data('resolution',
+    d.CIP_Grayscale1.dataset('resolution',
         15.,
         {'long_name': 'Physical resolution of array pixels',
          'units': 'micrometres',
          'ancillary_variables': 'resolution_err',
          'comment': "Manufacturer's nominal resolution only"})
-    d.1CIP_Grayscale.set_data('resolution_err',
+    d.CIP_Grayscale1.dataset('resolution_err',
         None,
         {'long_name': 'Uncertainty of physical resolution of array pixels',
         'units': 'micrometres',
         'comment': 'Uncertainty unknown'})
-    d.1CIP_Grayscale.set_data('arm_seperation',
+    d.CIP_Grayscale1.dataset('arm_seperation',
          40.,
         {'long_name': 'Physical distance between probe arms',
         'units': 'millimetres',
         'ancillary_variables': 'arm_seperation_err',
         'comment': "Manufacturer's nominal separation only"})
-    d.1CIP_Grayscale.set_data('arm_seperation_err',
+    d.CIP_Grayscale1.dataset('arm_seperation_err',
         None,
         {'long_name':'Uncertainty of physical distance between probe arms',
         'units': 'millimetres',
         'comment': 'Uncertainty unknown'})
-    d.1CIP_Grayscale.set_data('anti-shatter_tips',
+    d.CIP_Grayscale1.dataset('anti-shatter_tips',
         True,
         {'long_name': 'Use of antishatter- or Korolev-tips on probe arms',
         'comment': None})
-    d.1CIP_Grayscale.set_data('bpp',
+    d.CIP_Grayscale1.dataset('bpp',
         2,
         {'long_name': 'Bits per pixel used in image data',
         'comment': None})
-    d.1CIP_Grayscale.set_data('thresholds',
+    d.CIP_Grayscale1.dataset('thresholds',
         np.array([0.25,0.5,0.75,1.],dtype=float),
         {'long_name': 'Threshold levels defined for each pixel value',
         'comment': None})
-    d.1CIP_Grayscale.set_data('channels',
+    d.CIP_Grayscale1.dataset('channels',
         1,
         {'long_name': 'Number of measurement channels of probe',
         'comment': None})
 
     # Create the core data group and populate
-    d.1CIP_Grayscale.set_group('core')
+    d.CIP_Grayscale1.group('core')
     
-    d.1CIP_Grayscale.core.set_data('particle_sec',
+    d.CIP_Grayscale1.core.dataset('particle_sec',
         np.asarray(particle_s, dtype=float),
         {'standard_name': 'time',
         'long_name': 'Particle arrival time in seconds',
@@ -128,21 +128,21 @@ def dummy_CIPgs():
         'strftime': '%F %T %Z',
         'ancillary_variables': 'particle_nsec',
         'comments': None})
-    d.1CIP_Grayscale.core.set_data('particle_nsec',
+    d.CIP_Grayscale1.core.dataset('particle_nsec',
         np.asarray(particle_ns, dtype=int),
         {'long_name': 'Fractional particle arrival time in nanoseconds',
         'timezone': 'UTC',
         'units': 'nanoseconds since particle_sec',
         'comments': 'Particle arrival time found with ' +\
                     'particle_sec + particle+nsec'})
-    d.1CIP_Grayscale.core.set_data('particle_image',
+    d.CIP_Grayscale1.core.dataset('particle_image',
         np.asarray(particle_image, dtype=int),
         {'long_name': 'Particle image array',
         '_FillValue': -9999.,
         'comment': None})
 
     # Create aux data group and populate
-    d.1CIP_Grayscale.core.set_group('aux',
+    d.CIP_Grayscale1.core.group('aux',
         {'Instrument': '0',
         'Instrument Type': 'CIP Grayscale',
         'Sample Time': '1 sec (1 Hz)',
@@ -151,7 +151,7 @@ def dummy_CIPgs():
         'Baud Rate': '57600',
         'Image Card #': '0'})
         # etc
-    d.1CIP_Grayscale.core.aux.set_data('End Seconds',
+    d.CIP_Grayscale1.core.aux.dataset('End Seconds',
         np.asarray([58078.792969,58079.792969,58080.792969,
                     58081.792969], dtype=float),
         {'standard_name': 'time',
@@ -159,15 +159,15 @@ def dummy_CIPgs():
         'units': 'seconds since start_date 00:00:00',
         'strftime': '%F %T %Z',
         'comments': None})
-    d.1CIP_Grayscale.core.aux.set_data('Diode 1 Voltage',
+    d.CIP_Grayscale1.core.aux.dataset('Diode 1 Voltage',
         np.asarray([1.65,1.725,1.65,1.725], dtype=float),
         {'_FillValue': -9999.,
         'comment': None})
-    d.1CIP_Grayscale.core.aux.set_data('Diode 32 Voltage',
+    d.CIP_Grayscale1.core.aux.dataset('Diode 32 Voltage',
         np.asarray([1.95,1.875,2.025,1.875], dtype=float),
         {'_FillValue': -9999.,
         'comment': None})
-    d.1CIP_Grayscale.core.aux.set_data('Diode 64 Voltage',
+    d.CIP_Grayscale1.core.aux.dataset('Diode 64 Voltage',
         np.asarray([1.425,1.425,1.425,1.5], dtype=float),
         {'_FillValue': -9999.,
         'comment': None})
