@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 """
 name:     spif.py
+version:  0.1
 python:   3.4
 author:   Graeme Nott
 email:    graeme.nott@faam.ac.uk
@@ -21,14 +22,28 @@ import numpy as np
 import matplotlib
 import h5py
 
-import readers
+#import readers
 
 import pdb
 
 
 
+# Required python version for this code
+py_major = 3
+py_minor = 4
+
+# SPIF code version
+spif_major = 0
+spif_minor = 1
+
+
 # Do some python version checking
-assert sys.version_info >= (3,4)
+assert sys.version_info >= (py_major,py_minor), \
+        'Update to python {M}.{m} to run SPIF\n'.format(M=py_major,m=py_minor)
+
+# SPIF code version
+spif_version = '{M}.{m}'.format(M=spif_major,m=spif_minor)
+
 
 # Define default root attributes of SPIF file
 default_spif_attrib = {
@@ -45,13 +60,13 @@ default_spif_attrib = {
                                         '%Y-%m-%dT%H:%M%z'),
              c='initial implementation'),
     # Implement this by reading a file changelog
-    'spif_version': '0.1dev',
+    'spif_version': spif_version,
     'hdf5_version': h5py.version.hdf5_version,
     'h5py_version': h5py.version.version,
     'python_version': '{0}.{1}.{2}-{3}'.format(sys.version_info.major,
                                                sys.version_info.minor,
                                                sys.version_info.micro,
-                                               sys.version_info.releaselevel)
+                                               sys.version_info.releaselevel),
     'project': '',      # ??
     'start_date': ''}   # ??
 
@@ -100,10 +115,117 @@ def reader_map(instr):
 
 
 # ----------------------------------------------------------------------
-class spif:
+# Define module level methods
+
+def dataset(self,name,data,kwargs={}):
+    """
+    Create a dataset within the spif object
+    Creates an instance of the dataset group
+    """
+    #pdb.set_trace()
+    _tmp = Dataset(self.path+name+'/',data,**kwargs)
+    setattr(self,name,_tmp)
+
+
+def group(self,name,kwargs={}):
+    """
+    Create a sub-group within the spif object
+    Creates an instance of the class group
+
+    Note that it is more convenient if 'name' is 'nice' (need proper words)
+    """
+    #pdb.set_trace()
+    _tmp = Group(self.path+name+'/',**kwargs)
+    setattr(self,name,_tmp)
+
+
+# ----------------------------------------------------------------------
+# Define sub-classes created within the spif class instance
+# These are not created independently
+
+## NOTE: Do need to include some form of variable name checking to ensure
+##       easy usage by user?
+##
+
+class Group():
+    """
+    Class to define a spif object group and the contents
+    """
+
+    # Access module methods
+    group = group
+    dataset = dataset
+
+    def __init__(self,path,**grp_attrib):
+        """
+        Initialisation of a sub-class for definition of groups and contents
+
+        parent is the class above
+        """
+        # Create instrument root attributes
+        for k,v in grp_attrib.items():
+            setattr(self,k,v)
+
+        self.type = 'grp'
+        self.path = path
+
+
+
+    # def set_data(self,name,data,kwargs={}):
+    #     """
+    #     Create a dataset within the spif object
+    #     Creates an instance of the dataset group
+    #     """
+    #     set_data(name,data,kwargs)
+
+
+class Dataset():
+    """
+    Class to define dataset objects
+    """
+
+    # Access module methods
+    dataset = dataset
+
+
+    def __init__(self,path,data,**var_attrib):
+        """
+        Initialisation of a sub-class for definition of variables and
+        associated attributes
+        """
+
+        # Write dataset data into instance
+        self.set_value(data) 
+
+        # Create variable attributes
+        for k,v in var_attrib.items():
+            setattr(self,k,v)
+
+        self.type = 'data'
+        self.path = path
+
+
+    def set_value(self,value):
+        """
+        Create the data for the dataset. This is stored in an internal _data_
+        variable. Variable name chosen to minimise possibility of clash with
+        user-defined variable names
+        """
+
+        self._data_ = value
+
+
+
+# ----------------------------------------------------------------------
+class Spif:
     """
     Parent class to define spif objects. 
     """
+
+    # Access module methods
+    group = group
+    dataset = dataset
+
 
     def __init__(self, instr=''):
         """
@@ -115,6 +237,12 @@ class spif:
 
         # String designation of root of spif
         self.path = '/'
+
+        # The end of file marker designates the end of the data file that is
+        # being inserted into this object. If True then the h5 file will be
+        # closed once this object has been read.
+        # Default is True
+        self.eof = True
 
 
     def __str__(self):
@@ -151,13 +279,16 @@ class spif:
         return getattr(self,name).__dict__
 
 
-    def set_group(self,name,kwargs=None):
-        """
-        Create a sub-group within the spif object
-        Creates an instance of the class group
-        """
-        _tmp = group(self.path+name+'/',**kwargs)
-        setattr(self,name,_tmp)
+    # def set_group(self,name,kwargs={}):
+    #     """
+    #     Create a sub-group within the spif object
+    #     Creates an instance of the class group
+
+    #     Note that it is more convenient if 'name' is 'nice' (need proper words)
+    #     """
+    #     pdb.set_trace()
+    #     _tmp = spif.group(self.path+name+'/',**kwargs)
+    #     setattr(self,name,_tmp)
 
 
     def get_data(self,name,data_only=True):
@@ -173,66 +304,40 @@ class spif:
             return dataset
 
 
-    def set_data(self,name,data,kwargs=None):
+    def write(self,filename,append=False):
         """
-        Create a dataset within the spif object
-        Creates an instance of the dataset group
+        Method for writing spif instance into a hdf5 file.
+
+        
+        Keyword args:
+            filename: String of Path and filename of hdf5 file to be written
+            append:   Boolean. If False [default], an existing file will be
+                      overwritten and closed. If True, an existing file will
+                      have data appended, any attributes and datasets with 
+                      existing names will have data appended (if possible) and
+                      any new names will be added to the h5 file.
+
+        Returns:
+            success:  Returns None if h5 file written and closed successfully
+                      but an exception if not.
+
         """
-        _tmp = dataset(self.path+name+'/',data,**kwargs)
-        setattr(self,name,_tmp)
+    with h5py.File(str(fout), 'w') as spif:
+
+        # Variable marks the end of a stream of data from a single file
+        endof_data_stream = False
+        while endof_data_stream is False:
+            # Read multiple data dictionaries from reader as required
+            data = reader()
+
+            # Walk through data dictionary and write to open spif file
+            walk_data_dict(data,'')
+
+        print('\nWritten:',str(fout))
 
 
 
-# ----------------------------------------------------------------------
-class group(spif):
-    """
-    Class to define a spif object group and the contents
-    """
-
-    def __init__(self,path,**grp_attrib):
-        """
-        Initialisation of a sub-class for definition of groups and contents
-
-        parent is the class above
-        """
-        # Create instrument root attributes
-        for k,v in grp_attrib.items():
-            setattr(self,k,v)
-
-        self.type = 'grp'
-        self.path = path
-
-
-class dataset(spif):
-    """
-    Class to define dataset objects
-    """
-
-    def __init__(self,path,data,**var_attrib):
-        """
-        Initialisation of a sub-class for definition of variables and
-        associated attributes
-        """
-
-        # Write dataset data into instance
-        self.set_data(data) 
-
-        # Create variable attributes
-        for k,v in var_attrib.items():
-            setattr(self,k,v)
-
-        self.type = 'data'
-        self.path = path
-
-
-    def set_data(self,value):
-        """
-        Create the data for the dataset. This is stored in an internal _data_
-        variable. Variable name chosen to minimise possibility of clash with
-        user-defined variable names
-        """
-
-        self._data_ = value
+    # ----------------------------------------------------------------------
 
 
         # def append(self,var_):
@@ -320,6 +425,15 @@ def test(fin):
 
 # ----------------------------------------------------------------------
 def write(fin,instr,fout):
+
+
+    ###
+    ### THIS NEEDS TO BE CHANGED TO;
+    ###         Read raw data files
+    ###         Create a spif instance
+    ###         Write instance to h5 file
+    ###
+    
     """
     Shorthand function to allow user to write data into a SPIF file
     with;
