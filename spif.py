@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 """
 name:     spif.py
-version:  0.1
+version:  0.2
 python:   3.4
 author:   Graeme Nott
 email:    graeme.nott@faam.ac.uk
@@ -34,7 +34,7 @@ py_minor = 4
 
 # SPIF code version
 spif_major = 0
-spif_minor = 1
+spif_minor = 2
 
 
 # Do some python version checking
@@ -161,7 +161,7 @@ def walk_data(f,d,p):
 
 
     *** There is no facility for linking ancillary data together yet
-    
+
     *** This function will only write to a file, it will not append
         data to an existing file. It will fail badly.
         This needs to be changed.
