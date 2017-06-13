@@ -12,7 +12,7 @@ Program to create and read Single Particle Image Format (SPIF) files.
 
 """
 
-## Add paticle zero-time indicies for each particle
+
 
 
 import sys, os.path
@@ -139,6 +139,130 @@ def group(self,name,kwargs={}):
     setattr(self,name,_tmp)
 
 
+def walk_data(f,d,p):
+    """
+    Function to recursively walk through an arbitrary data
+    dictionary and create equivalent spif data structures.
+
+    Input args:
+        f:      open spif file objects. If f is None then print data to stdout
+        d:      spif instance
+        p:      string placeholder for depth within recursion
+
+    Create a list of attributes
+    Create a list of datasets
+    Create a list of groups
+
+        Write all attributes
+        Write all datasets and associated attributes
+        Create group in list of groups
+
+            Recurse into walk_data again...
+
+
+    *** There is no facility for linking ancillary data together yet
+    
+    *** This function will only write to a file, it will not append
+        data to an existing file. It will fail badly.
+        This needs to be changed.
+
+    """
+    # Allow writing to the variable endof_data_stream
+    global endof_data_stream
+
+    # Create lists of contents of group p of spif instance
+    grps = [k for (k,v) in d.__dict__.items() if isinstance(v,Group)]
+    dsets = [k for (k,v) in d.__dict__.items() if 
+             isinstance(v,Dataset)]
+    attrs = [k for (k,v) in d.__dict__.items() if k not in dsets+grps]
+
+    # Write attrs
+    for attr in attrs:
+        # Loop through attribute names
+
+        # Don't write 'type' or 'path' entries to the h5
+        if attr.lower() in ['type','path']:
+            continue
+
+        # Shortcut for attribute value
+        v = getattr(d,attr)
+
+        if v is None:
+            v = ''
+
+        print('  Adding attribute: ',attr)
+        # Write attribute
+        # Note that if p == '/' then will be written into root
+        f[p].attrs[attr] = v
+
+    # Write datasets
+    for dset in dsets:
+        # Datasets have attributes attached but no recursion is required
+        # Dataset values are denoted by the key '_data_'
+        
+        # Create list of attributes without 'type' and 'path' entries
+        # which are not written to the h5
+        dset_attrs = [l for l in getattr(d,dset).__dict__.keys() if \
+                      l.lower() not in ['type','path']]
+                
+        if '_data_' not in dset_attrs:
+            # Dataset instance in spif instance does not contain required field
+            continue
+
+        # Attempt to deal somewhat gracefully with empty data
+        if getattr(d,dset)._data_ in [None,'']:
+            if '_fillvalue' in [v.lower() for v in getattr(d,dset).__dict__]:
+                # value not given so use _FillValue
+                _data = getattr(d,dset)._FillValue
+            elif 'units' in [v.lower() for v in getattr(d,dset).__dict__]:
+                # If units are given then assume requires a number
+                _data = np.nan
+            else:
+                # value not given so use empty string
+                _data = ''
+        else:
+            _data = getattr(d,dset)._data_
+
+        print('Adding dataset {}'.format(getattr(getattr(d,dset),'path')))
+        # Write dataset
+        dset_tmp = f.create_dataset(p+dset, data = _data)
+        dset_attrs.remove('_data_')
+
+        # Write dataset attributes
+        for dset_attr in dset_attrs:
+
+            v = getattr(getattr(d,dset),dset_attr)
+            if v is None:
+                v = ''
+            dset_tmp.attrs[dset_attr] = v
+
+    # Write groups
+    for grp in grps:
+
+        # Shortcut for attribute value
+        v = getattr(d,grp)
+
+        print('Adding group {}'.format(getattr(v,'path')))
+
+        if f.get(grp, getclass=True) is None:
+            # If group k does not exist then create group
+            # Note that if p == '/' then will be written into root
+            f[p].create_group(grp)
+        elif f.get(grp, getclass=True) is not Group:
+            # Name already exists for an attribute or dataset
+            print("\n'{}' already exists but is not a Group\n".format(grp))
+            pdb.set_trace()
+        else:
+            # Group already exists so do nothing
+            #print(' Existant group {}'.format(g+k+'/'))
+            pass
+        
+        # Recurse with each group
+        walk_data(f,v,getattr(v,'path'))
+
+    return
+
+
 # ----------------------------------------------------------------------
 # Define sub-classes created within the spif class instance
 # These are not created independently
@@ -235,6 +359,8 @@ class Spif:
         for k,v in default_spif_attrib.items():
             setattr(self,k,v)
 
+        self.type = 'grp'
+
         # String designation of root of spif
         self.path = '/'
 
@@ -322,18 +448,22 @@ class Spif:
                       but an exception if not.
 
         """
-    with h5py.File(str(fout), 'w') as spif:
 
-        # Variable marks the end of a stream of data from a single file
-        endof_data_stream = False
-        while endof_data_stream is False:
-            # Read multiple data dictionaries from reader as required
-            data = reader()
+        with h5py.File(str(filename), 'w') as f:
+
+            # Variable marks the end of a stream of data from a single file
+            endof_data_stream = False
+            # while endof_data_stream is False:
+            #     # Read multiple data dictionaries from reader as required
+            #     data = reader()
+
+
+    
 
             # Walk through data dictionary and write to open spif file
-            walk_data_dict(data,'')
+            walk_data(f,self,'/')
 
-        print('\nWritten:',str(fout))
+            print('\nWritten:',str(filename))
 
 
 
@@ -417,9 +547,15 @@ def test(fin):
     meets definted standards for the format with;
         spif.test()
 
+    Tests to do:
+        All instances of Spif, Group, or Dataset must have a valid 'type' k,v
+        All instances of Spif, Group, or Dataset must have a valid 'path' k,v
     """
 
     test_d = read(fin)
+
+
+
 
     return
 
@@ -491,14 +627,14 @@ def write(fin,instr,fout):
         global endof_data_stream
         #pdb.set_trace()
 
-#        print ('\nwalk_dict(d,{})\n'.format(g))
+        #        print ('\nwalk_dict(d,{})\n'.format(g))
 
         for k, v in d.items():
 
-#            print ('** for k={} loop:'.format(k))
+        #            print ('** for k={} loop:'.format(k))
 
             if isinstance(v, dict) and \
-               'value' not in [v_.lower() for v_ in v]:
+               '_data_' not in [v_.lower() for v_ in v]:
                 # This subdictionary is converted into a h5 group
 
                 # Create a group based on current k string
