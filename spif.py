@@ -15,7 +15,7 @@ Program to create and read Single Particle Image Format (SPIF) files.
 
 
 
-import sys, os.path
+import sys
 import datetime, pytz
 
 import numpy as np
@@ -348,7 +348,23 @@ class Dataset():
 # ----------------------------------------------------------------------
 class Spif:
     """
-    Parent class to define spif objects. 
+    Creation of Spif objects for python-readable single particle data.
+
+    This class relies on two other classes, Group() and Dataset(), that are
+    not inherited or nested but create instances within the Spif instance.
+    This class also utilises two module-level methods that are related to the 
+    above classes, group() and dataset().
+
+    Attributes:
+        type: String abbreviation for type of object as to be written
+            into the h5 file. 'grp' or 'data' (attributes need no such label)
+        path: Path of object relative to root of the h5 file
+        eod: If True then there is no more data to be written into
+            the h5 file.
+        save: Write Spif instance into h5 file
+        get_data: Return a dataset (and dataset attributes if required) from
+            a Spif instance
+
     """
 
     # Access module methods
@@ -369,11 +385,11 @@ class Spif:
         # String designation of root of spif
         self.path = '/'
 
-        # The end of file marker designates the end of the data file that is
+        # The end of data marker designates the end of the data that is
         # being inserted into this object. If True then the h5 file will be
         # closed once this object has been read.
         # Default is True
-        self.eof = True
+        self.eod = True
 
 
     def __str__(self):
@@ -383,22 +399,15 @@ class Spif:
 
         """
 
-        # Create string of all attributes first
+        # Create introduction strings first
         intro_str = 'SPIF v{M}.{m} instance'.format(M=spif_major,m=spif_minor)
         key_str = "List of groups (end in '/'), datasets ('*'), and attributes."
         print('\n',intro_str,'\n',key_str)
+        
+        # Use walk_data to write to stdout instead of file
         walk_data(None,self,'/')
-        #print('')
-        # attrib_str = '\n'.join(
-        #     [' '+k for k,v in sorted(self.__dict__.items()) if
-        #      isinstance(v,Spif) is False])
+        print('')
 
-        # var_str = '\n'.join(
-        #     [' {}\t**'.format(k) for k,v in sorted(self.__dict__.items()) if
-        #      isinstance(v,Spif) is True])
-
-        # return '\n{0}\n{1}\n{2}\n'.format(self.path,attrib_str,var_str)
-        return
 
     def set_attr(self,key,value):
         """
@@ -471,6 +480,7 @@ class Spif:
 
     # ----------------------------------------------------------------------
 
+    # TODO(Graeme): This just here as may need the code. Delete as necessary
 
         # def append(self,var_):
         #     """
@@ -517,15 +527,23 @@ class Spif:
 
 
 # ----------------------------------------------------------------------
-def create(fin):
+def create():
     """
-    Shorthand function to allow user to read input files and create a 
-    spif object with;
-        spif.create(f)
+    Creation of empty spif.Spif() instance for population by user.
+
+    This function creates an almost empty instance of the spif.Spif class.
+    Mandatory attributes and groups are created but datasets are not.
+
+    Args:
+        None
+
+    Returns:
+        Instance of spif.Spif()
 
     """
 
-    print('\nNot yet implemented\n')
+    # TODO(Graeme): Creation of empty Spif instance for population by user
+    print('\ncreate() not yet implemented\n')
 
     return
 
@@ -533,22 +551,58 @@ def create(fin):
 # ----------------------------------------------------------------------
 def read(fin):
     """
-    Shorthand function to allow user to read SPIF files with;
-        spif.read(f)
+    Read spif h5 file and return a spif.Spif() instance.
+
+    Args:
+        fin (str or pathlib.path object): Path/file of a spif file.
+
+    Returns:
+        Instance of spif.Spif()
 
     """
 
-    print('\nNot yet implemented\n')
+    print('\nread() not yet implemented\n')
 
     return
+
+
+# ----------------------------------------------------------------------
+def readraw(fin,reader,spif=None):
+    """
+    Read a raw data file and return a spif.Spif() instance.
+
+    Args:
+        fin (str or pathlib.path object): Path/file of a raw data file.
+        reader (): 
+        spif (spif.Spif instance): If None then create new instance, if given
+            then add new data into existing instance.
+    Returns:
+        Instance of spif.Spif()
+
+    """
+
+    print('\nread() not yet implemented\n')
+
+    return
+
 
 # ----------------------------------------------------------------------
 def test(fin):
     """
-    Shorthand function to allow user to test whether the input SPIF file
-    meets definted standards for the format with;
-        spif.test()
+    Test whether a spif/h5 file meets the criteria of the standard.
 
+    This function allows user to test whether the input spif file meets
+    the defined standards of the format.
+
+    Args:
+        fin (str or pathlib.path object): Path/file of a spif file.
+
+    Returns:
+        result (tuple): Returns one of the following;
+            (0,None): success
+            (1,list of failures): Non-fatal fail with list of issues returned
+            (2,list of failures): Fatal fail with as list of issues up to fail 
+    
     Tests to do:
         All instances of Spif, Group, or Dataset must have a valid 'type' k,v
         All instances of Spif, Group, or Dataset must have a valid 'path' k,v
@@ -556,22 +610,25 @@ def test(fin):
 
     test_d = read(fin)
 
-
+    print('\ntest() not yet implemented\n')
 
 
     return
 
 # ----------------------------------------------------------------------
 def write(fin,instr,fout):
+    """
+    Read raw data file/s spif h5 file and return a spif.Spif() instance
+
+    Args:
+        fin (str or pathlib.path object): Path/file of a spif file.
+
+    Returns:
+        Instance of spif.Spif()
+
+    """
 
 
-    ###
-    ### THIS NEEDS TO BE CHANGED TO;
-    ###         Read raw data files
-    ###         Create a spif instance
-    ###         Write instance to h5 file
-    ###
-    
     """
     Shorthand function to allow user to write data into a SPIF file
     with;
@@ -604,26 +661,41 @@ def write(fin,instr,fout):
             spif.visit(fred)
     """
 
+
+    ###
+    ### THIS NEEDS TO BE CHANGED TO;
+    ###         Read raw data files
+    ###         Create a spif instance
+    ###         Write instance to h5 file
+    ###
+ 
+
+
     pass
 
 
 # ----------------------------------------------------------------------
-def call(args):
+def call(**args):
     """
-    Main function that can be called from other programs if spif is
-    imported.
+    Main function call of spif.py.
 
-    Input args:
-        args:   A dictionary of arguments for code.
-            'files':    List of filename and/or glob strings
-            'read':     Boolean, True to read SPIF file
-            'write':    Boolean, True to write SPIF file from raw data
-            'test':     Boolean, True to test format of existing SPIF
-            'instr':    List of instrument identifying strings
-            'outfile':  Output SPIF file name. If not given then is
-                        generated from inputs
-            'force_write': Boolean, True to overwrite existing SPIF
-            'recurse':  Boolean, True to use recursive globbing
+    Function to allow impotation and calling of complete spif.py
+    functionality. Generally however, one would import the spif.Spif() class
+    and create instances of this.
+
+    Args:
+        **args (dict): A dictionary of arguments for function. Is a replica
+            of the args dictionary that is created by argparse in __main__.
+            Recognised fields are;
+            'files': List of filename and/or glob strings
+            'read' (Boolean): True to read SPIF file
+            'write' (Boolean): True to write SPIF file from raw data
+            'test' (Boolean): True to test format of existing SPIF
+            'instr': List of instrument identifying strings
+            'outfile' (str): Output SPIF file name. If not given then is
+                generated from inputs
+            'force_write' (Boolean): True to overwrite existing SPIF
+            'recurse' (Boolean): True to use recursive globbing
 
 
     """
@@ -631,7 +703,7 @@ def call(args):
 
     # Convert glob/s to list of discrete files
     # Path also removes any non-existant filesnames
-#    path_obj = Path('.')
+
     if args['recurse'] is True:
         path_mod = '**/'
     else:
@@ -677,13 +749,18 @@ def call(args):
         # Output filename built from common elements of input filenames
         datestr = datetime.date.strftime(datetime.date.today(),'%Y%m%d_')
         timestr = datetime.datetime.strftime(datetime.datetime.now(),
-                                             '-%H%M.spif')
+                                             '-%H%M.h5')
         instr_str = ''.join(sorted(args['instr']))
         outfile = Path(datestr+instr_str+timestr)
     else:
         outfile = Path(args['outfile'])
 
-        if outfile.is_file() is True:
+        if outfile.suffix == '':
+            # Add the default h5 extension if one not given
+            outfile = outfile.with_suffix('.h5')
+        
+        if outfile.is_file() is True and args['force_write'] is False:
+            # If file already exists notify user and fail
             print('\nOutput file already exists;',
                   '  {0}'.format(str(outfile)),
                   'Use -f to overwrite',sep='\n')
@@ -711,12 +788,12 @@ if __name__=='__main__':
     # Define commandline options
     usage = '%(prog)s filename [options]'
     version = 'version: {M}.{m}'.format(M=spif_major,m=spif_minor)
-    description = 'Program to produce, read, and test Single Particle'+\
-                  ' Image Format (SPIF) files.\n {0}'.format(version)
+    description = ('Program to produce, read, and test Single Particle'
+                   'Image Format (SPIF) files.\n {0}'.format(version))
     epilog = 'Usage examples.\n' +\
-             'Create a SPIF file with default filename based ' +\
+             'Create a SPIF file, fred.h5, with default filename based ' +\
              'on dummy data;\n' +\
-             "$ python3 spif.py fred --dummy\n" +\
+             "$ python3 spif.py --dummy -o fred.h5\n" +\
              'Create a SPIF file with default filename based on a '+\
              'single instrument raw data file;\n' +\
              " $ python3 spif.py 'Imagefile_1CIP Grayscale_" +\
@@ -804,7 +881,7 @@ if __name__=='__main__':
     print('\t    Single Particle Image Format')
     print('-----------------------------------------------------\n')
 
-    call(args_dict)
+    call(**args_dict)
 
     print('\nDone.\n')
     # EOF
