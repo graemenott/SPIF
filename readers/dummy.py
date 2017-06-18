@@ -28,6 +28,10 @@ Currently all h5 dtypes are handled automatically. Thus the dtype of a
 dataset should be given explicitly in the numpy array.
 
 """
+
+# TODO(Graeme): Add paticle zero-time indicies for each particle, what about array dimension?
+
+
 import numpy as np
 import os.path
 
@@ -58,7 +62,7 @@ def dummy_CIPgs():
                                    delimiter=',',dtype=int)
 
     # Designate that this is the only data to be written to h5 file
-    d.eof = True
+    d.eod = True
 
     # Create a group for CIP GS and populate instrument attributes
     d.group('CIP_Grayscale1',
