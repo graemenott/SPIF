@@ -190,10 +190,14 @@ def walk_data(f,d,p):
         if v is None:
             v = ''
 
-        print('  Adding attribute: ',attr)
+#        print('  Adding attribute: ',attr)
+
         # Write attribute
         # Note that if p == '/' then will be written into root
-        f[p].attrs[attr] = v
+        if f is None:
+            print(' {}'.format(attr))
+        else:
+            f[p].attrs[attr] = v
 
     # Write datasets
     for dset in dsets:
@@ -223,18 +227,24 @@ def walk_data(f,d,p):
         else:
             _data = getattr(d,dset)._data_
 
-        print('Adding dataset {}'.format(getattr(getattr(d,dset),'path')))
+#        print('Adding dataset {}'.format(getattr(getattr(d,dset),'path')))
+
         # Write dataset
-        dset_tmp = f.create_dataset(p+dset, data = _data)
+        if f is None:
+            print('*{}'.format(dset))
+        else:
+            dset_tmp = f.create_dataset(p+dset, data = _data)
         dset_attrs.remove('_data_')
 
         # Write dataset attributes
         for dset_attr in dset_attrs:
-
             v = getattr(getattr(d,dset),dset_attr)
             if v is None:
                 v = ''
-            dset_tmp.attrs[dset_attr] = v
+            if f is None:
+                print(' {}'.format(dset_attr))
+            else:        
+                dset_tmp.attrs[dset_attr] = v
 
     # Write groups
     for grp in grps:
@@ -242,9 +252,11 @@ def walk_data(f,d,p):
         # Shortcut for attribute value
         v = getattr(d,grp)
 
-        print('Adding group {}'.format(getattr(v,'path')))
+#        print('Adding group {}'.format(getattr(v,'path')))
 
-        if f.get(grp, getclass=True) is None:
+        if f is None:
+            print('{}/'.format(grp))
+        elif f.get(grp, getclass=True) is None:
             # If group k does not exist then create group
             # Note that if p == '/' then will be written into root
             f[p].create_group(grp)
@@ -284,23 +296,15 @@ class Group():
         """
         Initialisation of a sub-class for definition of groups and contents
 
-        parent is the class above
         """
-        # Create instrument root attributes
+        
+        # Create user-defined group attributes
         for k,v in grp_attrib.items():
             setattr(self,k,v)
 
+        # Create standard group attributes
         self.type = 'grp'
         self.path = path
-
-
-
-    # def set_data(self,name,data,kwargs={}):
-    #     """
-    #     Create a dataset within the spif object
-    #     Creates an instance of the dataset group
-    #     """
-    #     set_data(name,data,kwargs)
 
 
 class Dataset():
@@ -321,10 +325,11 @@ class Dataset():
         # Write dataset data into instance
         self.set_value(data) 
 
-        # Create variable attributes
+        # Create user-defined dataset attributes
         for k,v in var_attrib.items():
             setattr(self,k,v)
 
+        # Create standard dataset attributes
         self.type = 'data'
         self.path = path
 
@@ -375,19 +380,25 @@ class Spif:
         """
         Function prints out the structure of the spif object in human-readable
         form. Sub-groups are marked with a double asterix.
+
         """
 
         # Create string of all attributes first
-        attrib_str = '\n'.join(
-            [' '+k for k,v in sorted(self.__dict__.items()) if
-             isinstance(v,spif) is False])
+        intro_str = 'SPIF v{M}.{m} instance'.format(M=spif_major,m=spif_minor)
+        key_str = "List of groups (end in '/'), datasets ('*'), and attributes."
+        print('\n',intro_str,'\n',key_str)
+        walk_data(None,self,'/')
+        #print('')
+        # attrib_str = '\n'.join(
+        #     [' '+k for k,v in sorted(self.__dict__.items()) if
+        #      isinstance(v,Spif) is False])
 
-        var_str = '\n'.join(
-            [' {}\t**'.format(k) for k,v in sorted(self.__dict__.items()) if
-             isinstance(v,spif) is True])
+        # var_str = '\n'.join(
+        #     [' {}\t**'.format(k) for k,v in sorted(self.__dict__.items()) if
+        #      isinstance(v,Spif) is True])
 
-        return '\n{0}\n{1}\n{2}\n'.format(self.path,attrib_str,var_str)
-
+        # return '\n{0}\n{1}\n{2}\n'.format(self.path,attrib_str,var_str)
+        return
 
     def set_attr(self,key,value):
         """
@@ -405,18 +416,6 @@ class Spif:
         return getattr(self,name).__dict__
 
 
-    # def set_group(self,name,kwargs={}):
-    #     """
-    #     Create a sub-group within the spif object
-    #     Creates an instance of the class group
-
-    #     Note that it is more convenient if 'name' is 'nice' (need proper words)
-    #     """
-    #     pdb.set_trace()
-    #     _tmp = spif.group(self.path+name+'/',**kwargs)
-    #     setattr(self,name,_tmp)
-
-
     def get_data(self,name,data_only=True):
         """
         Function to return the data and attributes (if data_only is False)
@@ -430,7 +429,7 @@ class Spif:
             return dataset
 
 
-    def write(self,filename,append=False):
+    def save(self,filename,append=False):
         """
         Method for writing spif instance into a hdf5 file.
 
@@ -457,13 +456,16 @@ class Spif:
             #     # Read multiple data dictionaries from reader as required
             #     data = reader()
 
-
-    
-
             # Walk through data dictionary and write to open spif file
-            walk_data(f,self,'/')
-
+            try:
+                walk_data(f,self,'/')
+            except Exception as err:
+                # Has been unidentified error in the Spif.save method
+                print('\nCannot save Spif instance to {}'.format(str(filename)))
+                return err
+            
             print('\nWritten:',str(filename))
+            return None
 
 
 
@@ -602,161 +604,7 @@ def write(fin,instr,fout):
             spif.visit(fred)
     """
 
-    global endof_data_stream
-
-    print_x = lambda x: print(x)
-
-    def walk_data_dict(d,g):
-        """
-        Function to recursively walk through an arbitrary data
-        dictionary and create equivalent spif data structures.
-
-        Input args:
-            d:      data dictionary
-            g:      string placeholder for depth within recursion
-
-        NOTE:   This function writes directly to the h5 file, 'spif', as
-                defined in the parent function.
-
-        *** This function will only write to a file, it will not append
-            data to an existing file. It will fail badly.
-            This needs to be changed.
-
-        """
-        # Allow writing to the variable endof_data_stream
-        global endof_data_stream
-        #pdb.set_trace()
-
-        #        print ('\nwalk_dict(d,{})\n'.format(g))
-
-        for k, v in d.items():
-
-        #            print ('** for k={} loop:'.format(k))
-
-            if isinstance(v, dict) and \
-               '_data_' not in [v_.lower() for v_ in v]:
-                # This subdictionary is converted into a h5 group
-
-                # Create a group based on current k string
-                # Need to seperate root and non-root instances (?)
-                if g == '' and spif.get(k) is None:
-                    #print(' Adding group {}'.format(g+k+'/'))
-                    spif.create_group(k)
-                elif spif.get(k) is None:
-                    #print(' Adding group {}'.format(g+k+'/'))
-                    spif[g].create_group(k)
-                else:
-                    # Group already exists so do nothing
-                    #print(' Existant group {}'.format(g+k+'/'))
-                    pass
-                #spif.visit(print_x)
-
-                # Recurse into sub-dictionary k
-                walk_data_dict(v,g+k+'/')
-
-            elif isinstance(v, dict):
-                # Item will not be converted into h5 group.
-                # If isinstance(v, dict) is True -> convert to Dataset
-
-                #print(' Adding dataset {}'.format(g+k))
-
-                if g[:-1] == '':
-                    # Attempt to write dataset directly into root of
-                    # spif file. In this case use the k value
-                    key = k
-                else:
-                    key = g+k
-
-                if v['value'] is None:
-                    if '_fillvalue' in [v_.lower() for v_ in v]:
-                        # value not given so use _FillValue
-                        spif.create_dataset(key, data=v['_FillValue'])
-                    elif 'units' in [v_.lower() for v_ in v]:
-                        # If units are given then assume requires a number
-                        spif.create_dataset(key, data=np.nan)
-                    else:
-                        # value not given so use empty string
-                        spif.create_dataset(key, data='')
-                else:
-                    spif.create_dataset(key, data=v['value'])#, dtype=None)
-
-                # Recurse into Dataset sub-dict and create attributes
-                walk_data_dict(v,g+k+'/')
-
-            elif k.lower() == 'value':
-                # dictionaries with 'value' attribute have already been
-                # converted to a dataset so can ignore these
-                #print('Ignore this!')
-                continue
-
-            else:
-                # If isinstance(v, dict) is False -> convert to Attribute
-                # Create attributes
-
-                #print("  {0}{1}: {2}".format(g, k, v))
-                #pdb.set_trace()
-
-                if k.lower() == 'ancillary_variables':
-                    # Create link to another variable
-                    # What happens if it hasn't been created?
-                    pass
-                elif k.upper() == 'EOF':
-                    # End of data file maker
-                    endof_data_stream = v
-                    #print('endof_data_stream is',endof_data_stream)
-                else:
-                    # Write attributes for this dataset or group
-                    # Convert any None entries into emptry strings
-                    #print(' Adding attribute: {}'.format(k))
-
-                    if g[:-1] == '':
-                        # Write attribute into root of SPIF file
-                        if v is None:
-                            spif.attrs[k] = ''
-                        else:
-                            spif.attrs[k] = v
-                        #print([k for k in spif.attrs])
-                    else:
-                        # Write attribute into group
-                        if v is None:
-                            spif[g[:-1]].attrs[k] = ''
-                        else:
-                            spif[g[:-1]].attrs[k] = v
-
-                        #print([k for k in spif[g[:-1]].attrs])
-                    #print()
-
-        return
-
-
-    with h5py.File(str(fout), 'w') as spif:
-
-        # Create root and write default root attributes
-
-        for k,v in default_root.items():
-            spif.attrs[k] = v
-
-        print('Reading...')
-        for f,i in zip(fin,instr):
-            # Loop through each input file and write into same spif file
-            print('\t{}'.format(f))
-
-            # Determine correct reader function
-            reader = reader_map(i)
-
-            # Variable marks the end of a stream of data from a single file
-            endof_data_stream = False
-            while endof_data_stream is False:
-                # Read multiple data dictionaries from reader as required
-                data = reader()
-
-                # Walk through data dictionary and write to open spif file
-                walk_data_dict(data,'')
-
-        print('\nWritten:',str(fout))
-    # Finished reading all input files and spif output file is closed
-    return
-
+    pass
 
 
 # ----------------------------------------------------------------------
@@ -862,7 +710,7 @@ if __name__=='__main__':
 
     # Define commandline options
     usage = '%(prog)s filename [options]'
-    version = 'ver: Mar 2017'
+    version = 'version: {M}.{m}'.format(M=spif_major,m=spif_minor)
     description = 'Program to produce, read, and test Single Particle'+\
                   ' Image Format (SPIF) files.\n {0}'.format(version)
     epilog = 'Usage examples.\n' +\
@@ -894,54 +742,54 @@ if __name__=='__main__':
     # Mandatory argument
     parser.add_argument('files',
                         nargs='+',
-                        help='White-space delineated path/filename ' +\
-                        'of input file/s. Glob or list of globs '+\
-                        'may be used.')
+                        help=('White-space delineated path/filename '
+                        'of input file/s. Glob or list of globs '
+                        'may be used.'))
 
     # Optional arguments
     parser.add_argument('-r', '--read', action='store_true',
                         dest='read', default=False,
-                        help='Option to read in a SPIF file and ' +\
-                        'output as a python object. May be used with '+\
-                        'a direct call to spif.read().')
+                        help=('Option to read in a SPIF file and '
+                        'output as a python object. May be used with '
+                        'a direct call to spif.read().'))
     parser.add_argument('-w', '--write', action='store_true',
                         dest='write', default=None,
-                        help='Option to write a SPIF file from raw ' +\
-                        'data files. Is the inverse of --read and ' +\
-                        'the default. May be used with a direct ' +\
-                        'call to spif.write().')
+                        help=('Option to write a SPIF file from raw '
+                        'data files. Is the inverse of --read and '
+                        'the default. May be used with a direct '
+                        'call to spif.write().'))
     parser.add_argument('-t', '--test', action='store_true',
                         dest='test', default=False,
-                        help='Option to test an existing SPIF file. ' +\
-                        'Result of test written to stdout if ' +\
-                        '--output not given. May be used with a ' +\
-                        'direct call to spif.test().')
+                        help=('Option to test an existing SPIF file. '
+                        'Result of test written to stdout if '
+                        '--output not given. May be used with a '
+                        'direct call to spif.test().'))
     parser.add_argument('-i', '--instr', action='store',
                         nargs='+',
                         dest='instr', default=[],
-                        help='White-space delineated list of ' +\
-                        'instrument identifiers. If file is path ' +\
-                        'only then all files associated with ' +\
-                        'instrument/s will be read.')
+                        help=('White-space delineated list of '
+                        'instrument identifiers. If file is path '
+                        'only then all files associated with '
+                        'instrument/s will be read.'))
     parser.add_argument('-o', '--output', action='store',
                         dest='outfile', default=None,
-                        help='Explicitly give output path/filename. ' +\
-                        'If not given then filename is based on ' +\
-                        'that of input file/s.')
+                        help=('Explicitly give output path/filename. '
+                        'If not given then filename is based on '
+                        'that of input file/s.'))
     parser.add_argument('-f', '--force', action='store_true',
                         dest='force_write', default=False,
-                        help='Allow an existing outfile to be over-' +\
-                        'written.')
+                        help=('Allow an existing outfile to be over-'
+                        'written.'))
     parser.add_argument('-d', '--dummy', action='store_true',
                         dest='dummy', default=False,
-                        help='Use dummy raw data dictionary to ' +\
-                        'create SPIF output. Used for development ' +\
-                        'purposes only.')
+                        help=('Use dummy raw data dictionary to '
+                        'create SPIF output. Used for development '
+                        'purposes only.'))
     parser.add_argument('-R', '--recursive', action='store_true',
                         dest='recurse', default=False,
-                        help='Recurse into sub-directories during ' +\
-                        'any globbing of input files. ' +\
-                        'Default is False.')
+                        help=('Recurse into sub-directories during '
+                        'any globbing of input files. '
+                        'Default is False.'))
     parser.add_argument('-v', '--version', action='version',
                         version=version,
                         help='Display program version number.')
