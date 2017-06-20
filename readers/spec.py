@@ -13,32 +13,6 @@ import numpy as np
 
 import pdb
 
-def twoDS():
-    """
-    Reader function for a SPEC 2D Stereo probe
-    """
-
-    print('twoDS')
-
-    return
-
-def CPI():
-    """
-    Reader function for a SPEC Cloud Particle Imager
-    """
-
-    print('CPI')
-
-    return
-
-def HVPS():
-    """
-    Reader function for a SPEC High Volume Precipitation Spectrometer
-    """
-
-    print('HVPS')
-
-    return
 
 def SPEC_lib():
     """
@@ -48,3 +22,47 @@ def SPEC_lib():
     print('SPEC_lib')
 
     return
+
+
+# ----------------------------------------------------------------------
+def twoDS(fin,d=None):
+    """
+    Reader function for a SPEC 2D Stereo probe
+    """
+
+    print('reader: twoDS')
+
+    if d is None:
+        # Create a bare-bones object if one has not been passed
+        d = spif.Spif()
+
+    return d
+
+
+def CPI(fin,d=None):
+    """
+    Reader function for a SPEC Cloud Particle Imager
+    """
+
+    print('reader: CPI')
+
+    if d is None:
+        # Create a bare-bones object if one has not been passed
+        d = spif.Spif()
+
+    return d
+
+
+def HVPS(fin,d=None):
+    """
+    Reader function for a SPEC High Volume Precipitation Spectrometer
+    """
+
+    print('reader: HVPS')
+
+    if d is None:
+        # Create a bare-bones object if one has not been passed
+        d = spif.Spif()
+
+    return d
+
