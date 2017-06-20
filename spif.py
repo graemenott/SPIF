@@ -6,14 +6,11 @@ python:   3.4
 author:   Graeme Nott
 email:    graeme.nott@faam.ac.uk
 created:  Mar 2017
-modified:
+
 
 Program to create and read Single Particle Image Format (SPIF) files.
 
 """
-
-
-
 
 import sys
 import datetime, pytz
@@ -95,6 +92,8 @@ def reader_map(instr):
     to be changed for certain set ups.
     """
 
+    import readers
+    
     # Each list of strings can have many instr strings. However, each
     # of these strings must be unique within rmap.
     rmap = {readers.CIPgs_PADS3:    ['CIP Grayscale'],
@@ -122,7 +121,7 @@ def dataset(self,name,data,kwargs={}):
     Create a dataset within the spif object
     Creates an instance of the dataset group
     """
-    #pdb.set_trace()
+
     _tmp = Dataset(self.path+name+'/',data,**kwargs)
     setattr(self,name,_tmp)
 
@@ -134,7 +133,7 @@ def group(self,name,kwargs={}):
 
     Note that it is more convenient if 'name' is 'nice' (need proper words)
     """
-    #pdb.set_trace()
+
     _tmp = Group(self.path+name+'/',**kwargs)
     setattr(self,name,_tmp)
 
@@ -525,11 +524,35 @@ class Spif:
                         
 
 
+# ----------------------------------------------------------------------
+def output(spif,fout):
+    """
+    Take a spif.Spif instance and output to a h5 file
+
+    An input spif.Spif instance is written to a h5 SPIF file.
+
+    Args:
+        spif (spif.Spif instance): An existing instance
+        fout (str or pathlib.path object): Path/file of the spif h5 file to be
+            written. If already exists then add/append data.
+
+    Returns:
+        Indication of successful write?
+
+    """
+
+#    pdb.set_trace()
+    try:
+        spif.save(fout,append=False)
+    except:
+        # Some save error
+        return 1
+
 
 # ----------------------------------------------------------------------
-def create():
+def initialise():
     """
-    Creation of empty spif.Spif() instance for population by user.
+    Create an empty spif.Spif() instance for population by user.
 
     This function creates an almost empty instance of the spif.Spif class.
     Mandatory attributes and groups are created but datasets are not.
@@ -542,14 +565,11 @@ def create():
 
     """
 
-    # TODO(Graeme): Creation of empty Spif instance for population by user
-    print('\ncreate() not yet implemented\n')
-
-    return
+    return Spif()
 
 
 # ----------------------------------------------------------------------
-def read(fin):
+def read_spif(fin):
     """
     Read spif h5 file and return a spif.Spif() instance.
 
@@ -567,7 +587,7 @@ def read(fin):
 
 
 # ----------------------------------------------------------------------
-def readraw(fin,reader,spif=None):
+def read_raw(fin,reader,spif=None):
     """
     Read a raw data file and return a spif.Spif() instance.
 
@@ -581,9 +601,7 @@ def readraw(fin,reader,spif=None):
 
     """
 
-    print('\nread() not yet implemented\n')
-
-    return
+    return reader(fin,spif)
 
 
 # ----------------------------------------------------------------------
@@ -621,15 +639,64 @@ def write(fin,instr,fout):
     Read raw data file/s spif h5 file and return a spif.Spif() instance
 
     Args:
-        fin (str or pathlib.path object): Path/file of a spif file.
+        fin (list or str or pathlib.path object): Path/file of raw data file/s.
+        instr (list or str): list of instrument id strings associated with
+            each fin. Thus len(fin) == len(instr) or if instr is a string then
+            same instr string applied to each fin in list
+        fout (str or pathlib.path object): Path/file of h5 spif file.
 
     Returns:
-        Instance of spif.Spif()
+        Indication of successful write?
 
+    Exceptions:
     """
 
+    # Test list args
+    # TODO (Graeme): More pythonic tests required
+    if type(fin) not in [list,tuple]:
+        fin = [fin]
+    if type(instr) not in [list,tuple]:
+        instr = [instr]
+    if len(instr) == 1:
+        instr = instr * len(fin)
+    if len(fin) != len(instr):
+        # TODO (Graeme): Fix handling of errors in fin and instr list lengths
+#        print(('\nError in number of input files ({}) and instrument'
+#               'strings ({}).'.format(len(fin),len(instr))))
+        return 1
+
+    # Initialise a temporary spif.Spif instance
+    spif_tmp = initialise()
+
+    print('Reading...')
+    for f,i in zip(fin,instr):
+        # Loop through each input file and write into same spif file
+        print('  {}'.format(f.name))
+
+        # Determine correct reader function
+        reader = reader_map(i)
+
+        if reader is None:
+            # Reader function for i cannot be found
+            continue
+
+        # TODO (Graeme): Deal with multiple instances of the same instr into the same spif file
+
+        # Populate spif instance
+        spif_tmp = read_raw(f,reader,spif_tmp)
+
+
+    # Write spif instance to h5 spif file
+    write_ok = output(spif_tmp,fout)
+
+    if write_ok != 1:
+        print('Written: {s}'.format(fout))
+    else:
+        print('Write fail: error {}'.format(write_ok))
 
     """
+    OBSOLETE!
+
     Shorthand function to allow user to write data into a SPIF file
     with;
         spif.write(f)
@@ -660,19 +727,7 @@ def write(fin,instr,fout):
             fred = lambda x: print(x)
             spif.visit(fred)
     """
-
-
-    ###
-    ### THIS NEEDS TO BE CHANGED TO;
-    ###         Read raw data files
-    ###         Create a spif instance
-    ###         Write instance to h5 file
-    ###
  
-
-
-    pass
-
 
 # ----------------------------------------------------------------------
 def call(**args):
@@ -722,8 +777,10 @@ def call(**args):
         return None
 
     # Remove any files for instruments that are not required
-    # Currently this involves searching for a instr string within the
+    # Currently this involves searching for an instr string within the
     # filename only. Bit crude.
+
+    # TODO (Graeme): Change this so can use files with arbitrary names
     if len(args['instr']) != 0 and args['dummy'] is False:
 
         fstr = [(f,i) for f in infiles[::]
@@ -766,7 +823,9 @@ def call(**args):
                   'Use -f to overwrite',sep='\n')
             return None
 
-    if args['write'] is True:
+#    pdb.set_trace()
+
+    if args['write'] in [True,None]:
 
         write(infiles, instr_strs, outfile)
 
