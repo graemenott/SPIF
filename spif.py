@@ -671,7 +671,12 @@ def write(fin,instr,fout):
     print('Reading...')
     for f,i in zip(fin,instr):
         # Loop through each input file and write into same spif file
-        print('  {}'.format(f.name))
+        
+        try:
+            print('  {}'.format(f.name))
+        except AttributeError:
+            # f is a string
+            print('  {}'.format(f))
 
         # Determine correct reader function
         reader = reader_map(i)
@@ -690,7 +695,7 @@ def write(fin,instr,fout):
     write_ok = output(spif_tmp,fout)
 
     if write_ok != 1:
-        print('Written: {s}'.format(fout))
+        print('Written: {!s}'.format(fout))
     else:
         print('Write fail: error {}'.format(write_ok))
 
