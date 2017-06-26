@@ -5,17 +5,13 @@ python:   3.4
 author:   Graeme Nott
 email:    graeme.nott@faam.ac.uk
 created:  Mar 2017
-modified:
 
 Functions that act as dummy readers of different instruments. That is
-they don't read actual data they produce a dictionary of artificial data
-to pass to spif.py. Full specifications for the spif dictionaries are
-contained in associated documentation; SPIF-Single Particle Image Format
-document.
+they don't read actual data they produce a spif.Spif() instance of
+artificial data.
 
 Requirements, reserved keys, and writer behaviours:
 
-- For each dataset variable, the data is stored in an item with the key 'value'.
 - The 'ancillary_variables' key is used to link one dataset to another.
 This is usually a dataset of errors/uncertainties of a dataset. The
 value of this item should be the key of the linked dataset.
@@ -45,6 +41,12 @@ def dummy_CIPgs(f_unused,d=None):
     """
     Define and return a spif object as would be returned from the actual
     CIP grayscale data reader function.
+
+    Args:
+        f_unused: Dummy variable so matches other reader functions
+        d (spif.Spif): If None [default] then create spif.Spif instance
+            with data. If given then append/insert data into d
+
     """
 
     if d is None:
@@ -124,7 +126,7 @@ def dummy_CIPgs(f_unused,d=None):
 
     # Create the core data group and populate
     d.CIP_Grayscale1.group('core')
-    
+
     d.CIP_Grayscale1.core.dataset('particle_sec',
         np.asarray(particle_s, dtype=float),
         {'standard_name': 'time',
