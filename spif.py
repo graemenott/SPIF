@@ -72,17 +72,19 @@ default_spif_attrib = {
 # ----------------------------------------------------------------------
 def reader_map(instr):
     """
+    Map raw data filename conventions to the appropriate raw data reader.    
+
     Function to map raw data filename conventions to the appropriate
     raw data reader. The instr string is a common substring of the
     raw data filenames and is used to select data files with the
     --instr=instr option of __main__(). Due to overlaps in the instr
     strings, instr must be matched exactly.
 
-    Input args:
-        instr:      instrument identifying string
+    Args:
+        fin (str): Instrument identifying string
 
     Returns:
-        reader:     function for reading raw data file
+        function for reading raw data file
 
     NOTE: There is a cludge here as there is no identifying string in
     PADS2 CIP files to distinguish between gray and monoscale. The
@@ -118,8 +120,12 @@ def reader_map(instr):
 
 def dataset(self,name,data,kwargs={}):
     """
-    Create a dataset within the spif object
-    Creates an instance of the dataset group
+    Creates an instance of the dataset group within a Spif object
+
+    Args:
+        name (str): name of dataset
+        data (various): data to put into object
+        kwargs: dictionary of dataset attributes
     """
 
     _tmp = Dataset(self.path+name+'/',data,**kwargs)
@@ -128,10 +134,11 @@ def dataset(self,name,data,kwargs={}):
 
 def group(self,name,kwargs={}):
     """
-    Create a sub-group within the spif object
-    Creates an instance of the class group
+    Creates an instance of a group within a Spif object
 
-    Note that it is more convenient if 'name' is 'nice' (need proper words)
+    Args:
+        name (str): name of dataset
+        kwargs: dictionary of dataset attributes
     """
 
     _tmp = Group(self.path+name+'/',**kwargs)
@@ -140,13 +147,13 @@ def group(self,name,kwargs={}):
 
 def walk_data(f,d,p):
     """
-    Function to recursively walk through an arbitrary data
-    dictionary and create equivalent spif data structures.
+    Recursively walk through Spif object and output/write contents
 
-    Input args:
-        f:      open spif file objects. If f is None then print data to stdout
-        d:      spif instance
-        p:      string placeholder for depth within recursion
+    Args:
+        f (file obj): open h5 spif file objects.
+            If f is None then print data to stdout
+        d (spif instance):
+        p (str): string placeholder for path within Spif instance
 
     Create a list of attributes
     Create a list of datasets
@@ -162,7 +169,7 @@ def walk_data(f,d,p):
     *** There is no facility for linking ancillary data together yet
 
     *** This function will only write to a file, it will not append
-        data to an existing file. It will fail badly.
+        data to an existing file. It will probably fail badly.
         This needs to be changed.
 
     """
@@ -285,6 +292,14 @@ def walk_data(f,d,p):
 class Group():
     """
     Class to define a spif object group and the contents
+
+    Attributes:
+        path: Path of object relative to root of the Spif object
+        grp_attrib (dict): attributes associated with this group
+        type (str): String abbreviation for type of object as to be written
+            into the h5 file. Is 'grp'.
+
+
     """
 
     # Access module methods
@@ -309,6 +324,14 @@ class Group():
 class Dataset():
     """
     Class to define dataset objects
+
+    Attributes:
+        path: Path of object relative to root of the Spif object
+        data: data to write into Dataset instance
+        grp_attrib (dict): attributes associated with this group
+        type (str): String abbreviation for type of object as to be written
+            into the h5 file. Is 'data'.
+
     """
 
     # Access module methods
@@ -441,10 +464,9 @@ class Spif:
         """
         Method for writing spif instance into a hdf5 file.
 
-        
-        Keyword args:
-            filename: String of Path and filename of hdf5 file to be written
-            append:   Boolean. If False [default], an existing file will be
+        Args:
+            filename (str): String of Path and filename of hdf5 file to be written
+            append (Boolean): If False [default], an existing file will be
                       overwritten and closed. If True, an existing file will
                       have data appended, any attributes and datasets with 
                       existing names will have data appended (if possible) and
