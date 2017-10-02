@@ -54,8 +54,12 @@ def dummy_CIPgs(f_unused,d=None):
         d = spif.Spif()
 
 
+    # Arrival time of particle in seconds from midnight
     particle_s = [58079.082, 58080.01, 58080.092, 58081.022]
+    # Arrival time of particle in nanoseconds from particle_s
     particle_ns = [21,14,12,7]
+    # Index of each particle in particle_image
+    particle_index = [0,21,35,47]
 
     # Obtain path of called script to determine path to data file
     p = os.path.abspath(__file__)
@@ -143,6 +147,11 @@ def dummy_CIPgs(f_unused,d=None):
         'units': 'nanoseconds since particle_sec',
         'comments': 'Particle arrival time found with ' +\
                     'particle_sec + particle+nsec'})
+    d.CIP_Grayscale1.core.dataset('particle_index',
+        np.asarray(particle_index, dtype=int),
+        {'long_name': 'Particle array index in particle_image',
+        '_FillValue': -9999.,
+        'comment': None})
     d.CIP_Grayscale1.core.dataset('particle_image',
         np.asarray(particle_image, dtype=int),
         {'long_name': 'Particle image array',
