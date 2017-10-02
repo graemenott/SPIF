@@ -25,8 +25,6 @@ dataset should be given explicitly in the numpy array.
 
 """
 
-# TODO(Graeme): Add paticle zero-time indicies for each particle, what about array dimension?
-
 
 import numpy as np
 import os.path
