@@ -23,8 +23,6 @@ import h5py
 
 import pdb
 
-
-
 # Required python version for this code
 py_major = 3
 py_minor = 4
@@ -72,7 +70,7 @@ default_spif_attrib = {
 # ----------------------------------------------------------------------
 def reader_map(instr):
     """
-    Map raw data filename conventions to the appropriate raw data reader.    
+    Map raw data filename conventions to the appropriate raw data reader.
 
     Function to map raw data filename conventions to the appropriate
     raw data reader. The instr string is a common substring of the
@@ -95,7 +93,7 @@ def reader_map(instr):
     """
 
     import readers
-    
+
     # Each list of strings can have many instr strings. However, each
     # of these strings must be unique within rmap.
     rmap = {readers.CIPgs_PADS3:    ['CIP Grayscale'],
@@ -178,7 +176,7 @@ def walk_data(f,d,p):
 
     # Create lists of contents of group p of spif instance
     grps = [k for (k,v) in d.__dict__.items() if isinstance(v,Group)]
-    dsets = [k for (k,v) in d.__dict__.items() if 
+    dsets = [k for (k,v) in d.__dict__.items() if
              isinstance(v,Dataset)]
     attrs = [k for (k,v) in d.__dict__.items() if k not in dsets+grps]
 
@@ -209,12 +207,12 @@ def walk_data(f,d,p):
     for dset in dsets:
         # Datasets have attributes attached but no recursion is required
         # Dataset values are denoted by the key '_data_'
-        
+
         # Create list of attributes without 'type' and 'path' entries
         # which are not written to the h5
         dset_attrs = [l for l in getattr(d,dset).__dict__.keys() if \
                       l.lower() not in ['type','path']]
-                
+
         if '_data_' not in dset_attrs:
             # Dataset instance in spif instance does not contain required field
             continue
@@ -249,7 +247,7 @@ def walk_data(f,d,p):
                 v = ''
             if f is None:
                 print(' {}'.format(dset_attr))
-            else:        
+            else:
                 dset_tmp.attrs[dset_attr] = v
 
     # Write groups
@@ -274,7 +272,7 @@ def walk_data(f,d,p):
             # Group already exists so do nothing
             #print(' Existant group {}'.format(g+k+'/'))
             pass
-        
+
         # Recurse with each group
         walk_data(f,v,getattr(v,'path'))
 
@@ -311,7 +309,7 @@ class Group():
         Initialisation of a sub-class for definition of groups and contents
 
         """
-        
+
         # Create user-defined group attributes
         for k,v in grp_attrib.items():
             setattr(self,k,v)
@@ -345,7 +343,7 @@ class Dataset():
         """
 
         # Write dataset data into instance
-        self.set_value(data) 
+        self.set_value(data)
 
         # Create user-defined dataset attributes
         for k,v in var_attrib.items():
@@ -374,7 +372,7 @@ class Spif:
 
     This class relies on two other classes, Group() and Dataset(), that are
     not inherited or nested but create instances within the Spif instance.
-    This class also utilises two module-level methods that are related to the 
+    This class also utilises two module-level methods that are related to the
     above classes, group() and dataset().
 
     Attributes:
@@ -425,7 +423,7 @@ class Spif:
         intro_str = 'SPIF v{M}.{m} instance'.format(M=spif_major,m=spif_minor)
         key_str = "List of groups (end in '/'), datasets ('*'), and attributes."
         print('\n',intro_str,'\n',key_str)
-        
+
         # Use walk_data to write to stdout instead of file
         walk_data(None,self,'/')
         print('')
@@ -433,7 +431,7 @@ class Spif:
 
     def set_attr(self,key,value):
         """
-        Create a attribute of a group or variable with a given 
+        Create a attribute of a group or variable with a given
         key,value pair. Any existing attribute is destroyed in the
         process
         """
@@ -453,7 +451,7 @@ class Spif:
         from within a dataset instance
         """
         dataset = getattr(self,name).__dict__
-        
+
         if data_only is True:
             return dataset['_data_']
         else:
@@ -468,7 +466,7 @@ class Spif:
             filename (str): String of Path and filename of hdf5 file to be written
             append (Boolean): If False [default], an existing file will be
                       overwritten and closed. If True, an existing file will
-                      have data appended, any attributes and datasets with 
+                      have data appended, any attributes and datasets with
                       existing names will have data appended (if possible) and
                       any new names will be added to the h5 file.
 
@@ -493,7 +491,7 @@ class Spif:
                 # Has been unidentified error in the Spif.save method
                 print('\nCannot save Spif instance to {}'.format(str(filename)))
                 return err
-            
+
             print('\nWritten:',str(filename))
             return None
 
@@ -522,20 +520,20 @@ class Spif:
         #     elif self.type == 'var':
         #         if type(self.var) == str:
         #             # If string then make into a single element list of string
-        #             self.var = [self.var[:]]     
+        #             self.var = [self.var[:]]
         #         if type(self.var) == list:
         #             # If list then append new element to end of list
         #             try:
         #                 # Assume that var_ is also an iterable
         #                 self.var.extend(var_)
         #             except TypeError:
-        #                 self.var.append(var_)                
+        #                 self.var.append(var_)
         #         if type(self.var) in [int,float]:
         #             # If var is a scalar then create an array and append
         #             self.var = np.atleast_1d(self.var).append(var_)
         #         elif type(self.var) == np.ndarray:
         #             # If var_ has the same dimension as self.var then expand
-        #             # first dimension. If this is not possible due to a 
+        #             # first dimension. If this is not possible due to a
         #             # dimension mismatch then extend zeroth dimension.
         #             try:
         #                 self.var = np.stack((self.var[:],var_))
@@ -543,7 +541,7 @@ class Spif:
         #                 self.var = np.append(self.var[:],var_)
         #     else:
         #         return None
-                        
+
 
 
 # ----------------------------------------------------------------------
@@ -615,7 +613,7 @@ def read_raw(fin,reader,spif=None):
 
     Args:
         fin (str or pathlib.path object): Path/file of a raw data file.
-        reader (): 
+        reader ():
         spif (spif.Spif instance): If None then create new instance, if given
             then add new data into existing instance.
     Returns:
@@ -641,8 +639,8 @@ def test(fin):
         result (tuple): Returns one of the following;
             (0,None): success
             (1,list of failures): Non-fatal fail with list of issues returned
-            (2,list of failures): Fatal fail with as list of issues up to fail 
-    
+            (2,list of failures): Fatal fail with as list of issues up to fail
+
     Tests to do:
         All instances of Spif, Group, or Dataset must have a valid 'type' k,v
         All instances of Spif, Group, or Dataset must have a valid 'path' k,v
@@ -693,7 +691,7 @@ def write(fin,instr,fout):
     print('Reading...')
     for f,i in zip(fin,instr):
         # Loop through each input file and write into same spif file
-        
+
         try:
             print('  {}'.format(f.name))
         except AttributeError:
@@ -754,7 +752,7 @@ def write(fin,instr,fout):
             fred = lambda x: print(x)
             spif.visit(fred)
     """
- 
+
 
 # ----------------------------------------------------------------------
 def call(**args):
@@ -842,7 +840,7 @@ def call(**args):
         if outfile.suffix == '':
             # Add the default h5 extension if one not given
             outfile = outfile.with_suffix('.h5')
-        
+
         if outfile.is_file() is True and args['force_write'] is False:
             # If file already exists notify user and fail
             print('\nOutput file already exists;',
