@@ -10,7 +10,7 @@ A variety of file formats are used by particle imaging instrument manufacturers.
 Structure
 ==========
 
-SPIF files is based on the `Link Hierarchical Data Format (HDF5) <https://www.hdfgroup.org/HDF5/>`_. HDF5 is a structured binary file format capable of containing large datasets and has automatic compression utilities. HDF5 is widely supported on a variety of platforms and environments and SPIF files will thus also be.
+SPIF files are based on the `Hierarchical Data Format (HDF5) <https://www.hdfgroup.org/HDF5/>`_. HDF5 is a structured binary file format capable of containing large datasets and has automatic compression utilities. HDF5 is widely supported on a variety of platforms and environments and SPIF files will thus also be.
 
 spif.py and associated code produces instances of a Spif class, such objects have the same structure as the h5 spif file that is written from this instance. Thus discussion of structure applies equally to class instances and produced h5 files.
 
