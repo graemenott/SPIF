@@ -17,6 +17,7 @@ import datetime, pytz
 
 import numpy as np
 import matplotlib
+import netCDF4
 import h5py
 
 #import readers
@@ -283,7 +284,7 @@ def walk_data(f,d,p):
 # Define sub-classes created within the spif class instance
 # These are not created independently
 
-## NOTE: Do need to include some form of variable name checking to ensure
+## NOTE: Do we need to include some form of variable name checking to ensure
 ##       easy usage by user?
 ##
 
