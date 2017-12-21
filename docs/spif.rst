@@ -8,5 +8,5 @@ SPIF
 .. autoclass:: spif.Spif
     :members:
 
-.. automodule readers
+.. automodule:: readers
     :members:
