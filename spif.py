@@ -171,6 +171,22 @@ def walk_data(f,d,p):
         data to an existing file. It will probably fail badly.
         This needs to be changed.
 
+    Conversion from h5 to nc
+    Write attribute:
+    f[p].attrs[attr] ->
+    Get attribute:
+    v = getattr(d,grp) ->
+    Create group:
+    f[p].create_group(grp) -> f[p].createGroup(grp)
+    Get group?
+    f.get(grp, getclass=True) ->
+
+    v is group
+    isinstance(v,Group) ->
+    v is dataset
+    isinstance(v,Dataset) ->
+
+
     """
     # Allow writing to the variable endof_data_stream
     global endof_data_stream
