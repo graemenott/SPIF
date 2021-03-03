@@ -6,22 +6,23 @@
 # full list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
+#Document compilation instructions
+
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..'))
+import os.path, sys
+src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..'))
 if src_dir not in sys.path:
     sys.path.insert(0,src_dir)
 
 import spif
 
 import pdb
-
 
 # -- Project information -----------------------------------------------------
 
@@ -30,7 +31,7 @@ description = spif.__description__
 copyright = spif.__copyright__
 author = spif.__author__
 version_date = spif.__date__
-version = spif.__version_major__ + 0.1*spif.__version_minor__
+version = f"{spif.__version_major__ + 0.1*spif.__version_minor__}"
 
 # -- General configuration ---------------------------------------------------
 
@@ -82,7 +83,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -108,7 +109,7 @@ rst_epilog = """
     """.format(title = title,
                descr = description,
                ver = version,
-               date = date,
+               date = version_date,
                pyver = sys.version_info.major + 0.1*sys.version_info.minor,
                auth = author,
                copy = copyright)
@@ -130,7 +131,7 @@ html_theme = 'sphinxdoc'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['source/_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
