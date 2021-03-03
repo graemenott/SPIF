@@ -1,6 +1,9 @@
-name: spif
 # conda environment for SPIF repository
-
+name: spif
+channels:
+  - anaconda
+  - defaults
+  - conda-forge
 dependencies:
   - python>=3.6
   - Cython
@@ -14,6 +17,7 @@ dependencies:
   - opencv
   - pandas
   - pep8
+  - pint>=0.11
   - pytest
   - pytz
   - pyyaml
@@ -24,5 +28,4 @@ dependencies:
   - sphinx_rtd_theme
   - sphinxcontrib>=1.0
   - sphinxcontrib-websupport>=1.1
-  - xarray>=0.11
   - yaml
