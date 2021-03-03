@@ -94,6 +94,7 @@ Universal variables may also be included in the instrument group root. For examp
 
     *int* value(bit)
         bit:long_name = "Value of shadow level in image array";
+
         bit:ancillary_variables = shadow;
 
     *float* shadow(bit)
@@ -101,16 +102,21 @@ Universal variables may also be included in the instrument group root. For examp
 
     *float* resolution
         resolution:long_name = "Physical resolution of array pixels instrument";
+
         resolution:units = "micrometer";
+
         resolution:ancillary_variables = instrument/resolution_err;
 
     *float* clockstep
         resolution:long_name = "Temporal resolution of clock. Along with airspeed defines the physical resolution in the flight direction";
+
         resolution:units = "nanosecond";
 
     *float* arm_separation
         arm_separation:long_name = "Physical distance between probe arms";
+
         arm_separation:units = "micrometer";
+
         arm_separation:ancillary_variables = instrument/arm_separation_err;
 
     *boolean* antishatter_tips
@@ -131,17 +137,23 @@ Variables in the ``core`` group are;
 
     *int* image_sec(image)
         image_sec:standard_name = "time";
+
         image_sec:long_name = "image arrival time in seconds";
+
         image_sec:timezone = "UTC";
+
         image_sec:units = "seconds since "...;
 
     *float* image_ns(image)
         image_ns:long_name = "image arrival time in nanoseconds from corresponding image_sec";
+
         image_ns:units = "nanoseconds";
+
         image_ns:ancillary_variables = instrument/core/image_sec;
 
     *float* image_len(image)
         image_len:long_name = "image event length in number of slices";
+
         image_len:units = "dimensionless";
 
     *int* images(image, slice, pixel)
