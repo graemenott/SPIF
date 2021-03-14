@@ -20,12 +20,9 @@ src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..'))
 if src_dir not in sys.path:
     sys.path.insert(0,src_dir)
 
-import spif
 import pdb
-pdb.set_trace()
-from spif import csv2rst
 
-
+import spif
 
 
 # -- Project information -----------------------------------------------------
@@ -38,8 +35,8 @@ version_date = spif.__date__
 version = f"{spif.__version_major__ + 0.1*spif.__version_minor__}"
 
 # Generate documents from cfg files of mandatory and optional file parameters
-spif_mandatory_rst = spif.cfg2rst.main('spif_mandatory.cfg')
-spif_optional_rst = spif.cfg2rst.main('spif_optional.cfg')
+spif_mandatory_rst = spif.cfg2rst('spif_mandatory.cfg')
+spif_optional_rst = spif.cfg2rst('spif_optional.cfg')
 
 # -- General configuration ---------------------------------------------------
 
