@@ -1,0 +1,31 @@
+# conda environment for SPIF repository
+name: spif
+channels:
+  - anaconda
+  - defaults
+  - conda-forge
+dependencies:
+  - python>=3.6
+  - Cython
+  - h5py
+  - hdf5
+  - ipython
+  - natsort
+  - nose
+  - numpy
+  - matplotlib
+  - opencv
+  - pandas
+  - pep8
+  - pint>=0.11
+  - pytest
+  - pytz
+  - pyyaml
+  - netCDF4
+  - scipy>=1.1
+  - seaborn
+  - sphinx
+  - sphinx_rtd_theme
+  - sphinxcontrib>=1.0
+  - sphinxcontrib-websupport>=1.1
+  - yaml
