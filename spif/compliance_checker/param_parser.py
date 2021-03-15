@@ -7,6 +7,7 @@ restructured text for integration into documentation
 
 import configparser
 import os.path
+import re
 import pdb
 
 
@@ -14,7 +15,12 @@ __author__ = 'graeme.nott@faam.ac.uk'
 __date__ = '2021 03 14'
 __version__ = '0.1'
 __all__ = ['ncParam',
-           'cfg2rst']
+           'cfg2rst',
+           'mandatory_params',
+           'optional_params']
+
+DEFAULT_CFG_FILES = {'mandatory': 'spif_mandatory_params.cfg',
+                     'optional':  'spif_optional_params.cfg'}
 
 ALLOWED_TYPES = {'grp': ['grp', 'grps', 'group', 'groups'],
                  'attr': ['attr', 'attrs', 'attribute', 'attributes'],
@@ -62,36 +68,46 @@ class ncParam():
                 self.nctype = 'coord'
 
     def _grprst(self):
-        return f"\n{self.group}\n{'-'*len(self.group)}\n"
+        if self.group == '/':
+            return "~~~~\nroot\n~~~~\n"
+        else:
+            return f"\n{self.group}\n{'~'*max(3, len(self.group))}\n"
 
     def _dimrst(self):
         """ Print attribute string block in rst format
         """
-        return f"\t:dimension: \"{self.name}\" ;\n"
+        return f" :dimension: \"{self.name}\" ;\n"
 
     def _attrrst(self):
         """ Print attribute string block in rst format
         """
-        block = f"\t:{self.name}: "
+        block = f" :{self.esc(self.name)}: "
         for attr, astr in self.attrs.items():
-            block += f"\"{astr}\" ;\n\t"
+            block += f"\"{self.esc(astr)}\" ;\n "
         return block
 
     def _varrst(self):
         """ Print variable string block in rst format
         """
         try:
-            block = f"\t|\t*{self.dtype}* **{self.name}**({', '.join(self.dims)})\n"
+            block = f" | *{self.dtype}* **{self.esc(self.name)}** ({', '.join(self.dims)})\n"
         except TypeError as err:
             # dims are None
-            block = f"\t|\t*{self.dtype}* **{self.name}**\n"
+            block = f" | *{self.dtype}* **{self.esc(self.name)}**\n"
         for attr, astr in self.attrs.items():
-            block += f"\t|\t\t**{self.name}**:{attr} = \"{astr}\" ;\n"
+            block += f" |  **{self.esc(self.name)}**:{self.esc(attr)} = \"{self.esc(astr)}\" ;\n"
         return block
 
     @staticmethod
+    def esc(s):
+        """ Include \ in strings to escape rst special characters
+        """
+        specials = '*_:'
+        return re.sub(r'([\*\_\:])', r'\\\1', s)
+
+    @staticmethod
     def root_path(path):
-            return os.path.join('/', path)
+        return os.path.join('/', path)
 
     def set_ncgrp(self, param):
         self.path = self.root_path(param.name)
@@ -133,9 +149,32 @@ class ncParam():
 
 
 # ----------------------------------------------------------------------
+def mandatory_params(file=None):
+    """ Allow file to be imported
+    """
+    if file is None:
+        file = os.path.join(os.path.dirname(__file__),
+                            DEFAULT_CFG_FILES['mandatory'])
+
+    return file
+
+
+# ----------------------------------------------------------------------
+def optional_params(file=None):
+    """ Allow file to be imported
+    """
+    if file is None:
+        file = os.path.join(os.path.dirname(__file__),
+                            DEFAULT_CFG_FILES['optional'])
+
+    return file
+
+
+# ----------------------------------------------------------------------
 def list_converter(s):
     s_list = s.split(',')
     return [None if _s.lower()=='none' else _s.strip() for _s in s_list]
+
 
 # ----------------------------------------------------------------------
 def cfg2rst(cfg_file):
@@ -169,11 +208,11 @@ def cfg2rst(cfg_file):
 # ----------------------------------------------------------------------
 if __name__=='__main__':
 
-    default_cfg = 'spif_mandatory.cfg'
+    default_cfg = '../docsrc/spif_mandatory.cfg'
 
 
     try:
-        test = main(default_cfg)
+        test = cfg2rst(default_cfg)
     except:
         pdb.post_mortem()
 
