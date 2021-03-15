@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIF - Single Particle Image Format &#8212; Python  documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Structure" href="structure.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structure.html" title="Structure"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Python  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPIF - Single Particle Image Format</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="spif-single-particle-image-format">
+<h1>SPIF - Single Particle Image Format<a class="headerlink" href="#spif-single-particle-image-format" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
+<p>A variety of binary file formats are used by the manufacturers of Optical Array Probes (OAPs) to transmit and store particle image data. The formats are/were designed around hardware and bandwidth limitations and so may not have a convenient or standard binary structure. This has meant that users must write their own routines for reading image data for processing and analysis. We propose a new file format for OAP raw image data called the Single Particle Image Format (SPIF). The new format will specify a single structure which all imaging probe data formats may be translated into leading to improved accessibility for users and a refinement of (now common) data processing routines. It may be that this format could be adopted by instrument manufacturers so that all raw image data is immediately available in a standard format. The format is also suitable for the long-term archiving of raw data and so has the potential to satisfy usage requirements across the range of usage environments.</p>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html#spif-file-definition">SPIF File Definition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#spif-root-attributes">SPIF Root Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#instrument-group">Instrument Group</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="params_mandatory.html">SPIF Mandatory Parameter Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spif_mandatory_params.html">Mandatory Parameter List</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spif_mandatory_params.html#instrument">/instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_mandatory_params.html#instrument-core">/instrument/core</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="params_optional.html">SPIF Optional Parameter Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spif_optional_params.html">Optional Parameter List</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spif_optional_params.html#instrument">/instrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_optional_params.html#instrument-level0">/instrument/level0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_optional_params.html#instrument-level1">/instrument/level1</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="current-status">
+<h2>Current Status<a class="headerlink" href="#current-status" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><table class="colwidths-auto docutils align-left">
+<tbody>
+<tr class="row-odd"><td><p>Project</p></td>
+<td><p>SPIF - Single Particle Image Format</p></td>
+</tr>
+<tr class="row-even"><td><p>Description</p></td>
+<td><p>SPIF convention definitions documentation</p></td>
+</tr>
+<tr class="row-odd"><td><p>Project repository</p></td>
+<td><p><a class="reference external" href="https://github.com/graemenott/SPIF">https://github.com/graemenott/SPIF</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Project version</p></td>
+<td><p>0.86</p></td>
+</tr>
+<tr class="row-odd"><td><p>Python version</p></td>
+<td><p>3.7</p></td>
+</tr>
+<tr class="row-even"><td><p>Created</p></td>
+<td><p>Long ago…</p></td>
+</tr>
+<tr class="row-odd"><td><p>Modified</p></td>
+<td><p>Mar 15, 2021</p>
+<blockquote>
+<div></div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SPIF - Single Particle Image Format</a><ul>
+<li><a class="reference internal" href="#motivation">Motivation</a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+<li><a class="reference internal" href="#current-status">Current Status</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="structure.html"
+                        title="next chapter">Structure</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="structure.html" title="Structure"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Python  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPIF - Single Particle Image Format</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright undecided.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+    </div>
+  </body>
+</html>

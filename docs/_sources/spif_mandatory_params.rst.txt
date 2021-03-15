@@ -1,0 +1,94 @@
+.. title:: SPIF Mandatory Parameters
+.. note:: Auto-generated: |today|
+
+~~~~
+root
+~~~~
+
+
+ :Conventions: "SPIF-0.86" ;
+ 
+
+ :title: 
+
+
+/instrument
+~~~~~~~~~~~
+
+
+ :instrument\_name: 
+
+ :dimension: "bit" ;
+
+
+ :dimension: "pixel" ;
+
+
+ | *float* **arm\_separation**
+ |  **arm\_separation**:long\_name = "Physical distance between probe arms" ;
+ |  **arm\_separation**:units = "millimeter" ;
+
+
+ | *float* **clockstep**
+ |  **clockstep**:long\_name = "Temporal resolution of imaging clock" ;
+ |  **clockstep**:units = "nanosecond" ;
+
+
+ | *float* **instrument\_wavelength**
+ |  **instrument\_wavelength**:long\_name = "Operating wavelength of laser used for shadowing/imaging the particles" ;
+
+
+ | *float* **resolution**
+ |  **resolution**:long\_name = "Physical resolution of array pixels instrument" ;
+ |  **resolution**:units = "um" ;
+
+
+ | *float* **shadow** (bit)
+ |  **shadow**:long\_name = "Fractional obscuration of photodiode array for each bit value" ;
+ |  **shadow**:units = "dimensionless" ;
+
+
+ | *int* **value** (bit)
+ |  **value**:long\_name = "Value of shadow level in image array" ;
+ |  **value**:units = "dimensionless" ;
+
+
+
+/instrument/core
+~~~~~~~~~~~~~~~~
+
+
+ :dimension: "images" ;
+
+
+ | *int* **buffer\_index** (images)
+ |  **buffer\_index**:long\_name = "index of data buffer from which image was extracted" ;
+ |  **buffer\_index**:units = "dimensionless" ;
+
+
+ | *int* **image** (images, slice, pixel)
+ |  **image**:long\_name = "image array" ;
+ |  **image**:units = "dimensionless" ;
+
+
+ | *int* **image\_len** (images)
+ |  **image\_len**:long\_name = "image event length in number of slices" ;
+ |  **image\_len**:units = "dimensionless" ;
+
+
+ | *float* **image\_ns** (images)
+ |  **image\_ns**:long\_name = "image arrival time in nanoseconds from corresponding image\_sec" ;
+ |  **image\_ns**:units = "nanoseconds" ;
+ |  **image\_ns**:ancillary\_variables = "instrument/core/image\_sec" ;
+
+
+ | *int* **image\_sec** (images)
+ |  **image\_sec**:standard\_name = "time" ;
+ |  **image\_sec**:long\_name = "image arrival time in seconds" ;
+ |  **image\_sec**:timezone = "" ;
+ |  **image\_sec**:units = "" ;
+
+
+ | *boolean* **overload** (images)
+ |  **overload**:long\_name = "Probe particle overload status" ;
+ |  **overload**:units = "dimensionless" ;

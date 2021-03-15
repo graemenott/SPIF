@@ -1,0 +1,573 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIF Mandatory Parameters &#8212; Python  documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="SPIF Optional Parameter Definitions" href="params_optional.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="params_optional.html" title="SPIF Optional Parameter Definitions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPIF Mandatory Parameters</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Auto-generated: Mar 15, 2021</p>
+</div>
+<div class="section" id="root">
+<h1>root<a class="headerlink" href="#root" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">history</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">institution</dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">references</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">source</dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+</div></blockquote>
+<div class="section" id="instrument">
+<h2>/instrument<a class="headerlink" href="#instrument" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">institution</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">instrument_channel</dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">instrument_firmware</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">instrument_long_name</dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">instrument_software</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">manufacturer</dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">platform</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">raw_filenames</dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">references</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">serial_number</dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="line-block">
+<div class="line"><em>boolean</em> <strong>antishatter_tips</strong></div>
+<div class="line-block">
+<div class="line"><strong>antishatter_tips</strong>:long_name = “Use of antishatter-, or Korolev-tips on probe arms” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>arm_separation_err</strong></div>
+<div class="line-block">
+<div class="line"><strong>arm_separation_err</strong>:long_name = “Uncertaintly in the physical distance between probe arms” ;</div>
+<div class="line"><strong>arm_separation_err</strong>:units = “millimeter” ;</div>
+<div class="line"><strong>arm_separation_err</strong>:ancillary_variables = “instrument/arm_separation” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>resolution_err</strong></div>
+<div class="line-block">
+<div class="line"><strong>resolution_err</strong>:long_name = “Uncertainty in physical resolution of array pixels instrument” ;</div>
+<div class="line"><strong>resolution_err</strong>:units = “um” ;</div>
+<div class="line"><strong>resolution_err</strong>:ancillary_variables = “instrument/resolution” ;</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="instrument-level0">
+<h2>/instrument/level0<a class="headerlink" href="#instrument-level0" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">dimension</dt>
+<dd class="field-odd"><p>“particles” ;</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>F</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>F</strong>:long_name = “Shape factor of particl” ;</div>
+<div class="line"><strong>F</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>F</strong>:references = “Holroyd 1986” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_eq</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_eq</strong>:long_name = “Diameter of circle with area equivalent to particle area” ;</div>
+<div class="line"><strong>N_eq</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_eq</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>N_eq</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_h</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_h</strong>:long_name = “Hypotenuse of triangle formed by N_p and N_t” ;</div>
+<div class="line"><strong>N_h</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_h</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>N_h</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_hole</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_hole</strong>:long_name = “Max hole diameter” ;</div>
+<div class="line"><strong>N_hole</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_hole</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>N_hole</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_korolev</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_korolev</strong>:long_name = “Korolev-corrected diameter” ;</div>
+<div class="line"><strong>N_korolev</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_korolev</strong>:references = “Korolev, 2007.” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_m</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_m</strong>:long_name = “Mean of N_p and N_t” ;</div>
+<div class="line"><strong>N_m</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_m</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>N_m</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>N_p</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_p</strong>:long_name = “Max distance in the photodiode-array dimension” ;</div>
+<div class="line"><strong>N_p</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_p</strong>:equivalent_name = “N_y, L5” ;</div>
+<div class="line"><strong>N_p</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_reconst</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_reconst</strong>:long_name = “Reconstructed circle diameter for center-in particle” ;</div>
+<div class="line"><strong>N_reconst</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_reconst</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>N_reconst</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>N_s</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_s</strong>:long_name = “Diameter of minimum enclosing circle” ;</div>
+<div class="line"><strong>N_s</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_s</strong>:equivalent_name = “N_max” ;</div>
+<div class="line"><strong>N_s</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_slice_count</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_slice_count</strong>:long_name = “Diameter of slice with maximum number of shaded pixels” ;</div>
+<div class="line"><strong>N_slice_count</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_slice_count</strong>:equivalent_name = “L2” ;</div>
+<div class="line"><strong>N_slice_count</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_slice_diff</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_slice_diff</strong>:long_name = “Diameter of slice with greatest pixel separation” ;</div>
+<div class="line"><strong>N_slice_diff</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_slice_diff</strong>:equivalent_name = “L4” ;</div>
+<div class="line"><strong>N_slice_diff</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>N_t</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_t</strong>:long_name = “Max distance in the time dimension” ;</div>
+<div class="line"><strong>N_t</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_t</strong>:equivalent_name = “N_x, L1” ;</div>
+<div class="line"><strong>N_t</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>S</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>S</strong>:long_name = “Ratio of fully shaded slices to total slices” ;</div>
+<div class="line"><strong>S</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>S</strong>:references = “Holroyd 1986” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>boolean</em> <strong>all_in</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>all_in</strong>:long_name = “Flag indicating if particle is all-in” ;</div>
+<div class="line"><strong>all_in</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>all_in</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>area</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>area</strong>:long_name = “Number of shaded pixels” ;</div>
+<div class="line"><strong>area</strong>:units = “pixels” ;</div>
+<div class="line"><strong>area</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>area</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>bbox</strong> (particles, 4)</div>
+<div class="line-block">
+<div class="line"><strong>bbox</strong>:long_name = “Bounding box of particle. p0, t0, pN, tN pixel coordinates” ;</div>
+<div class="line"><strong>bbox</strong>:units = “pixels” ;</div>
+<div class="line"><strong>bbox</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>bbox</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>boolean</em> <strong>center_in</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>center_in</strong>:long_name = “Flag indicating if particle is center-in” ;</div>
+<div class="line"><strong>center_in</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>center_in</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>ellipse_angle</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>ellipse_angle</strong>:long_name = “Orientation of particle fit to ellipse” ;</div>
+<div class="line"><strong>ellipse_angle</strong>:units = “radians” ;</div>
+<div class="line"><strong>ellipse_angle</strong>:references = “” ;</div>
+<div class="line"><strong>ellipse_angle</strong>:comment = “Given in radians with range from -pi/2 to pi/2. Reference is parallel to photodiode array.” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>ellipse_maj_axis</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>ellipse_maj_axis</strong>:long_name = “The length of the major axis of the ellipse fit to particle” ;</div>
+<div class="line"><strong>ellipse_maj_axis</strong>:units = “pixels” ;</div>
+<div class="line"><strong>ellipse_maj_axis</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>ellipse_min_axis</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>ellipse_min_axis</strong>:long_name = “The length of the minor axis of the ellipse fit to particle” ;</div>
+<div class="line"><strong>ellipse_min_axis</strong>:units = “pixels” ;</div>
+<div class="line"><strong>ellipse_min_axis</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>fit_angle</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>fit_angle</strong>:long_name = “Orientation of particle fit to line using least-squares technique” ;</div>
+<div class="line"><strong>fit_angle</strong>:units = “pixels” ;</div>
+<div class="line"><strong>fit_angle</strong>:references = “” ;</div>
+<div class="line"><strong>fit_angle</strong>:comment = “Given in radians with range from -pi/2 to pi/2. Reference is parallel to photodiode array.” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>fit_maj_axis</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>fit_maj_axis</strong>:long_name = “The length of particle along the least-squares fit line orientation” ;</div>
+<div class="line"><strong>fit_maj_axis</strong>:units = “pixels” ;</div>
+<div class="line"><strong>fit_maj_axis</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>fit_maj_axis</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>fit_min_axis</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>fit_min_axis</strong>:long_name = “The length of particle perpendicular to the least-squares fit line orientation” ;</div>
+<div class="line"><strong>fit_min_axis</strong>:units = “pixels” ;</div>
+<div class="line"><strong>fit_min_axis</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>fit_r2</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>fit_r2</strong>:long_name = “R squared value from least-squares line fit” ;</div>
+<div class="line"><strong>fit_r2</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>fit_r2</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>l_edge_count</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>l_edge_count</strong>:long_name = “Number of shaded pixels along left (0th) photodiode boundary for current particle” ;</div>
+<div class="line"><strong>l_edge_count</strong>:units = “pixels” ;</div>
+<div class="line"><strong>l_edge_count</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>l_edge_count</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>perimeter</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>perimeter</strong>:long_name = “Number of pixels around perimeter of particle” ;</div>
+<div class="line"><strong>perimeter</strong>:units = “pixels” ;</div>
+<div class="line"><strong>perimeter</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>perimeter</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>r_edge_count</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>r_edge_count</strong>:long_name = “Number of shaded pixels along right (Nth) photodiode boundary for current particle” ;</div>
+<div class="line"><strong>r_edge_count</strong>:units = “pixels” ;</div>
+<div class="line"><strong>r_edge_count</strong>:equivalent_name = “” ;</div>
+<div class="line"><strong>r_edge_count</strong>:references = “” ;</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="instrument-level1">
+<h2>/instrument/level1<a class="headerlink" href="#instrument-level1" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">dimension</dt>
+<dd class="field-odd"><p>“particles” ;</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_h</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_h</strong>:long_name = “Hypotenuse of triangle formed by D_p and D_t” ;</div>
+<div class="line"><strong>D_h</strong>:units = “um” ;</div>
+<div class="line"><strong>D_h</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_hole</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_hole</strong>:long_name = “Max hole diameter” ;</div>
+<div class="line"><strong>D_hole</strong>:units = “um” ;</div>
+<div class="line"><strong>D_hole</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_korolev</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_korolev</strong>:long_name = “Korolev-corrected diameter” ;</div>
+<div class="line"><strong>D_korolev</strong>:units = “um” ;</div>
+<div class="line"><strong>D_korolev</strong>:references = “Korolev, 2007.” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_m</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_m</strong>:long_name = “Mean of D_p and D_t” ;</div>
+<div class="line"><strong>D_m</strong>:units = “um” ;</div>
+<div class="line"><strong>D_m</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_p</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_p</strong>:long_name = “Max distance in the photodiode-array dimension” ;</div>
+<div class="line"><strong>D_p</strong>:units = “um” ;</div>
+<div class="line"><strong>D_p</strong>:equivalent_name = “D_y, L5” ;</div>
+<div class="line"><strong>D_p</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_reconst</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_reconst</strong>:long_name = “Reconstructed circle diameter for center-in particle” ;</div>
+<div class="line"><strong>D_reconst</strong>:units = “um” ;</div>
+<div class="line"><strong>D_reconst</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_s</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_s</strong>:long_name = “Diameter of minimum enclosing circle” ;</div>
+<div class="line"><strong>D_s</strong>:units = “um” ;</div>
+<div class="line"><strong>D_s</strong>:equivalent_name = “D_max” ;</div>
+<div class="line"><strong>D_s</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_slice_count</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_slice_count</strong>:long_name = “Diameter of slice with maximum number of shaded pixels” ;</div>
+<div class="line"><strong>D_slice_count</strong>:units = “um” ;</div>
+<div class="line"><strong>D_slice_count</strong>:equivalent_name = “L2” ;</div>
+<div class="line"><strong>D_slice_count</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_slice_diff</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>D_slice_diff</strong>:long_name = “Diameter of slice with greatest pixel separation” ;</div>
+<div class="line"><strong>D_slice_diff</strong>:units = “um” ;</div>
+<div class="line"><strong>D_slice_diff</strong>:equivalent_name = “L4” ;</div>
+<div class="line"><strong>D_slice_diff</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_eq</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_eq</strong>:long_name = “Diameter of circle with area equivalent to particle area” ;</div>
+<div class="line"><strong>N_eq</strong>:units = “um” ;</div>
+<div class="line"><strong>N_eq</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_t</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>N_t</strong>:long_name = “Max distance in the time dimension” ;</div>
+<div class="line"><strong>N_t</strong>:units = “um” ;</div>
+<div class="line"><strong>N_t</strong>:equivalent_name = “D_x, L1” ;</div>
+<div class="line"><strong>N_t</strong>:references = “?” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>boolean</em> <strong>all_in</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>all_in</strong>:long_name = “Flag indicating if particle is all-in” ;</div>
+<div class="line"><strong>all_in</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>all_in</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>area</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>area</strong>:long_name = “Area of shaded pixels” ;</div>
+<div class="line"><strong>area</strong>:units = “um^2” ;</div>
+<div class="line"><strong>area</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>boolean</em> <strong>center_in</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>center_in</strong>:long_name = “Flag indicating if particle is center-in” ;</div>
+<div class="line"><strong>center_in</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>center_in</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>ellipse_angle</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>ellipse_angle</strong>:long_name = “Orientation of particle fit to ellipse” ;</div>
+<div class="line"><strong>ellipse_angle</strong>:units = “radians” ;</div>
+<div class="line"><strong>ellipse_angle</strong>:references = “” ;</div>
+<div class="line"><strong>ellipse_angle</strong>:comment = “Given in radians with range from -pi/2 to pi/2. Reference is parallel to photodiode array.” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>ellipse_maj_axis</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>ellipse_maj_axis</strong>:long_name = “The length of the major axis of the ellipse fit to particle” ;</div>
+<div class="line"><strong>ellipse_maj_axis</strong>:units = “um” ;</div>
+<div class="line"><strong>ellipse_maj_axis</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>ellipse_min_axis</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>ellipse_min_axis</strong>:long_name = “The length of the minor axis of the ellipse fit to particle” ;</div>
+<div class="line"><strong>ellipse_min_axis</strong>:units = “um” ;</div>
+<div class="line"><strong>ellipse_min_axis</strong>:references = “” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>habit</strong> (particles)</div>
+<div class="line-block">
+<div class="line"><strong>habit</strong>:long_name = “Name of the habit classification technique” ;</div>
+<div class="line"><strong>habit</strong>:key = “” ;</div>
+<div class="line"><strong>habit</strong>:references = “” ;</div>
+</div>
+</div>
+<blockquote>
+<div></div></blockquote>
+</div></blockquote>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">root</a><ul>
+<li><a class="reference internal" href="#instrument">/instrument</a></li>
+<li><a class="reference internal" href="#instrument-level0">/instrument/level0</a></li>
+<li><a class="reference internal" href="#instrument-level1">/instrument/level1</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="params_optional.html"
+                        title="previous chapter">SPIF Optional Parameter Definitions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/spif_optional_params.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="params_optional.html" title="SPIF Optional Parameter Definitions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPIF Mandatory Parameters</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright undecided.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.1.
+    </div>
+  </body>
+</html>
