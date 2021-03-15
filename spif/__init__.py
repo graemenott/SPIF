@@ -7,7 +7,7 @@ __author__ = 'the SPIF inititive'
 __copyright__ = 'undecided'
 __date__ = '2021 03 03'
 __version_major__ = 0
-__version_minor__ = 86
+__version_minor__ = 8.6
 
 
 from .compliance_checker import *
