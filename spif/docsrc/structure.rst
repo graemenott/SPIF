@@ -1,4 +1,17 @@
-. title:: SPIF Structure
+.. title:: SPIF Structure
+
+
+==========
+Structure
+==========
+
+The SPIF file uses the `NetCDF4 format <https://www.unidata.ucar.edu/software/netcdf/>`_. NetCDF4 is a structured binary file format capable of containing large datasets and has automatic compression
+utilities. NetCDF4 is widely supported on a variety of platforms and environments.
+
+Data will be contained within **instrument groups** inside the SPIF file. Only data from a single instrument in contained in a single SPIF file however different instrument channels may be stored in different groups and so be kept together. Group attributes allow the specific instrument to be identified along with instrument hardware and software parameters.
+
+In a similar fashion to the `CF (Climate and Forecast) Conventions <http://cfconventions.org/>`_, the SPIF conventions define a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the standards. Any suggested but optional data for inclusion are given in *italics*. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF `scoping guidelines <http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups>`_ in that dimensions are visible to all child groups.
+
 
 ====================
 SPIF File Definition
@@ -82,43 +95,39 @@ The root of the instrument group contains attributes pertaining to that specific
     :instrument_wavelength: Wavelength of imaging laser
     :platform: Name or description of platform instrument is mounted on
     :raw_filenames: Raw data filename(s) used to generate the current instrument dataset
-    :comment: = Any further notes about instrument, platform, location, orientation, etc;
+    :comment: Any further notes about instrument, platform, location, orientation, etc;
 
 Universal variables may also be included in the instrument group root. For example;
 
-    *int* pixel(pixel)
-        pixel:long_name = "Vector of pixel numbers for instrument";
+    | *int* **pixel** (pixel)
+    |  **pixel**:long\_name = "Vector of pixel numbers for instrument" ;
 
-    *int* bit(bit)
-        bit:long_name = "pixel bit";
+    | *int* **bit** (bit)
+    |  **bit**:long\_name = "pixel bit" ;
 
-    *int* value(bit)
-        bit:long_name = "Value of shadow level in image array";
+    | *int* **value** (bit)
+    |  **bit**:long_name = "Value of shadow level in image array" ;
+    |  **bit**:ancillary\_variables = shadow;
 
-        bit:ancillary_variables = shadow;
+    | *float* **shadow** (bit)
+    |  **shadow**:long\_name = "Fractional obscuration of photodiode array for each bit value" ;
 
-    *float* shadow(bit)
-        shadow:long_name = "Fractional obscuration of photodiode array for each bit value";
+    | *float* **resolution**
+    |  **resolution**:long\_name = "Physical resolution of array pixels instrument" ;
+    |  **resolution**:units = "micrometer" ;
+    |  **resolution**:ancillary_variables = instrument/resolution_err ;
 
-    |   *float* **resolution**
-    |       **resolution**:long_name = "Physical resolution of array pixels instrument";
-    |       **resolution**:units = "micrometer";
-    |       **resolution**:ancillary_variables = instrument/resolution_err;
+    | *float* **clockstep**
+    |  **resolution**:long\_name = "Temporal resolution of clock. Along with airspeed defines the physical resolution in the flight direction" ;
+    |  **resolution**:units = "nanosecond" ;
 
-    *float* clockstep
-        resolution:long_name = "Temporal resolution of clock. Along with airspeed defines the physical resolution in the flight direction";
+    | *float* **arm\_separation**
+    |  **arm\_separation**:long_name = "Physical distance between probe arms" ;
+    |  **arm\_separation**:units = "micrometer" ;
+    |  **arm\_separation**:ancillary_variables = instrument/arm\_separation\_err ;
 
-        resolution:units = "nanosecond";
-
-    *float* arm_separation
-        arm_separation:long_name = "Physical distance between probe arms";
-
-        arm_separation:units = "micrometer";
-
-        arm_separation:ancillary_variables = instrument/arm_separation_err;
-
-    *boolean* antishatter_tips
-        antishatter_tips:long_name = "Use of antishatter-, or Korolev-, tips on probe arms";
+    | *boolean* **antishatter_tips**
+    |  **antishatter\_tips**:long\_name = "Use of antishatter-, or Korolev-, tips on probe arms" ;
 
 
 .. _core:
@@ -130,32 +139,26 @@ The instrument ``core`` group contains the raw image data. Variables should exis
 
 Variables in the ``core`` group are;
 
-    *int* image(image)
-        image:long_name = "Index of image";
+    | *int* **image** (image)
+    |  **image**:long\_name = "Index of image" ;
 
-    *int* image_sec(image)
-        image_sec:standard_name = "time";
+    | *int* **image\_sec** (image)
+    |  **image\_sec**:standard_name = "time" ;
+    |  **image\_sec**:long\_name = "image arrival time in seconds" ;
+    |  **image\_sec**:timezone = "UTC" ;
+    |  **image\_sec**:units = "seconds since "... ;
 
-        image_sec:long_name = "image arrival time in seconds";
+    | *float* **image\_ns** (image)
+    |  **image\_ns**:long_name = "image arrival time in nanoseconds from corresponding image_sec" ;
+    |  **image\_ns**:units = "nanoseconds" ;
+    |  **image\_ns**:ancillary\_variables = instrument/core/image\_sec ;
 
-        image_sec:timezone = "UTC";
+    | *float* **image_len** (image)
+    |  **image\_len**:long\_name = "image event length in number of slices" ;
+    |  **image\_len**:units = "dimensionless" ;
 
-        image_sec:units = "seconds since "...;
-
-    *float* image_ns(image)
-        image_ns:long_name = "image arrival time in nanoseconds from corresponding image_sec";
-
-        image_ns:units = "nanoseconds";
-
-        image_ns:ancillary_variables = instrument/core/image_sec;
-
-    *float* image_len(image)
-        image_len:long_name = "image event length in number of slices";
-
-        image_len:units = "dimensionless";
-
-    *int* images(image, slice, pixel)
-        images:long_name = "image array";
+    | *int* **images** (image, slice, pixel)
+    |  **images**:long\_name = "image array" ;
 
 
 .. _aux:
