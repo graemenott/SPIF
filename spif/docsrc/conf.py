@@ -20,8 +20,7 @@ src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..'))
 if src_dir not in sys.path:
     sys.path.insert(0,src_dir)
 
-import pdb
-
+import re
 import spif
 
 
@@ -35,8 +34,19 @@ version_date = spif.__date__
 version = f"{spif.__version_major__ + 0.1*spif.__version_minor__}"
 
 # Generate documents from cfg files of mandatory and optional file parameters
-spif_mandatory_rst = spif.cfg2rst('spif_mandatory.cfg')
-spif_optional_rst = spif.cfg2rst('spif_optional.cfg')
+with open('spif_mandatory_params.rst', 'w') as f:
+    _p = spif.cfg2rst(spif.mandatory_params())
+    # Update convention version to latest
+    _p = re.sub(r'(:Conventions: \"SPIF-)n.m', f"\g<1>{version}", _p)
+    # Add title and auto-generate notice
+    _p = '.. title:: SPIF Mandatory Parameters\n' + \
+         '.. note:: Auto-generated: |today|\n\n' + _p
+    f.write(_p)
+with open('spif_optional_params.rst', 'w') as f:
+    _p = spif.cfg2rst(spif.optional_params())
+    _p = '.. title:: SPIF Mandatory Parameters\n' + \
+         '.. note:: Auto-generated: |today|\n\n' + _p
+    f.write(_p)
 
 # -- General configuration ---------------------------------------------------
 
@@ -104,24 +114,20 @@ add_module_names = True
 # rst substitutions for each file. Used for easy access to project
 # fundamentals.
 rst_epilog = """
-    .. |ProjectTitle| replace:: {title}
-    .. |ProjectDescription| replace:: {descr}
-    .. |ProjectVersion| replace:: {ver}
-    .. |ProjectDate| replace:: {date}
-    .. |PythonVersion| replace:: {pyver}
-    .. |ProjectAuthor| replace:: {auth}
-    .. |ProjectCopyright| replace:: {copy}
-    .. |ProjectMandatoryParams| replace:: {must}
-    .. |ProjectOptionalParams| replace:: {could}
-    """.format(title = title,
-               descr = description,
-               ver = version,
-               date = version_date,
-               pyver = sys.version_info.major + 0.1*sys.version_info.minor,
-               auth = author,
-               copy = copyright,
-               must = spif_mandatory_rst,
-               could = spif_optional_rst)
+                .. |ProjectTitle| replace:: {title}
+                .. |ProjectDescription| replace:: {descr}
+                .. |ProjectVersion| replace:: {ver}
+                .. |ProjectDate| replace:: {date}
+                .. |PythonVersion| replace:: {pyver}
+                .. |ProjectAuthor| replace:: {auth}
+                .. |ProjectCopyright| replace:: {copy}""".format(
+                   title = title,
+                   descr = description,
+                   ver = version,
+                   date = version_date,
+                   pyver = sys.version_info.major + 0.1*sys.version_info.minor,
+                   auth = author,
+                   copy = copyright)
 
 
 # -- Options for HTML output -------------------------------------------------
