@@ -135,6 +135,36 @@ Universal variables may also be included in the instrument group root. For examp
 Instrument Core Group
 ^^^^^^^^^^^^^^^^^^^^^
 
+.. note::
+    **Option 1** Image array is 2-dimensional with the unlimited dimension being ``time`` and the orthogonal dimension being ``pixel``. This most closely resembles the structure of an OAP image.
+
+    :Advantages:
+        Close to raw binary file format (?) and images as presented during data collection.
+    :Disadvantages:
+        Cannot be extended to different image types, eg 2d ccd images. `Time` is not a contiguous series.
+
+The instrument ``core`` group contains the raw image data. Variables should exist for all of the information contained for each image in the source binary file. Thus this is a true raw dataset. The incrementing and unlimited dimension is ``time``. The units are in nanoseconds from the start time of the file, this is defined in the ``time:units`` attribute using the CF format. The ``array`` dimension corresponds to the image dimension along the diode array, and is set as the number of diodes of the instrument.
+
+Variables in the ``core`` group are;
+
+    | *float* **time** (time)
+    |  **time**:standard_name = "time" ;
+    |  **time**:timezone = "UTC" ;
+    |  **time**:long_name = "image arrival time in nanoseconds from start time" ;
+    |  **time**:units = "nanoseconds since <start_datetime>" ;
+
+    | *int* **images** (time, pixel)
+    |  **images**:long\_name = "image array" ;
+
+
+.. note::
+    **Option 2** Here the 2-dim is split into individual images and so is effectively the inverse operation that the probe hardware performs when is squishes particle images together. The image array is 3-dimensional with the ``image`` dimension being unlimited dimension and a counter.
+
+    :Advantages:
+        Format can be (more) easily extended to instruments that use a 2-dim imaging array.
+    :Disadvantages:
+        Issues of padding in the ``slice`` dimension as this need to be set to the largest possible (?) size. Change in format from 'native' image format(?).
+
 The instrument ``core`` group contains the raw image data. Variables should exist for all of the information contained for each image in the source binary file. Thus this is a true raw dataset. The incrementing dimension is ``image``. The start time for the *nth* image is given by the sum of ``particle_sec``(*n*) and ``particle_ns``(*n*). The 2-dimensional images have additional dimensions ``slice`` and ``array``. The ``slice`` dimension corresponds to the image dimension in the direction of flight and is set as the maximum number of slices encountered (or allowed) by the instrument. The ``array`` dimension corresponds to the image dimension along the diode array, and is set as the number of diodes of the instrument.
 
 Variables in the ``core`` group are;
@@ -159,6 +189,7 @@ Variables in the ``core`` group are;
 
     | *int* **images** (image, slice, pixel)
     |  **images**:long\_name = "image array" ;
+
 
 
 .. _aux:
