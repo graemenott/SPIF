@@ -41,15 +41,20 @@
 <div class="section" id="motivation">
 <h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
 <p>A variety of binary file formats are used by the manufacturers of Optical Array Probes (OAPs) to transmit and store particle image data. The formats are/were designed around hardware and bandwidth limitations and so may not have a convenient or standard binary structure. This has meant that users must write their own routines for reading image data for processing and analysis. We propose a new file format for OAP raw image data called the Single Particle Image Format (SPIF). The new format will specify a single structure which all imaging probe data formats may be translated into leading to improved accessibility for users and a refinement of (now common) data processing routines. It may be that this format could be adopted by instrument manufacturers so that all raw image data is immediately available in a standard format. The format is also suitable for the long-term archiving of raw data and so has the potential to satisfy usage requirements across the range of usage environments.</p>
+<p>OAP images are created by triggering a 1-dimensional array of photodiodes on a nanosecond timescale to create a series of slices as a particle travels through the sample volume. These slices are used to construct a 2-dimensional image of the particle with a set width that corresponds to the number of photodiodes in the 1-dimensional array and a variable length that depends on the size and shape of the particle. True 2-dimensional images produced by a 2-dimensional CCD or similar photodetector can also be stored in the SPIF structure. The dimensions of the produced images may not have a fixed size, for example probes such as the <a class="reference external" href="http://www.specinc.com/3v-cpi-combo">SPEC 3V-CPI</a> define a region of interest that is constrained by the image size in order to reduce data bandwidth requirements and file size. SPIF files can contain both of these types of images which increases it’s flexibility and future-proofs the convention, more details are given in <a class="reference internal" href="structure.html#image-array-structure"><span class="std std-ref">Raw Image Array Structure</span></a>.</p>
 </div>
 <div class="section" id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="structure.html">Structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="structure.html#spif-file-definition">SPIF File Definition</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#spif-root-attributes">SPIF Root Attributes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#instrument-group">Instrument Group</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#instrument-channels">Instrument Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#raw-image-array-structure">Raw Image Array Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="definition.html">SPIF File Definition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="definition.html#spif-root-attributes">SPIF Root Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definition.html#instrument-channel-group">Instrument Channel Group</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="params_mandatory.html">SPIF Mandatory Parameter Definitions</a></li>
@@ -92,7 +97,7 @@
 <td><p>Long ago…</p></td>
 </tr>
 <tr class="row-odd"><td><p>Modified</p></td>
-<td><p>Mar 26, 2021</p>
+<td><p>Apr 23, 2021</p>
 <blockquote>
 <div></div></blockquote>
 </td>
