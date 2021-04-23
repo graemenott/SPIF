@@ -59,6 +59,7 @@ with open('spif_optional_params.rst', 'w') as f:
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel',
     'sphinx.ext.todo',
     'sphinx.ext.imgmath',
     'sphinx.ext.ifconfig',
