@@ -69,20 +69,22 @@ Any other attributes that apply to this dataset can be included in the root.
 Instrument Channel Group
 ------------------------
 
-The root of the instrument channel group contains attributes pertaining to that specific instrument/channel. Instrument group attributes are currently not mandatory but may include;
+The root of the instrument channel group contains attributes pertaining to that specific instrument/channel. It may also include information about the probe software module that was used to create the file.
+
+Instrument group attributes are currently not mandatory but may include;
 
     :instrument_name: Short name of instrument
     :instrument_long_name: Full descriptive name of instrument
     :instrument_channel: Instrument channel (if applicable)
-    :institution: Institution operating instrument
-    :references: Link to web, paper, document reference describing instrument
-    :serial_number: Serial number or instrument identifier
+    :instrument_serial_number: Serial number or instrument identifier
     :manufacturer: Manufacturer of instrument
     :instrument_firmware: Instrument firmware version
     :instrument_software: Name and version of data acquisition software interfacing with instrument
     :instrument_wavelength: Wavelength of imaging laser
+    :institution: Institution operating instrument
     :platform: Name or description of platform instrument is mounted on
     :raw_filenames: Raw data filename(s) used to generate the current instrument dataset
+    :references: Link to web, paper, document reference describing instrument
     :comment: Any further notes about instrument, platform, location, orientation, etc;
 
 Universal variables may also be included in the instrument group root. For example;
@@ -95,21 +97,36 @@ Dimensions:
 Variables:
 """"""""""
 
-    | *u1* **value** (bit)
+    | *int* **value** (bit)
     |  **bit**:long_name = "Value of shadow level in image array" ;
     |  **bit**:ancillary\_variables = shadow;
 
     | *float* **shadow** (bit)
     |  **shadow**:long\_name = "Fractional obscuration of photodiode array for each bit value" ;
 
+    | *float* **start_time**
+    |  **start_time**:long_name = "Reference datetime of image data" ;
+    |  **start_time**:units = "seconds since <reference datetime>" ;
+
     | *float* **resolution**
-    |  **resolution**:long\_name = "Physical resolution of array pixels instrument" ;
+    |  **resolution**:long\_name = "Physical resolution of array pixels" ;
     |  **resolution**:units = "micrometer" ;
     |  **resolution**:ancillary_variables = instrument/resolution_err ;
 
-    | *float* **clockstep**
-    |  **resolution**:long\_name = "Temporal resolution of clock. Along with airspeed defines the physical resolution in the flight direction" ;
-    |  **resolution**:units = "nanosecond" ;
+    | *float* **resolution_err**
+    |  **resolution_err**:long\_name = "Uncertainty of physical resolution of array pixels" ;
+    |  **resolution_err**:units = "micrometer" ;
+
+    | *float* **array\_rate**
+    |  **array\_rate**:long\_name = "Temporal clocking rate of imaging array. If an OAP then this, along with airspeed, defines the physical resolution in the flight direction. If 2D image then defines maximum frame rate." ;
+    |  **array\_rate**:units = "hertz" ;
+
+    | *int* **array\_size**
+    |  **array\_size**:long\_name = "Number of pixels across the imaging array, may be 1D or 2D." ;
+
+    | *int* **image\_size**
+    |  **image\_size**:long\_name = "Number of pixels across an image, may be 1D or 2D. If fixed size then number of pixels, if variable size then _FillValue" ;
+    |  **image\_size**:_FillValue = 0 ;
 
     | *float* **arm\_separation**
     |  **arm\_separation**:long_name = "Physical distance between probe arms" ;
@@ -124,7 +141,7 @@ Variables:
 Instrument Core Group
 ^^^^^^^^^^^^^^^^^^^^^
 
-The instrument ``core`` group contains the raw image data. Variables should exist for all of the information contained for each image in the source binary file. Thus this is a true raw dataset. The unlimited dimensions are ``image_num`` and ``pixel`` where ``pixel`` is the number of pixels of data in the flattened image array.
+The instrument ``core`` group contains the raw image data. Variables should exist for all of the information contained for each image in the source binary file. Thus this is a true raw dataset. The unlimited dimensions are ``image_num`` and ``pixel`` where ``max(image_num)`` is the number of images in the dataset and ``max(pixel)`` is the total number of pixels of data in the flattened image array.
 
 .. Note::
     Each image may in fact contain multiple particles. As the ``core`` group is entirely raw data, there has been no processing to split out the multiple particles from a single image.
@@ -139,34 +156,42 @@ Dimensions:
 
 Variables:
 """"""""""
-    | *f4* **image** (pixel)
+    | *int* **image** (pixel)
     |  **image**:long\_name = "Flattened 1d array of images" ;
 
-    | *f4* **timestamp** (image_num)
+    | *float* **timestamp** (image_num)
     |  **time**:standard_name = "time" ;
     |  **time**:timezone = "UTC" ;
     |  **time**:long_name = "image arrival time in nanoseconds from start time" ;
-    |  **time**:units = "nanoseconds since <start_datetime>" ;
+    |  **time**:units = "nanoseconds since <start_time>" ;
 
-    | *u8* **startpixel** (image_num)
+    | *int* **startpixel** (image_num)
     |  **startpixel**:long\_name = "Array index of first image slice" ;
 
-    | *u4* **width** (image_num)
+    | *int* **width** (image_num)
     |  **width**:long\_name = "Number of pixels across image" ;
     |  **width**:units = "pixels" ;
 
-    | *u4* **height** (image_num)
+    | *int* **height** (image_num)
     |  **height**:long\_name = "Number of slices/lines that make up image" ;
     |  **height**:units = "lines" ;
 
-    | *u4* **flag** (image_num)
+    | *int* **flag** (image_num)
     |  **flag**:long\_name = "Data quality flag for each image" ;
     |  **flag**:flag_values = "0, 1" ;
     |  **flag**:flag_meanings, "good bad" ;
 
 
-.. Caution::
-    Have not done any more...
+.. admonition:: A word on data types
+
+    The above dtypes are given in the broadest terms as the definitions do not *require* a specific type of *integer* or *float*. However, significant savings in terms of file size and memory usage can be made by using the following dtypes (given in terms of `netCDF <http://unidata.github.io/netcdf4-python/#variables-in-a-netcdf-file>`_ and `numpy <https://numpy.org/doc/stable/reference/arrays.scalars.html>`_ dtypes);
+
+       | **image**: 'u1' or np.uint8
+       | **timestamp**: 'f4' or np.float32
+       | **startpixel**: 'u8' or np.uint64
+       | **width**: 'u4' or np.uint32
+       | **height**: 'u4' or np.uint32
+       | **flag**: 'u1' or np.uint8
 
 
 .. _aux:
