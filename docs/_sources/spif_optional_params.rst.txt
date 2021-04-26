@@ -43,6 +43,11 @@ root
  |  **antishatter\_tips**:long\_name = "Use of antishatter-, or Korolev-tips on probe arms" ;
 
 
+ | *float* **arm\_separation**
+ |  **arm\_separation**:long\_name = "Physical distance between probe arms" ;
+ |  **arm\_separation**:units = "millimeter" ;
+
+
  | *float* **arm\_separation\_err**
  |  **arm\_separation\_err**:long\_name = "Uncertaintly in the physical distance between probe arms" ;
  |  **arm\_separation\_err**:units = "millimeter" ;

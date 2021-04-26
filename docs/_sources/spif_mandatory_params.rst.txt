@@ -24,14 +24,9 @@ root
  :dimension: "pixel" ;
 
 
- | *float* **arm\_separation**
- |  **arm\_separation**:long\_name = "Physical distance between probe arms" ;
- |  **arm\_separation**:units = "millimeter" ;
-
-
- | *float* **clockstep**
- |  **clockstep**:long\_name = "Temporal resolution of imaging clock" ;
- |  **clockstep**:units = "nanosecond" ;
+ | *float* **array\_rate**
+ |  **array\_rate**:long\_name = "Temporal clocking rate of imaging array" ;
+ |  **array\_rate**:units = "hertz" ;
 
 
  | *float* **instrument\_wavelength**
@@ -46,6 +41,11 @@ root
  | *float* **shadow** (bit)
  |  **shadow**:long\_name = "Fractional obscuration of photodiode array for each bit value" ;
  |  **shadow**:units = "dimensionless" ;
+
+
+ | *float* **start\_time**
+ |  **start\_time**:long\_name = "Reference datetime of image data" ;
+ |  **start\_time**:units = ""seconds since <reference datetime>"" ;
 
 
  | *int* **value** (bit)

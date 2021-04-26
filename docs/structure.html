@@ -42,12 +42,14 @@
             
   <div class="section" id="structure">
 <h1>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h1>
-<p>The SPIF file uses the <a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF4 format</a>. NetCDF4 is a structured binary file format capable of containing large datasets and has automatic compression
-utilities. NetCDF4 is widely supported on a variety of platforms and environments.</p>
+<p>The SPIF file uses the <a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF4 format</a>. NetCDF4 is a structured binary file format capable of containing large datasets and has automatic compression utilities. NetCDF4 is widely supported on a variety of platforms and environments.</p>
 <p>In a similar fashion to the <a class="reference external" href="http://cfconventions.org/">CF (Climate and Forecast) Conventions</a>, the SPIF conventions define a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the standards. Any suggested but optional data for inclusion are given in <em>italics</em>. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups">scoping guidelines</a> in that dimensions are visible to all child groups.</p>
 <div class="section" id="instrument-channels">
 <h2>Instrument Channels<a class="headerlink" href="#instrument-channels" title="Permalink to this headline">¶</a></h2>
-<p>Data is contained within <strong>instrument channel groups</strong> inside the SPIF file. Only data from a single probe is contained in a single SPIF file however some instruments may have more than one channel, for example the <a class="reference external" href="http://www.specinc.com/2d-s-stereo-probe-operation">SPEC 2DS</a> has vertical and horizontal channels, and the instrument groups facilitate keeping these together in a single file. The instrument channel group names are not pre-defined and further information is included as attributes of these groups.</p>
+<p>Data is contained within <strong>instrument channel groups</strong> inside the SPIF file. Only data from a single probe is contained in a single SPIF file however some instruments may have more than one channel, for example the <a class="reference external" href="http://www.specinc.com/2d-s-stereo-probe-operation">SPEC 2DS</a> has vertical and horizontal channels with each detecting particles independently, essentially behaving
+as independent instruments. For a probe that is made up of multiple instru-
+ments (e.g., 2DS, 3V-CPI, etc) where the particle detection will not be coincident,
+data is split into different instrument groups but this allows keeping these data together in a single file. The instrument channel group names are not pre-defined but should be self-explainatory and further information is included as attributes of these groups.</p>
 </div>
 <div class="section" id="raw-image-array-structure">
 <span id="image-array-structure"></span><h2>Raw Image Array Structure<a class="headerlink" href="#raw-image-array-structure" title="Permalink to this headline">¶</a></h2>
@@ -62,8 +64,19 @@ utilities. NetCDF4 is widely supported on a variety of platforms and environment
 <p>It is possible that <code class="docutils literal notranslate"><span class="pre">width</span></code> is given as a scalar variable instead of an array of length <code class="docutils literal notranslate"><span class="pre">image</span></code>.</p>
 </div>
 <p>More details about this is included in the section on <a class="reference internal" href="definition.html#core"><span class="std std-ref">Instrument Core Group</span></a>.</p>
+</div>
+<div class="section" id="mandatory-and-optional-contents">
+<h2>Mandatory and Optional Contents<a class="headerlink" href="#mandatory-and-optional-contents" title="Permalink to this headline">¶</a></h2>
+<p>As mentioned above, the SPIF definition is somewhat constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a set of mandatory parameters. That is groups, attributes, and (coordinate) variables.</p>
+<blockquote>
+<div><p><a class="reference internal" href="spif_mandatory_params.html"><span class="doc">List of Mandatory Parameters</span></a></p>
+</div></blockquote>
+<p>In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables. It may assist users if these added parameters are familiar and so some suggested optional parameters are listed below.</p>
+<blockquote>
+<div><p><a class="reference internal" href="spif_optional_params.html"><span class="doc">List of Optional Parameters</span></a></p>
 <blockquote>
 <div></div></blockquote>
+</div></blockquote>
 </div>
 </div>
 
@@ -79,6 +92,7 @@ utilities. NetCDF4 is widely supported on a variety of platforms and environment
 <li><a class="reference internal" href="#">Structure</a><ul>
 <li><a class="reference internal" href="#instrument-channels">Instrument Channels</a></li>
 <li><a class="reference internal" href="#raw-image-array-structure">Raw Image Array Structure</a></li>
+<li><a class="reference internal" href="#mandatory-and-optional-contents">Mandatory and Optional Contents</a></li>
 </ul>
 </li>
 </ul>
