@@ -80,7 +80,6 @@ Instrument group attributes are currently not mandatory but may include;
     :manufacturer: Manufacturer of instrument
     :instrument_firmware: Instrument firmware version
     :instrument_software: Name and version of data acquisition software interfacing with instrument
-    :instrument_wavelength: Wavelength of imaging laser
     :institution: Institution operating instrument
     :platform: Name or description of platform instrument is mounted on
     :raw_filenames: Raw data filename(s) used to generate the current instrument dataset
@@ -104,9 +103,9 @@ Variables:
     | *float* **shadow** (bit)
     |  **shadow**:long\_name = "Fractional obscuration of photodiode array for each bit value" ;
 
-    | *float* **start_time**
-    |  **start_time**:long_name = "Reference datetime of image data" ;
-    |  **start_time**:units = "seconds since <reference datetime>" ;
+    | *float* **start\_time**
+    |  **start\_time**:long\_name = "Reference datetime of image data" ;
+    |  **start\_time**:units = "seconds since <reference datetime>" ;
 
     | *float* **resolution**
     |  **resolution**:long\_name = "Physical resolution of array pixels" ;
@@ -118,15 +117,19 @@ Variables:
     |  **resolution_err**:units = "micrometer" ;
 
     | *float* **array\_rate**
-    |  **array\_rate**:long\_name = "Temporal clocking rate of imaging array. If an OAP then this, along with airspeed, defines the physical resolution in the flight direction. If 2D image then defines maximum frame rate." ;
+    |  **array\_rate**:long\_name = "Temporal clocking rate of imaging array. If an OAP then this, along with airspeed, defines the physical resolution in the flight direction. If 2d image then defines maximum frame rate." ;
     |  **array\_rate**:units = "hertz" ;
 
     | *int* **array\_size**
-    |  **array\_size**:long\_name = "Number of pixels across the imaging array, may be 1D or 2D." ;
+    |  **array\_size**:long\_name = "Number of pixels across the imaging array, may be 1d or 2d." ;
 
     | *int* **image\_size**
-    |  **image\_size**:long\_name = "Number of pixels across an image, may be 1D or 2D. If fixed size then number of pixels, if variable size then _FillValue" ;
+    |  **image\_size**:long\_name = "Number of pixels across an image, may be 1d or 2d. If fixed size then number of pixels, if variable size then _FillValue" ;
     |  **image\_size**:_FillValue = 0 ;
+
+    | *float* **wavelength**
+    |  **wavelength**:long\_name = "Operating wavelength of laser used for shadowing/imaging the particles" ;
+    |  **wavelength**:units = "nanometer" ;
 
     | *float* **arm\_separation**
     |  **arm\_separation**:long_name = "Physical distance between probe arms" ;
@@ -141,14 +144,17 @@ Variables:
 Instrument Core Group
 ^^^^^^^^^^^^^^^^^^^^^
 
+.. TODO::
+    Should this ``core`` group exist or just have all the raw data in the ``instrument`` group root?
+
 The instrument ``core`` group contains the raw image data. Variables should exist for all of the information contained for each image in the source binary file. Thus this is a true raw dataset. The unlimited dimensions are ``image_num`` and ``pixel`` where ``max(image_num)`` is the number of images in the dataset and ``max(pixel)`` is the total number of pixels of data in the flattened image array.
 
 .. Note::
     Each image may in fact contain multiple particles. As the ``core`` group is entirely raw data, there has been no processing to split out the multiple particles from a single image.
 
-The arrival time of each image is given by ``time``. The units are in nanoseconds from the start time of the file, this is defined in the ``time:units`` attribute using the CF format.
+The arrival time of each image is given by ``time``. The units are in nanoseconds from the reference ``start\_time``, this is defined in the ``time:units`` attribute using the CF format.
 
-Variables in the ``core`` group are;
+Variables in the ``core`` group include;
 
 Dimensions:
 """""""""""
@@ -162,8 +168,9 @@ Variables:
     | *float* **timestamp** (image_num)
     |  **time**:standard_name = "time" ;
     |  **time**:timezone = "UTC" ;
-    |  **time**:long_name = "image arrival time in nanoseconds from start time" ;
+    |  **time**:long_name = "image arrival time in nanoseconds from reference start time" ;
     |  **time**:units = "nanoseconds since <start_time>" ;
+    |  **time**:ancillary_variables = instrument/start_time ;
 
     | *int* **startpixel** (image_num)
     |  **startpixel**:long\_name = "Array index of first image slice" ;
@@ -173,13 +180,13 @@ Variables:
     |  **width**:units = "pixels" ;
 
     | *int* **height** (image_num)
-    |  **height**:long\_name = "Number of slices/lines that make up image" ;
+    |  **height**:long\_name = "Number of slices/lines in image" ;
     |  **height**:units = "lines" ;
 
-    | *int* **flag** (image_num)
-    |  **flag**:long\_name = "Data quality flag for each image" ;
-    |  **flag**:flag_values = "0, 1" ;
-    |  **flag**:flag_meanings, "good bad" ;
+    | *int* **overload** (image_num)
+    |  **overload**:long\_name = "Data quality flag for each image" ;
+    |  **overload**:flag_values = "0, 1" ;
+    |  **overload**:flag_meanings, "good bad" ;
 
 
 .. admonition:: A word on data types
