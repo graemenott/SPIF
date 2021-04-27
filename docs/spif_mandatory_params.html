@@ -34,7 +34,7 @@
             
   <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Auto-generated: Apr 26, 2021</p>
+<p>Auto-generated: Apr 27, 2021</p>
 </div>
 <div class="section" id="root">
 <h1>root<a class="headerlink" href="#root" title="Permalink to this headline">¶</a></h1>
@@ -68,9 +68,18 @@
 </div>
 </div>
 <div class="line-block">
-<div class="line"><em>float</em> <strong>instrument_wavelength</strong></div>
+<div class="line"><em>int</em> <strong>array_size</strong></div>
 <div class="line-block">
-<div class="line"><strong>instrument_wavelength</strong>:long_name = “Operating wavelength of laser used for shadowing/imaging the particles” ;</div>
+<div class="line"><strong>array_size</strong>:long_name = “Number of pixels across the imaging array, may be 1d or 2d.” ;</div>
+<div class="line"><strong>array_size</strong>:units = “dimensionless” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>image_size</strong></div>
+<div class="line-block">
+<div class="line"><strong>image_size</strong>:long_name = “Number of pixels across an image, may be 1d or 2d. If fixed size then number of pixels, if variable size then _FillValue” ;</div>
+<div class="line"><strong>image_size</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>image_size</strong>:_fillvalue = “0” ;</div>
 </div>
 </div>
 <div class="line-block">
@@ -91,7 +100,7 @@
 <div class="line"><em>float</em> <strong>start_time</strong></div>
 <div class="line-block">
 <div class="line"><strong>start_time</strong>:long_name = “Reference datetime of image data” ;</div>
-<div class="line"><strong>start_time</strong>:units = “”seconds since &lt;reference datetime&gt;”” ;</div>
+<div class="line"><strong>start_time</strong>:units = “seconds since &lt;reference datetime&gt;” ;</div>
 </div>
 </div>
 <div class="line-block">
@@ -101,6 +110,12 @@
 <div class="line"><strong>value</strong>:units = “dimensionless” ;</div>
 </div>
 </div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>wavelength</strong></div>
+<div class="line-block">
+<div class="line"><strong>wavelength</strong>:long_name = “Operating wavelength of laser used for shadowing/imaging the particles” ;</div>
+</div>
+</div>
 </div></blockquote>
 </div>
 <div class="section" id="instrument-core">
@@ -108,52 +123,52 @@
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">dimension</dt>
-<dd class="field-odd"><p>“images” ;</p>
+<dd class="field-odd"><p>“image_num” ;</p>
 </dd>
 </dl>
 <div class="line-block">
-<div class="line"><em>int</em> <strong>buffer_index</strong> (images)</div>
+<div class="line"><em>int</em> <strong>height</strong> (image_num)</div>
 <div class="line-block">
-<div class="line"><strong>buffer_index</strong>:long_name = “index of data buffer from which image was extracted” ;</div>
-<div class="line"><strong>buffer_index</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>height</strong>:long_name = “Number of slices/lines in image” ;</div>
+<div class="line"><strong>height</strong>:units = “dimensionless” ;</div>
 </div>
 </div>
 <div class="line-block">
-<div class="line"><em>int</em> <strong>image</strong> (images, slice, pixel)</div>
+<div class="line"><em>int</em> <strong>image</strong> (pixel)</div>
 <div class="line-block">
-<div class="line"><strong>image</strong>:long_name = “image array” ;</div>
+<div class="line"><strong>image</strong>:long_name = “Flattened 1d array of images” ;</div>
 <div class="line"><strong>image</strong>:units = “dimensionless” ;</div>
 </div>
 </div>
 <div class="line-block">
-<div class="line"><em>int</em> <strong>image_len</strong> (images)</div>
-<div class="line-block">
-<div class="line"><strong>image_len</strong>:long_name = “image event length in number of slices” ;</div>
-<div class="line"><strong>image_len</strong>:units = “dimensionless” ;</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><em>float</em> <strong>image_ns</strong> (images)</div>
-<div class="line-block">
-<div class="line"><strong>image_ns</strong>:long_name = “image arrival time in nanoseconds from corresponding image_sec” ;</div>
-<div class="line"><strong>image_ns</strong>:units = “nanoseconds” ;</div>
-<div class="line"><strong>image_ns</strong>:ancillary_variables = “instrument/core/image_sec” ;</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><em>int</em> <strong>image_sec</strong> (images)</div>
-<div class="line-block">
-<div class="line"><strong>image_sec</strong>:standard_name = “time” ;</div>
-<div class="line"><strong>image_sec</strong>:long_name = “image arrival time in seconds” ;</div>
-<div class="line"><strong>image_sec</strong>:timezone = “” ;</div>
-<div class="line"><strong>image_sec</strong>:units = “” ;</div>
-</div>
-</div>
-<div class="line-block">
-<div class="line"><em>boolean</em> <strong>overload</strong> (images)</div>
+<div class="line"><em>int</em> <strong>overload</strong> (image_num)</div>
 <div class="line-block">
 <div class="line"><strong>overload</strong>:long_name = “Probe particle overload status” ;</div>
+<div class="line"><strong>overload</strong>:flag_values = “0, 1” ;</div>
+<div class="line"><strong>overload</strong>:flag_meanings = “normal overload” ;</div>
 <div class="line"><strong>overload</strong>:units = “dimensionless” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>startpixel</strong> (image_num)</div>
+<div class="line-block">
+<div class="line"><strong>startpixel</strong>:long_name = “Array index of first image slice” ;</div>
+<div class="line"><strong>startpixel</strong>:units = “dimensionless” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>timestamp</strong> (image_num)</div>
+<div class="line-block">
+<div class="line"><strong>timestamp</strong>:long_name = “Image arrival time in nanoseconds from reference start time” ;</div>
+<div class="line"><strong>timestamp</strong>:units = “nanoseconds since &lt;start_time&gt;” ;</div>
+<div class="line"><strong>timestamp</strong>:ancillary_variables = “instrument/start_time” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>width</strong> (image_num)</div>
+<div class="line-block">
+<div class="line"><strong>width</strong>:long_name = “Number of pixels across image” ;</div>
+<div class="line"><strong>width</strong>:units = “dimensionless” ;</div>
 </div>
 </div>
 <blockquote>

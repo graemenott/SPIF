@@ -6,6 +6,8 @@ root
 ~~~~
 
 
+ :comment: 
+
  :history: 
 
  :institution: 
@@ -19,6 +21,8 @@ root
 ~~~~~~~~~~~
 
 
+ :comment: 
+
  :institution: 
 
  :instrument\_channel: 
@@ -26,6 +30,8 @@ root
  :instrument\_firmware: 
 
  :instrument\_long\_name: 
+
+ :instrument\_serial\_number: 
 
  :instrument\_software: 
 
@@ -37,8 +43,6 @@ root
 
  :references: 
 
- :serial\_number: 
-
  | *boolean* **antishatter\_tips**
  |  **antishatter\_tips**:long\_name = "Use of antishatter-, or Korolev-tips on probe arms" ;
 
@@ -46,18 +50,6 @@ root
  | *float* **arm\_separation**
  |  **arm\_separation**:long\_name = "Physical distance between probe arms" ;
  |  **arm\_separation**:units = "millimeter" ;
-
-
- | *float* **arm\_separation\_err**
- |  **arm\_separation\_err**:long\_name = "Uncertaintly in the physical distance between probe arms" ;
- |  **arm\_separation\_err**:units = "millimeter" ;
- |  **arm\_separation\_err**:ancillary\_variables = "instrument/arm\_separation" ;
-
-
- | *float* **resolution\_err**
- |  **resolution\_err**:long\_name = "Uncertainty in physical resolution of array pixels instrument" ;
- |  **resolution\_err**:units = "um" ;
- |  **resolution\_err**:ancillary\_variables = "instrument/resolution" ;
 
 
 
