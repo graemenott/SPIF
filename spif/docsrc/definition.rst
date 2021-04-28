@@ -1,8 +1,8 @@
 .. title:: SPIF Definition
 
-====================
+********************
 SPIF File Definition
-====================
+********************
 
 The SPIF group structure is below with optional groups shown in *italics*
 
@@ -46,9 +46,9 @@ Contents of a SPIF file are;
 
 .. _root:
 
---------------------
+====================
 SPIF Root Attributes
---------------------
+====================
 
 Each SPIF file has a standardised set of attributes in the root. These attributes are;
 
@@ -65,9 +65,9 @@ Any other attributes that apply to this dataset can be included in the root.
 
 .. _instrument:
 
-------------------------
+========================
 Instrument Channel Group
-------------------------
+========================
 
 The root of the instrument channel group contains attributes pertaining to that specific instrument/channel. It may also include information about the probe software module that was used to create the file.
 
@@ -88,13 +88,12 @@ Instrument group attributes are currently not mandatory but may include;
 
 Universal variables may also be included in the instrument group root. For example;
 
-Dimensions:
-"""""""""""
+**Dimensions:**
+
     | pixel
     | bit
 
-Variables:
-""""""""""
+**Variables:**
 
     | *int* **value** (bit)
     |  **bit**:long_name = "Value of shadow level in image array" ;
@@ -142,9 +141,11 @@ Variables:
 .. _core:
 
 Instrument Core Group
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 .. TODO::
+    :class: warning
+
     Should this ``core`` group exist or just have all the raw data in the ``instrument`` group root?
 
 The instrument ``core`` group contains the raw image data. Variables should exist for all of the information contained for each image in the source binary file. Thus this is a true raw dataset. The unlimited dimensions are ``image_num`` and ``pixel`` where ``max(image_num)`` is the number of images in the dataset and ``max(pixel)`` is the total number of pixels of data in the flattened image array.
@@ -156,12 +157,12 @@ The arrival time of each image is given by ``time``. The units are in nanosecond
 
 Variables in the ``core`` group include;
 
-Dimensions:
-"""""""""""
+**Dimensions:**
+
     | image_num
 
-Variables:
-""""""""""
+**Variables:**
+
     | *int* **image** (pixel)
     |  **image**:long\_name = "Flattened 1d array of images" ;
 
@@ -204,7 +205,7 @@ Variables:
 .. _aux:
 
 Auxillary Data Group
-^^^^^^^^^^^^^^^^^^^^
+--------------------
 
 .. note:: The ``aux`` group is an optional SPIF feature.
 
@@ -216,18 +217,57 @@ The instrument ``aux`` group contains auxiliary data relevant to a given instrum
     * Data acquisition timing words
     * Temperature
     * Altitude
+    * Air speed
+
+
+.. _tas:
+
+Auxillary Air Speed Data
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The speed at which particles travel through the probe sample volume is an important parameter for further processing. It allows;
+
+    * the ``array_rate`` of an OAP to be converted into physical resolution and so particles sizes to be calculated,
+    * the calculation of sample volume and so higher-order microphysical parameters like particle number concentration, liquid water content, etc.
+
+Airspeed, particularly when it comes to aircraft, is hardly straight forward however in this situation we are interested in true airspeed (TAS) and probe airspeed (PAS). The airspeed at the probe may not be the same as that at a more central location due to local flow perturbations. Post-flight corrections may be required to the TAS applied at time of measurement to comensate for this and other effects.
+
+.. TODO::
+    :class: warning
+
+    Two options exist here, firstly a **TAS\_corrected** variable that may not be present if no correction applicable. Or a **TAS\_correction** variable that is alway present but which has a default of 1.
+
+If TAS is included then it should have the following form;
+
+    | *float* **TAS\_original** (time)
+    |  **TAS\_original**:long_name = "True Air Speed (TAS) as applied to the auxilary data at time of acquisition" ;
+    |  **TAS\_original**:units = "m/s" ;
+    |  **TAS\_original**:ancillary_variables = instrument/aux/TAS\_correction ;
+
+    | *float* **TAS\_correction** (time)
+    |  **TAS\_correction**:long_name = "Correction factor for true air speed at the probe. Probe Air Speed (PAS) is TAS\_original * TAS\_correction. Default is 1." ;
+    |  **TAS\_correction**:units = "dimensionless" ;
+    |  **TAS\_correction**:_Fillvalue = 1 ;
+    |  **TAS\_correction**:ancillary_variables = instrument/aux/TAS\_original ;
+
+or
+
+    | *float* **TAS\_corrected** (time)
+    |  **TAS\_corrected**:long_name = "Corrected true air speed at the probe." ;
+    |  **TAS\_corrected**:units = "m/s" ;
+
 
 
 .. _level0:
 
 Level-0 Processed Data Group
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 
 .. note:: The ``level-0`` group is an optional SPIF feature.
 
 Following extraction of image data into SPIF format, images can be analyzed to extract information about the particles they contain. At the most basic level, parameters of interest describe geometric and physical measurements of the identified particles. Thus, the level 0 data contains basic information about identified particles such as;
 
-    * Diameters (more discussion on this below)
+    * `Diameters`_ (more discussion on this below)
     * Area
     * Perimeter
     * Bounding box within image
@@ -239,13 +279,115 @@ Following extraction of image data into SPIF format, images can be analyzed to e
 
 Note that the level 0 particles are sized using number of pixels - conversion to sizing in microns takes place in Level 1.
 
+Each of the parameters discussed above applies to individual particles. For most imaging probes there can be multiple particles in a single image. Given this *n*-to-one relationship, the Level 0 particle data will require use of a new dimension corresponding to the number of particles detected, which is likely to be different than the number of images captured. The particles dimension thus covers all parameters described in this section. With the additional dimension, there is a need for supplemental parameters which describe the relationship of detected particles to their original image, both in terms of a reference to the additional image, as well as a more exact temporal location, based on the particle’s location in the image frame.
 
-Diameter definitions:
-"""""""""""""""""""""
+A list of possible level 0 variables are given on :doc:`this page <spif_optional_params>`.
 
-    Interpretation of particle diameter presents a challenge, as there are currently several definitions of particle diameter in use by the community, and a standard definition likely isn’t reasonable, since different diameters are useful depending on the measurement scenario. Thus, to make SPIF useful to the broader community, it should include a wide set of diameters in use by the community. An additional consideration for the inclusion of various particle diameters is how these diameters are named. Throughout the literature, varying names have been given to essentially identical diameters. In the diameter definitions here, an attempt will be made to standardize the names, while referencing other names used for a given diameter definition.
+Variables in the ``level0`` group may include;
+
+**Dimensions:**
+
+    | particle_num
+
+**Variables:**
+
+    | *int* **image\_index** (particle_num)
+    |  **image\_index**:long\_name = "Reference to image\_num index of image containing current particle" ;
+    |  **image\_index**:ancillary_variables = instrument/core/image\_num ;
+
+    | *float* **N\_p** (particle_num)
+    |  **N\_p**:long_name = "Max diameter of particle in the photodiode-array dimension" ;
+    |  **N\_p**:units = "pixels" ;
+    |  **N\_p**:references =  ;
 
 
-Each of the parameters discussed above applies to individual particles. For most OAPs, there can be multiple particles in a single image. Given this n-to-one relationship, the Level 0 particle data will require use of a new dimension corresponding to the number of particles detected, which is likely to be different than the number of images captured. The particles dimension thus covers all parameters described in this section. With the additional dimension, there is a need for supplemental parameters which describe the relationship of detected particles to their original image, both in terms of a reference to the additional image, as well as a more exact temporal location, based on the particle’s location in the image frame.
+.. _level1:
 
-etc etc...
+Level-1 Processed Data Group
+----------------------------
+
+.. note:: The ``level-1`` group is an optional SPIF feature.
+
+
+Whereas Level 0 data presents particle information as simply properties of an image, Level 1 contains particle properties linked to physical, real-world quantities. In Level 1, there are two primary categories of data:
+
+    #. Particle properties scaled to physical dimensions (μm, etc.) using the resolution of the instrument,
+    #. Parameters classifying particles into habits or other categories.
+
+As discussed in `tas`_, when generating scaled particle properties, care must be taken to correct for improper scaling in the image time direction due to inconsistencies between the probe sampling rate and the speed of the aircraft. These inconsistencies can happen for various reasons the most common include; exceeding TAS limits of the probe, having incorrect or constant airspeed inputs supplied to the probe, or problems with local pitot measurements due to icing or other blockages.
+
+As the ``level-1`` group is a sub-group of ``level-0``, the ``level-1`` group inherits the ``particle_num`` dimension. A ``pas`` (or probe air speed) variable gives the correct true air speed at the probe for each particle derived from the TAS variables in the ``aux`` group.
+
+.. TODO::
+    :class: warning
+
+    The PAS variable is just an idea...
+
+A list of possible level 0 variables are given on :doc:`this page <spif_optional_params>` and may include for example;
+
+**Variables:**
+
+    | *int* **PAS** (particle_num)
+    |  **PAS**:long\_name = "Probe Air Speed (PAS) derived from the True Air Speed (TAS) variables in the auxilary data group" ;
+    |  **PAS**:units = "m/s" ;
+
+    | *float* **D\_p** (particle_num)
+    |  **D\_p**:long_name = "Max diameter of particle in the photodiode-array dimension" ;
+    |  **D\_p**:units = "um" ;
+    |  **D\_p**:equivalent_name = "D_y, L5" ;
+    |  **D\_p**:references =  ;
+
+
+.. _Diameters:
+
+Diameter definitions
+--------------------
+
+    Interpretation of particle diameter presents a challenge, as there are currently several definitions of particle diameter in use by the community, and a standard definition likely isn’t reasonable, since different diameters are useful depending on the measurement scenario. Thus, to make SPIF useful to the broader community, it may include a wide set of diameters in use by the community. An additional consideration for the inclusion of various particle diameters is how these diameters are named. Throughout the literature, varying names have been given to essentially identical diameters. In the diameter definitions here, an attempt will be made to standardize the names, while referencing other names used for a given diameter definition.
+
+
+    =================   =================       ================================
+    Pixel Diameter      Physical diameter       Definition
+    =================   =================       ================================
+    :math:`N_p`         :math:`D_p`             Maximum diameter in the
+                                                photodiode-array dimension.
+                                                Equivalent to :math:`N_y`/:math:`D_y` [1]_, [2]_ and :math:`L_5` [3]_.
+    :math:`N_t`         :math:`D_t`             Maximum diameter in the time
+                                                dimension. Equivalent to :math:`N_x`/:math:`D_x` [1]_, [2]_ and :math:`L_1` [3]_.
+    :math:`N_{eq}`      :math:`D_{eq}`          Diameter of circle with area
+                                                equivalent to particle area.
+    :math:`N_s`         :math:`D_s`             Diameter of minimum enclosing
+                                                circle. Equivalent to :math:`N_{max}`/:math:`D_{max}` [4]_.
+    :math:`N_h`         :math:`D_h`             Hypotenuse of triangle formed by
+                                                :math:`N_p` and :math:`N_t`.
+    :math:`N_m`         :math:`D_m`             Mean of :math:`N_p` and
+                                                :math:`N_t`.
+    |Nsc|               |Dsc|                   Diameter in slice with maximum
+                                                number of shaded pixels. Equivalent to :math:`L_2` [3]_.
+    |Nsd|               |Dsd|                   Diameter in slice with greatest
+                                                pixel separation. Equivalent to :math:`L_4` [3]_.
+    |Nre|               |Dre|                   Reconstructed circle diameter
+                                                for center-in particles.
+    |Nho|               |Dho|                   Max hole diameter as defined in
+                                                [5]_.
+
+    =================   =================       ================================
+
+.. Substitutions that don't fit into rst table
+
+.. |Nsc| replace:: :math:`N_{\scriptsize\mbox{slice_count}}`
+.. |Dsc| replace:: :math:`D_{\scriptsize\mbox{slice_count}}`
+.. |Nsd| replace:: :math:`N_{\scriptsize\mbox{slice_diff}}`
+.. |Dsd| replace:: :math:`D_{\scriptsize\mbox{slice_diff}}`
+.. |Nre| replace:: :math:`N_{\scriptsize\mbox{reconst}}`
+.. |Dre| replace:: :math:`D_{\scriptsize\mbox{reconst}}`
+.. |Nho| replace:: :math:`N_{\scriptsize\mbox{hole}}`
+.. |Dho| replace:: :math:`D_{\scriptsize\mbox{hole}}`
+
+
+
+.. [1] Korolev, A., Isaac, G.A. and Hallett, J. "Ice particle habits in stratiform clouds", Q.J.R. Meteorol. Soc., 126, 2873-2902, doi:10.1002/qj.49712656913, 2000.
+.. [2] Leroy, D., E. Fontaine, A. Schwarzenboeck, and J. W. Strapp. "Ice Crystal Sizes in High Ice Water Content Clouds. Part I: On the Computation of Median Mass Diameter from In Situ Measurements", J. Atmos. Oceanic Technol., 33, 11, 2461-2476, doi:JTECH-D-15-0151.1, 2016.
+.. [3] Lawson, R. P. "Effects of ice particles shattering on the 2D-S probe", Atmos. Meas. Tech., 4, 1361-1381, doi:10.5194/amt-4-1361-2011, 2011.
+.. [4] Heymsfield, A. J., Schmitt, C. and Bansemer, A. "Ice Cloud Particle Size Distributions and Pressure-Dependent Terminal Velocities from In Situ Observations at Temperatures from 0° to -86°C", J. Atmos. Oceanic Technol., 70, 4123-4154, doi:10.1175/JAS-D-12-0124.1, 2013.
+.. [5] Korolev, A. V. "Reconstruction of the sizes of spherical particles from their shadow images Part I: Theoretical considerations", J. Atmos. Oceanic Technol., 24, 376-389, doi:10.1175/JTECH1980.1, 2007.
