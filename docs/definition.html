@@ -13,6 +13,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Structure" href="structure.html" /> 
@@ -148,17 +149,14 @@
 </dl>
 </div></blockquote>
 <p>Universal variables may also be included in the instrument group root. For example;</p>
-<div class="section" id="dimensions">
-<h3>Dimensions:<a class="headerlink" href="#dimensions" title="Permalink to this headline">¶</a></h3>
+<p><strong>Dimensions:</strong></p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">pixel</div>
 <div class="line">bit</div>
 </div>
 </div></blockquote>
-</div>
-<div class="section" id="variables">
-<h3>Variables:<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<p><strong>Variables:</strong></p>
 <blockquote>
 <div><div class="line-block">
 <div class="line"><em>int</em> <strong>value</strong> (bit)</div>
@@ -237,8 +235,8 @@
 </div>
 </div></blockquote>
 <div class="section" id="instrument-core-group">
-<span id="core"></span><h4>Instrument Core Group<a class="headerlink" href="#instrument-core-group" title="Permalink to this headline">¶</a></h4>
-<div class="admonition-todo admonition" id="id1">
+<span id="core"></span><h3>Instrument Core Group<a class="headerlink" href="#instrument-core-group" title="Permalink to this headline">¶</a></h3>
+<div class="warning admonition" id="id1">
 <p class="admonition-title">Todo</p>
 <p>Should this <code class="docutils literal notranslate"><span class="pre">core</span></code> group exist or just have all the raw data in the <code class="docutils literal notranslate"><span class="pre">instrument</span></code> group root?</p>
 </div>
@@ -249,18 +247,13 @@
 </div>
 <p>The arrival time of each image is given by <code class="docutils literal notranslate"><span class="pre">time</span></code>. The units are in nanoseconds from the reference <code class="docutils literal notranslate"><span class="pre">start\_time</span></code>, this is defined in the <code class="docutils literal notranslate"><span class="pre">time:units</span></code> attribute using the CF format.</p>
 <p>Variables in the <code class="docutils literal notranslate"><span class="pre">core</span></code> group include;</p>
-</div>
-</div>
-<div class="section" id="id2">
-<h3>Dimensions:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><strong>Dimensions:</strong></p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">image_num</div>
 </div>
 </div></blockquote>
-</div>
-<div class="section" id="id3">
-<h3>Variables:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p><strong>Variables:</strong></p>
 <blockquote>
 <div><div class="line-block">
 <div class="line"><em>int</em> <strong>image</strong> (pixel)</div>
@@ -321,8 +314,9 @@
 </div>
 </div></blockquote>
 </div>
+</div>
 <div class="section" id="auxillary-data-group">
-<span id="aux"></span><h4>Auxillary Data Group<a class="headerlink" href="#auxillary-data-group" title="Permalink to this headline">¶</a></h4>
+<span id="aux"></span><h3>Auxillary Data Group<a class="headerlink" href="#auxillary-data-group" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">aux</span></code> group is an optional SPIF feature.</p>
@@ -336,11 +330,57 @@
 <li><p>Data acquisition timing words</p></li>
 <li><p>Temperature</p></li>
 <li><p>Altitude</p></li>
+<li><p>Air speed</p></li>
 </ul>
 </div></blockquote>
+<div class="section" id="auxillary-air-speed-data">
+<span id="tas"></span><h4>Auxillary Air Speed Data<a class="headerlink" href="#auxillary-air-speed-data" title="Permalink to this headline">¶</a></h4>
+<p>The speed at which particles travel through the probe sample volume is an important parameter for further processing. It allows;</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">array_rate</span></code> of an OAP to be converted into physical resolution and so particles sizes to be calculated,</p></li>
+<li><p>the calculation of sample volume and so higher-order microphysical parameters like particle number concentration, liquid water content, etc.</p></li>
+</ul>
+</div></blockquote>
+<p>Airspeed, particularly when it comes to aircraft, is hardly straight forward however in this situation we are interested in true airspeed (TAS) and probe airspeed (PAS). The airspeed at the probe may not be the same as that at a more central location due to local flow perturbations. Post-flight corrections may be required to the TAS applied at time of measurement to comensate for this and other effects.</p>
+<div class="warning admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Two options exist here, firstly a <strong>TAS_corrected</strong> variable that may not be present if no correction applicable. Or a <strong>TAS_correction</strong> variable that is alway present but which has a default of 1.</p>
+</div>
+<p>If TAS is included then it should have the following form;</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>float</em> <strong>TAS_original</strong> (time)</div>
+<div class="line-block">
+<div class="line"><strong>TAS_original</strong>:long_name = “True Air Speed (TAS) as applied to the auxilary data at time of acquisition” ;</div>
+<div class="line"><strong>TAS_original</strong>:units = “m/s” ;</div>
+<div class="line"><strong>TAS_original</strong>:ancillary_variables = instrument/aux/TAS_correction ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>TAS_correction</strong> (time)</div>
+<div class="line-block">
+<div class="line"><strong>TAS_correction</strong>:long_name = “Correction factor for true air speed at the probe. Probe Air Speed (PAS) is TAS_original * TAS_correction. Default is 1.” ;</div>
+<div class="line"><strong>TAS_correction</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>TAS_correction</strong>:_Fillvalue = 1 ;</div>
+<div class="line"><strong>TAS_correction</strong>:ancillary_variables = instrument/aux/TAS_original ;</div>
+</div>
+</div>
+</div></blockquote>
+<p>or</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>float</em> <strong>TAS_corrected</strong> (time)</div>
+<div class="line-block">
+<div class="line"><strong>TAS_corrected</strong>:long_name = “Corrected true air speed at the probe.” ;</div>
+<div class="line"><strong>TAS_corrected</strong>:units = “m/s” ;</div>
+</div>
+</div>
+</div></blockquote>
+</div>
 </div>
 <div class="section" id="level-0-processed-data-group">
-<span id="level0"></span><h4>Level-0 Processed Data Group<a class="headerlink" href="#level-0-processed-data-group" title="Permalink to this headline">¶</a></h4>
+<span id="level0"></span><h3>Level-0 Processed Data Group<a class="headerlink" href="#level-0-processed-data-group" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">level-0</span></code> group is an optional SPIF feature.</p>
@@ -348,7 +388,7 @@
 <p>Following extraction of image data into SPIF format, images can be analyzed to extract information about the particles they contain. At the most basic level, parameters of interest describe geometric and physical measurements of the identified particles. Thus, the level 0 data contains basic information about identified particles such as;</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>Diameters (more discussion on this below)</p></li>
+<li><p><a class="reference internal" href="#diameters">Diameters</a> (more discussion on this below)</p></li>
 <li><p>Area</p></li>
 <li><p>Perimeter</p></li>
 <li><p>Bounding box within image</p></li>
@@ -360,17 +400,162 @@
 </ul>
 </div></blockquote>
 <p>Note that the level 0 particles are sized using number of pixels - conversion to sizing in microns takes place in Level 1.</p>
+<p>Each of the parameters discussed above applies to individual particles. For most imaging probes there can be multiple particles in a single image. Given this <em>n</em>-to-one relationship, the Level 0 particle data will require use of a new dimension corresponding to the number of particles detected, which is likely to be different than the number of images captured. The particles dimension thus covers all parameters described in this section. With the additional dimension, there is a need for supplemental parameters which describe the relationship of detected particles to their original image, both in terms of a reference to the additional image, as well as a more exact temporal location, based on the particle’s location in the image frame.</p>
+<p>A list of possible level 0 variables are given on <a class="reference internal" href="spif_optional_params.html"><span class="doc">this page</span></a>.</p>
+<p>Variables in the <code class="docutils literal notranslate"><span class="pre">level0</span></code> group may include;</p>
+<p><strong>Dimensions:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">particle_num</div>
 </div>
+</div></blockquote>
+<p><strong>Variables:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>int</em> <strong>image_index</strong> (particle_num)</div>
+<div class="line-block">
+<div class="line"><strong>image_index</strong>:long_name = “Reference to image_num index of image containing current particle” ;</div>
+<div class="line"><strong>image_index</strong>:ancillary_variables = instrument/core/image_num ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_p</strong> (particle_num)</div>
+<div class="line-block">
+<div class="line"><strong>N_p</strong>:long_name = “Max diameter of particle in the photodiode-array dimension” ;</div>
+<div class="line"><strong>N_p</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_p</strong>:references =  ;</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="level-1-processed-data-group">
+<span id="level1"></span><h3>Level-1 Processed Data Group<a class="headerlink" href="#level-1-processed-data-group" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">level-1</span></code> group is an optional SPIF feature.</p>
+</div>
+<p>Whereas Level 0 data presents particle information as simply properties of an image, Level 1 contains particle properties linked to physical, real-world quantities. In Level 1, there are two primary categories of data:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Particle properties scaled to physical dimensions (μm, etc.) using the resolution of the instrument,</p></li>
+<li><p>Parameters classifying particles into habits or other categories.</p></li>
+</ol>
+</div></blockquote>
+<p>As discussed in <a class="reference internal" href="#tas">tas</a>, when generating scaled particle properties, care must be taken to correct for improper scaling in the image time direction due to inconsistencies between the probe sampling rate and the speed of the aircraft. These inconsistencies can happen for various reasons the most common include; exceeding TAS limits of the probe, having incorrect or constant airspeed inputs supplied to the probe, or problems with local pitot measurements due to icing or other blockages.</p>
+<p>As the <code class="docutils literal notranslate"><span class="pre">level-1</span></code> group is a sub-group of <code class="docutils literal notranslate"><span class="pre">level-0</span></code>, the <code class="docutils literal notranslate"><span class="pre">level-1</span></code> group inherits the <code class="docutils literal notranslate"><span class="pre">particle_num</span></code> dimension. A <code class="docutils literal notranslate"><span class="pre">pas</span></code> (or probe air speed) variable gives the correct true air speed at the probe for each particle derived from the TAS variables in the <code class="docutils literal notranslate"><span class="pre">aux</span></code> group.</p>
+<div class="warning admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>The PAS variable is just an idea…</p>
+</div>
+<p>A list of possible level 0 variables are given on <a class="reference internal" href="spif_optional_params.html"><span class="doc">this page</span></a> and may include for example;</p>
+<p><strong>Variables:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>int</em> <strong>PAS</strong> (particle_num)</div>
+<div class="line-block">
+<div class="line"><strong>PAS</strong>:long_name = “Probe Air Speed (PAS) derived from the True Air Speed (TAS) variables in the auxilary data group” ;</div>
+<div class="line"><strong>PAS</strong>:units = “m/s” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_p</strong> (particle_num)</div>
+<div class="line-block">
+<div class="line"><strong>D_p</strong>:long_name = “Max diameter of particle in the photodiode-array dimension” ;</div>
+<div class="line"><strong>D_p</strong>:units = “um” ;</div>
+<div class="line"><strong>D_p</strong>:equivalent_name = “D_y, L5” ;</div>
+<div class="line"><strong>D_p</strong>:references =  ;</div>
+</div>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="diameter-definitions">
-<h3>Diameter definitions:<a class="headerlink" href="#diameter-definitions" title="Permalink to this headline">¶</a></h3>
+<span id="diameters"></span><h3>Diameter definitions<a class="headerlink" href="#diameter-definitions" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><p>Interpretation of particle diameter presents a challenge, as there are currently several definitions of particle diameter in use by the community, and a standard definition likely isn’t reasonable, since different diameters are useful depending on the measurement scenario. Thus, to make SPIF useful to the broader community, it should include a wide set of diameters in use by the community. An additional consideration for the inclusion of various particle diameters is how these diameters are named. Throughout the literature, varying names have been given to essentially identical diameters. In the diameter definitions here, an attempt will be made to standardize the names, while referencing other names used for a given diameter definition.</p>
+<div><p>Interpretation of particle diameter presents a challenge, as there are currently several definitions of particle diameter in use by the community, and a standard definition likely isn’t reasonable, since different diameters are useful depending on the measurement scenario. Thus, to make SPIF useful to the broader community, it may include a wide set of diameters in use by the community. An additional consideration for the inclusion of various particle diameters is how these diameters are named. Throughout the literature, varying names have been given to essentially identical diameters. In the diameter definitions here, an attempt will be made to standardize the names, while referencing other names used for a given diameter definition.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Pixel Diameter</p></th>
+<th class="head"><p>Physical diameter</p></th>
+<th class="head"><p>Definition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_p\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_p\)</span></p></td>
+<td><p>Maximum diameter in the
+photodiode-array dimension.
+Equivalent to <span class="math notranslate nohighlight">\(N_y\)</span>/<span class="math notranslate nohighlight">\(D_y\)</span> <a class="footnote-reference brackets" href="#id14" id="id4">1</a>, <a class="footnote-reference brackets" href="#id15" id="id5">2</a> and <span class="math notranslate nohighlight">\(L_5\)</span> <a class="footnote-reference brackets" href="#id16" id="id6">3</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_t\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_t\)</span></p></td>
+<td><p>Maximum diameter in the time
+dimension. Equivalent to <span class="math notranslate nohighlight">\(N_x\)</span>/<span class="math notranslate nohighlight">\(D_x\)</span> <a class="footnote-reference brackets" href="#id14" id="id7">1</a>, <a class="footnote-reference brackets" href="#id15" id="id8">2</a> and <span class="math notranslate nohighlight">\(L_1\)</span> <a class="footnote-reference brackets" href="#id16" id="id9">3</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_{eq}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{eq}\)</span></p></td>
+<td><p>Diameter of circle with area
+equivalent to particle area.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_s\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_s\)</span></p></td>
+<td><p>Diameter of minimum enclosing
+circle. Equivalent to <span class="math notranslate nohighlight">\(N_{max}\)</span>/<span class="math notranslate nohighlight">\(D_{max}\)</span> <a class="footnote-reference brackets" href="#id17" id="id10">4</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_h\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_h\)</span></p></td>
+<td><p>Hypotenuse of triangle formed by
+<span class="math notranslate nohighlight">\(N_p\)</span> and <span class="math notranslate nohighlight">\(N_t\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_m\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_m\)</span></p></td>
+<td><p>Mean of <span class="math notranslate nohighlight">\(N_p\)</span> and
+<span class="math notranslate nohighlight">\(N_t\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_{\scriptsize\mbox{slice_count}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{\scriptsize\mbox{slice_count}}\)</span></p></td>
+<td><p>Diameter in slice with maximum
+number of shaded pixels. Equivalent to <span class="math notranslate nohighlight">\(L_2\)</span> <a class="footnote-reference brackets" href="#id16" id="id11">3</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_{\scriptsize\mbox{slice_diff}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{\scriptsize\mbox{slice_diff}}\)</span></p></td>
+<td><p>Diameter in slice with greatest
+pixel separation. Equivalent to <span class="math notranslate nohighlight">\(L_4\)</span> <a class="footnote-reference brackets" href="#id16" id="id12">3</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_{\scriptsize\mbox{reconst}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{\scriptsize\mbox{reconst}}\)</span></p></td>
+<td><p>Reconstructed circle diameter
+for center-in particles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_{\scriptsize\mbox{hole}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{\scriptsize\mbox{hole}}\)</span></p></td>
+<td><p>Max hole diameter as defined in
+<a class="footnote-reference brackets" href="#id18" id="id13">5</a>.</p></td>
+</tr>
+</tbody>
+</table>
 </div></blockquote>
-<p>Each of the parameters discussed above applies to individual particles. For most OAPs, there can be multiple particles in a single image. Given this n-to-one relationship, the Level 0 particle data will require use of a new dimension corresponding to the number of particles detected, which is likely to be different than the number of images captured. The particles dimension thus covers all parameters described in this section. With the additional dimension, there is a need for supplemental parameters which describe the relationship of detected particles to their original image, both in terms of a reference to the additional image, as well as a more exact temporal location, based on the particle’s location in the image frame.</p>
-<p>etc etc…</p>
-<blockquote>
-<div></div></blockquote>
+<dl class="footnote brackets">
+<dt class="label" id="id14"><span class="brackets">1</span><span class="fn-backref">(<a href="#id4">1</a>,<a href="#id7">2</a>)</span></dt>
+<dd><p>Korolev, A., Isaac, G.A. and Hallett, J. “Ice particle habits in stratiform clouds”, Q.J.R. Meteorol. Soc., 126, 2873-2902, doi:10.1002/qj.49712656913, 2000.</p>
+</dd>
+<dt class="label" id="id15"><span class="brackets">2</span><span class="fn-backref">(<a href="#id5">1</a>,<a href="#id8">2</a>)</span></dt>
+<dd><p>Leroy, D., E. Fontaine, A. Schwarzenboeck, and J. W. Strapp. “Ice Crystal Sizes in High Ice Water Content Clouds. Part I: On the Computation of Median Mass Diameter from In Situ Measurements”, J. Atmos. Oceanic Technol., 33, 11, 2461-2476, doi:JTECH-D-15-0151.1, 2016.</p>
+</dd>
+<dt class="label" id="id16"><span class="brackets">3</span><span class="fn-backref">(<a href="#id6">1</a>,<a href="#id9">2</a>,<a href="#id11">3</a>,<a href="#id12">4</a>)</span></dt>
+<dd><p>Lawson, R. P. “Effects of ice particles shattering on the 2D-S probe”, Atmos. Meas. Tech., 4, 1361-1381, doi:10.5194/amt-4-1361-2011, 2011.</p>
+</dd>
+<dt class="label" id="id17"><span class="brackets"><a class="fn-backref" href="#id10">4</a></span></dt>
+<dd><p>Heymsfield, A. J., Schmitt, C. and Bansemer, A. “Ice Cloud Particle Size Distributions and Pressure-Dependent Terminal Velocities from In Situ Observations at Temperatures from 0° to -86°C”, J. Atmos. Oceanic Technol., 70, 4123-4154, doi:10.1175/JAS-D-12-0124.1, 2013.</p>
+</dd>
+<dt class="label" id="id18"><span class="brackets"><a class="fn-backref" href="#id13">5</a></span></dt>
+<dd><p>Korolev, A. V. “Reconstruction of the sizes of spherical particles from their shadow images Part I: Theoretical considerations”, J. Atmos. Oceanic Technol., 24, 376-389, doi:10.1175/JTECH1980.1, 2007.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -387,18 +572,14 @@
 <li><a class="reference internal" href="#">SPIF File Definition</a><ul>
 <li><a class="reference internal" href="#spif-root-attributes">SPIF Root Attributes</a></li>
 <li><a class="reference internal" href="#instrument-channel-group">Instrument Channel Group</a><ul>
-<li><a class="reference internal" href="#dimensions">Dimensions:</a></li>
-<li><a class="reference internal" href="#variables">Variables:</a><ul>
 <li><a class="reference internal" href="#instrument-core-group">Instrument Core Group</a></li>
+<li><a class="reference internal" href="#auxillary-data-group">Auxillary Data Group</a><ul>
+<li><a class="reference internal" href="#auxillary-air-speed-data">Auxillary Air Speed Data</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id2">Dimensions:</a></li>
-<li><a class="reference internal" href="#id3">Variables:</a><ul>
-<li><a class="reference internal" href="#auxillary-data-group">Auxillary Data Group</a></li>
 <li><a class="reference internal" href="#level-0-processed-data-group">Level-0 Processed Data Group</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#diameter-definitions">Diameter definitions:</a></li>
+<li><a class="reference internal" href="#level-1-processed-data-group">Level-1 Processed Data Group</a></li>
+<li><a class="reference internal" href="#diameter-definitions">Diameter definitions</a></li>
 </ul>
 </li>
 </ul>

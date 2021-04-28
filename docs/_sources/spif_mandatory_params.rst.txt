@@ -62,6 +62,7 @@ root
 
  | *float* **wavelength**
  |  **wavelength**:long\_name = "Operating wavelength of laser used for shadowing/imaging the particles" ;
+ |  **wavelength**:units = "nm" ;
 
 
 

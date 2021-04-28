@@ -13,6 +13,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="SPIF File Definition" href="definition.html" />
@@ -47,9 +48,7 @@
 <div class="section" id="instrument-channels">
 <h2>Instrument Channels<a class="headerlink" href="#instrument-channels" title="Permalink to this headline">¶</a></h2>
 <p>Data is contained within <strong>instrument channel groups</strong> inside the SPIF file. Only data from a single probe is contained in a single SPIF file however some instruments may have more than one channel, for example the <a class="reference external" href="http://www.specinc.com/2d-s-stereo-probe-operation">SPEC 2DS</a> has vertical and horizontal channels with each detecting particles independently, essentially behaving
-as independent instruments. For a probe that is made up of multiple instru-
-ments (e.g., 2DS, 3V-CPI, etc) where the particle detection will not be coincident,
-data is split into different instrument groups but this allows keeping these data together in a single file. The instrument channel group names are not pre-defined but should be self-explainatory and further information is included as attributes of these groups.</p>
+as independent instruments. For a probe that is made up of multiple instruments (e.g., 2DS, 3V-CPI, etc) where the particle detection will not be coincident, data is split into different instrument groups but this allows keeping these data together in a single file. The instrument channel group names are not pre-defined but should be self-explainatory and further information is included as attributes of these groups.</p>
 </div>
 <div class="section" id="raw-image-array-structure">
 <span id="image-array-structure"></span><h2>Raw Image Array Structure<a class="headerlink" href="#raw-image-array-structure" title="Permalink to this headline">¶</a></h2>
@@ -61,7 +60,7 @@ data is split into different instrument groups but this allows keeping these dat
 <p>In order to reconstruct the 2-dimensional images from the flattened array two variables are provided, <code class="docutils literal notranslate"><span class="pre">width</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code>, these are of length <code class="docutils literal notranslate"><span class="pre">image_num</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>It is possible that <code class="docutils literal notranslate"><span class="pre">width</span></code> is given as a scalar variable instead of an array of length <code class="docutils literal notranslate"><span class="pre">image</span></code>.</p>
+<p>It is possible that <code class="docutils literal notranslate"><span class="pre">width</span></code> is given as a scalar variable instead of an array of length <code class="docutils literal notranslate"><span class="pre">image_num</span></code>?</p>
 </div>
 <p>More details about this is included in the section on <a class="reference internal" href="definition.html#core"><span class="std std-ref">Instrument Core Group</span></a>.</p>
 </div>
