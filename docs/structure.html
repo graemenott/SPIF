@@ -16,7 +16,7 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="SPIF File Definition" href="definition.html" />
+    <link rel="next" title="SPIF File Definition" href="spif_definition.html" />
     <link rel="prev" title="SPIF - Single Particle Image Format" href="index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -26,7 +26,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="definition.html" title="SPIF File Definition"
+          <a href="spif_definition.html" title="SPIF File Definition"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="SPIF - Single Particle Image Format"
@@ -44,11 +44,61 @@
   <div class="section" id="structure">
 <h1>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h1>
 <p>The SPIF file uses the <a class="reference external" href="https://www.unidata.ucar.edu/software/netcdf/">NetCDF4 format</a>. NetCDF4 is a structured binary file format capable of containing large datasets and has automatic compression utilities. NetCDF4 is widely supported on a variety of platforms and environments.</p>
-<p>In a similar fashion to the <a class="reference external" href="http://cfconventions.org/">CF (Climate and Forecast) Conventions</a>, the SPIF conventions define a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the standards. Any suggested but optional data for inclusion are given in <em>italics</em>. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups">scoping guidelines</a> in that dimensions are visible to all child groups.</p>
+<p>In a similar fashion to the <a class="reference external" href="http://cfconventions.org/">CF (Climate and Forecast) Conventions</a>, the SPIF conventions define a minimum structure, in terms of groups, variables, and attributes, for compliance. Any additional data contained within the file is optional but should not conflict with the standards. In this documentation any suggested but optional data for inclusion are given in <em>italics</em>. Due to the focussed type of data, SPIF conventions are more demanding of variable and attribute names than the CF conventions are. SPIF follows the CF <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#groups">scoping guidelines</a> in that dimensions are visible to all child groups.</p>
+<p>The SPIF group structure is below with optional groups shown in <em>italics</em></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">root</div>
+<div class="line">│</div>
+<div class="line">├── instrument 1</div>
+<div class="line">│   ├── “core”</div>
+<div class="line">│   ├── <em>“raw”</em></div>
+<div class="line">│   ├── <em>“aux”</em></div>
+<div class="line">│   ├── <em>level-0</em></div>
+<div class="line">│   │   └── <em>level-1</em></div>
+<div class="line">│   └── <em>level-2</em></div>
+<div class="line">│</div>
+<div class="line">├── <em>instrument 2</em></div>
+<div class="line">:</div>
+</div>
+</div></blockquote>
+<p>Contents of a SPIF file are;</p>
+<blockquote>
+<div><dl class="simple">
+<dt><a class="reference internal" href="spif_definition.html#spif-root"><span class="std std-ref">root</span></a></dt><dd><p>The root of the SPIF file contains global attributes associated with the file.</p>
+</dd>
+<dt><a class="reference internal" href="spif_definition.html#spif-instrument-channel"><span class="std std-ref">instrument</span></a> group</dt><dd><p>Data from each instrument channel data is included within a separate group. All metadata relevant to an instrument channel plus universal variables are included in the <code class="docutils literal notranslate"><span class="pre">instrument</span></code> root. Many instruments will only have a single channel but in all cases the <code class="docutils literal notranslate"><span class="pre">instrument</span></code> group exists to maintain a consistant structure.</p>
+</dd>
+<dt><a class="reference internal" href="spif_definition.html#spif-core"><span class="std std-ref">core</span></a> group</dt><dd><p>The spif-core group contains the raw image data. Coordinate variables are <code class="docutils literal notranslate"><span class="pre">image_num</span></code> and <code class="docutils literal notranslate"><span class="pre">pixel</span></code>.</p>
+</dd>
+<dt><a class="reference internal" href="spif_extensions.html#spif-raw"><span class="std std-ref">raw</span></a> group</dt><dd><p>The spif-raw group contains the raw image data read directly from the binary file. These data include buffer header information that may have been stripped out of the spif-core data variables and may be useful for deciphering data corruption issues and the like.</p>
+</dd>
+<dt><a class="reference internal" href="spif_extensions.html#spif-aux"><span class="std std-ref">aux</span></a> group</dt><dd><p>The spif-aux group contains additional data which is generated by a given instrument but is not required for image processing. This data is included to maintain integrity of the original dataset, making SPIF a suitable format for long term archiving.</p>
+</dd>
+<dt><a class="reference internal" href="spif_extensions.html#spif-level-0"><span class="std std-ref">level-0</span></a> group</dt><dd><p>Particle information and derived parameters in units of <code class="docutils literal notranslate"><span class="pre">pixels</span></code>/<code class="docutils literal notranslate"><span class="pre">slices</span></code>. Coordinate variable is <code class="docutils literal notranslate"><span class="pre">particle</span></code>.</p>
+</dd>
+<dt><a class="reference internal" href="spif_extensions.html#spif-level-1"><span class="std std-ref">level-1</span></a> group</dt><dd><p>Particle information and derived parameters in physical units. Coordinate variable is <code class="docutils literal notranslate"><span class="pre">particle</span></code>.</p>
+</dd>
+<dt><a class="reference internal" href="spif_extensions.html#spif-level-2"><span class="std std-ref">level-2</span></a> group</dt><dd><p>Higher-level, possibly aggregated, data products derived from <code class="docutils literal notranslate"><span class="pre">level-1</span></code>. Coordinate variable is (probably) <code class="docutils literal notranslate"><span class="pre">time</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="section" id="mandatory-and-optional-content">
+<h2>Mandatory and Optional Content<a class="headerlink" href="#mandatory-and-optional-content" title="Permalink to this headline">¶</a></h2>
+<p>The SPIF definition is somewhat constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a set of mandatory parameters. That is groups, attributes, and (coordinate) variables.</p>
+<blockquote>
+<div><p><a class="reference internal" href="spif_mandatory_params.html"><span class="doc">List of Mandatory Parameters</span></a></p>
+</div></blockquote>
+<p>In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables. It may assist users if these added parameters are familiar and so some suggested optional parameters are given;</p>
+<blockquote>
+<div><p><a class="reference internal" href="spif_optional_params.html"><span class="doc">List of Optional Parameters</span></a></p>
+</div></blockquote>
+<p>Further information on optional groups and their contents are described in <a class="reference internal" href="spif_extensions.html"><span class="doc">SPIF Extensions and Optional Extras</span></a>.</p>
+</div>
 <div class="section" id="instrument-channels">
 <h2>Instrument Channels<a class="headerlink" href="#instrument-channels" title="Permalink to this headline">¶</a></h2>
 <p>Data is contained within <strong>instrument channel groups</strong> inside the SPIF file. Only data from a single probe is contained in a single SPIF file however some instruments may have more than one channel, for example the <a class="reference external" href="http://www.specinc.com/2d-s-stereo-probe-operation">SPEC 2DS</a> has vertical and horizontal channels with each detecting particles independently, essentially behaving
-as independent instruments. For a probe that is made up of multiple instruments (e.g., 2DS, 3V-CPI, etc) where the particle detection will not be coincident, data is split into different instrument groups but this allows keeping these data together in a single file. The instrument channel group names are not pre-defined but should be self-explainatory and further information is included as attributes of these groups.</p>
+as independent instruments. For a probe that is made up of multiple instruments (e.g., 2DS, 3V-CPI, etc) where the particle detection will not be coincident, data is split into different instrument groups as this allows keeping these data together in a single file. The instrument channel group names are not pre-defined but should be self-explainatory with further information included as attributes of these groups.</p>
 </div>
 <div class="section" id="raw-image-array-structure">
 <span id="image-array-structure"></span><h2>Raw Image Array Structure<a class="headerlink" href="#raw-image-array-structure" title="Permalink to this headline">¶</a></h2>
@@ -62,20 +112,9 @@ as independent instruments. For a probe that is made up of multiple instruments 
 <p class="admonition-title">Note</p>
 <p>It is possible that <code class="docutils literal notranslate"><span class="pre">width</span></code> is given as a scalar variable instead of an array of length <code class="docutils literal notranslate"><span class="pre">image_num</span></code>?</p>
 </div>
-<p>More details about this is included in the section on <a class="reference internal" href="definition.html#core"><span class="std std-ref">Instrument Core Group</span></a>.</p>
-</div>
-<div class="section" id="mandatory-and-optional-contents">
-<h2>Mandatory and Optional Contents<a class="headerlink" href="#mandatory-and-optional-contents" title="Permalink to this headline">¶</a></h2>
-<p>As mentioned above, the SPIF definition is somewhat constrained to ensure that standard-compliant files contain all the information/data required for future processing. SPIF files must contain, as a minimum, a set of mandatory parameters. That is groups, attributes, and (coordinate) variables.</p>
-<blockquote>
-<div><p><a class="reference internal" href="spif_mandatory_params.html"><span class="doc">List of Mandatory Parameters</span></a></p>
-</div></blockquote>
-<p>In addition to these mandatory netCDF parameters, a SPIF file can be extended with additional groups, attributes, and (coordinate) variables. It may assist users if these added parameters are familiar and so some suggested optional parameters are listed below.</p>
-<blockquote>
-<div><p><a class="reference internal" href="spif_optional_params.html"><span class="doc">List of Optional Parameters</span></a></p>
+<p>More details about this is included in the section describing the <a class="reference internal" href="spif_definition.html#spif-core"><span class="std std-ref">Instrument Core Group</span></a>.</p>
 <blockquote>
 <div></div></blockquote>
-</div></blockquote>
 </div>
 </div>
 
@@ -89,9 +128,9 @@ as independent instruments. For a probe that is made up of multiple instruments 
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Structure</a><ul>
+<li><a class="reference internal" href="#mandatory-and-optional-content">Mandatory and Optional Content</a></li>
 <li><a class="reference internal" href="#instrument-channels">Instrument Channels</a></li>
 <li><a class="reference internal" href="#raw-image-array-structure">Raw Image Array Structure</a></li>
-<li><a class="reference internal" href="#mandatory-and-optional-contents">Mandatory and Optional Contents</a></li>
 </ul>
 </li>
 </ul>
@@ -100,7 +139,7 @@ as independent instruments. For a probe that is made up of multiple instruments 
   <p class="topless"><a href="index.html"
                         title="previous chapter">SPIF - Single Particle Image Format</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="definition.html"
+  <p class="topless"><a href="spif_definition.html"
                         title="next chapter">SPIF File Definition</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -130,7 +169,7 @@ as independent instruments. For a probe that is made up of multiple instruments 
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="definition.html" title="SPIF File Definition"
+          <a href="spif_definition.html" title="SPIF File Definition"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="SPIF - Single Particle Image Format"

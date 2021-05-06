@@ -41,7 +41,7 @@
 <h1>SPIF - Single Particle Image Format<a class="headerlink" href="#spif-single-particle-image-format" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="motivation">
 <h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
-<p>Particle imaging probes have been used for many years to record the shapes and concentrations of airborne particles <a class="footnote-reference brackets" href="#id2" id="id1">1</a>. A variety of file formats are used by the manufacturers of such instruments to transmit and store particle image data. The formats are/were designed around hardware and bandwidth limitations and so may not have a convenient or standard structure. This has meant that users must write their own routines for reading (often binary) image data files for processing and analysis. We propose a new file format for raw image data called the Single Particle Image Format (SPIF). The new format will specify a single structure which all imaging probe data formats may be translated into leading to improved accessibility for users and a refinement of (now common) data processing routines. It may be that this format could be adopted by instrument manufacturers so that all raw image data is immediately available in a standard format. The format is also suitable for the long-term archiving of raw data and so has the potential to satisfy usage requirements across the range of usage environments.</p>
+<p>Particle imaging probes have been used for many years to record the shapes and concentrations of airborne particles <a class="footnote-reference brackets" href="#baumgardner2017" id="id1">1</a>. A variety of file formats are used by the manufacturers of such instruments to transmit and store particle image data. The formats are/were designed around hardware and bandwidth limitations and so may not have a convenient or standard structure. This has meant that users must write their own routines for reading (often binary) image data files for processing and analysis. We propose a new file format for raw image data called the Single Particle Image Format (SPIF). The new format will specify a single structure which all imaging probe data formats may be translated into leading to improved accessibility for users and a refinement of (now common) data processing routines. It may be that this format could be adopted by instrument manufacturers so that all raw image data is immediately available in a standard format. The format is also suitable for the long-term archiving of raw data and so has the potential to satisfy usage requirements across the range of usage environments.</p>
 <p>Optical Array Probe (OAP) images are created by triggering a 1-dimensional array of photodiodes on a nanosecond timescale to create a series of slices as a particle travels through the sample volume. These slices are used to construct a 2-dimensional image of the particle with a set width that corresponds to the number of photodiodes in the 1-dimensional array and a variable length that depends on the size and shape of the particle. Different types of imaging probes may use a 2-dimensional CCD or similar photodetector to create true 2-dimensional images of passing particles. The dimensions of the produced images may not have a fixed size, for example probes such as the <a class="reference external" href="http://www.specinc.com/3v-cpi-combo">SPEC 3V-CPI</a> define a region of interest that is reduced to only contain the particle image in order to reduce data bandwidth requirements and file size.</p>
 <p>SPIF files can contain both of these types of images which increases it’s flexibility and future-proofs the convention, more details are given in <a class="reference internal" href="structure.html#image-array-structure"><span class="std std-ref">Raw Image Array Structure</span></a>.</p>
 </div>
@@ -50,14 +50,23 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="structure.html#mandatory-and-optional-content">Mandatory and Optional Content</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structure.html#instrument-channels">Instrument Channels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="structure.html#raw-image-array-structure">Raw Image Array Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="structure.html#mandatory-and-optional-contents">Mandatory and Optional Contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="definition.html">SPIF File Definition</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="definition.html#spif-root-attributes">SPIF Root Attributes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="definition.html#instrument-channel-group">Instrument Channel Group</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spif_definition.html">SPIF File Definition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spif_definition.html#spif-root-attributes">SPIF Root Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_definition.html#instrument-channel-group">Instrument Channel Group</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="spif_extensions.html">SPIF Extensions and Optional Extras</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="spif_extensions.html#raw-data-group">Raw Data Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_extensions.html#auxillary-data-group">Auxillary Data Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_extensions.html#level-0-processed-data-group">Level-0 Processed Data Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_extensions.html#level-1-processed-data-group">Level-1 Processed Data Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_extensions.html#diameter-definitions">Diameter definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spif_extensions.html#level-2-processed-data-group">Level-2 Processed Data Group</a></li>
 </ul>
 </li>
 </ul>
@@ -118,7 +127,7 @@
 </tr>
 <tr class="row-odd"><td><dl class="simple">
 <dt>Modified</dt><dd><ul class="simple">
-<li><p>Apr 28, 2021</p></li>
+<li><p>May 06, 2021</p></li>
 </ul>
 </dd>
 </dl>
@@ -128,8 +137,8 @@
 </table>
 </div></blockquote>
 <dl class="footnote brackets">
-<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>Baumgardner, D., S. J. Abel, D. Axisa, R. Cotton, J. Crosier, P. Field, C. Gurganus, A. Heymsfield, A. Korolev, M. Krämer, P. Lawson, G. McFarquhar, Z. Ulanowski, and J. Um. “Cloud Ice Properties: In Situ Measurement Challenges”, Meteorological Monographs 58 (2017): 9.1-9.23, <a class="reference external" href="https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0011.1">https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0011.1</a></p>
+<dt class="label" id="baumgardner2017"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Baumgardner, D., S. J. Abel, D. Axisa, R. Cotton, J. Crosier, P. Field, C. Gurganus, A. Heymsfield, A. Korolev, M. Krämer, P. Lawson, G. McFarquhar, Z. Ulanowski, and J. Um. “Cloud Ice Properties: In Situ Measurement Challenges”, Meteorological Monographs 58, 9.1-9.23, doi: <a class="reference external" href="https://doi.org/10.1175/AMSMONOGRAPHS-D-16-0011.1">10.1175/AMSMONOGRAPHS-D-16-0011.1</a>, 2017.</p>
 </dd>
 </dl>
 </div>

@@ -61,7 +61,7 @@ root
 
 
  | *float* **F** (particles)
- |  **F**:long\_name = "Shape factor of particl" ;
+ |  **F**:long\_name = "Shape factor of particle" ;
  |  **F**:units = "dimensionless" ;
  |  **F**:references = "Holroyd 1986" ;
 
@@ -248,6 +248,12 @@ root
  :dimension: "particles" ;
 
 
+ | *float* **D\_eq** (particles)
+ |  **D\_eq**:long\_name = "Diameter of circle with area equivalent to particle area" ;
+ |  **D\_eq**:units = "um" ;
+ |  **D\_eq**:references = "" ;
+
+
  | *float* **D\_h** (particles)
  |  **D\_h**:long\_name = "Hypotenuse of triangle formed by D\_p and D\_t" ;
  |  **D\_h**:units = "um" ;
@@ -306,17 +312,11 @@ root
  |  **D\_slice\_diff**:references = "?" ;
 
 
- | *float* **N\_eq** (particles)
- |  **N\_eq**:long\_name = "Diameter of circle with area equivalent to particle area" ;
- |  **N\_eq**:units = "um" ;
- |  **N\_eq**:references = "" ;
-
-
- | *float* **N\_t** (particles)
- |  **N\_t**:long\_name = "Max distance in the time dimension" ;
- |  **N\_t**:units = "um" ;
- |  **N\_t**:equivalent\_name = "D\_x, L1" ;
- |  **N\_t**:references = "?" ;
+ | *float* **D\_t** (particles)
+ |  **D\_t**:long\_name = "Max distance in the time dimension" ;
+ |  **D\_t**:units = "um" ;
+ |  **D\_t**:equivalent\_name = "D\_x, L1" ;
+ |  **D\_t**:references = "?" ;
 
 
  | *boolean* **all\_in** (particles)
