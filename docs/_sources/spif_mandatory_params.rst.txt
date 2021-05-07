@@ -104,3 +104,11 @@ root
  | *int* **width** (image_num)
  |  **width**:long\_name = "Number of pixels across image" ;
  |  **width**:units = "dimensionless" ;
+
+
+
+/instrument/raw
+~~~~~~~~~~~~~~~
+
+
+ :dimension: "buffer" ;
