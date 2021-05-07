@@ -188,6 +188,20 @@ Variables in the ``core`` group include;
        | **flag**: 'u1' or np.uint8
 
 
+.. _spif-raw:
+
+Raw Data Group
+--------------
+
+The instrument ``raw`` group contains data variables of the raw buffer information in the binary file. This will include buffer headers, timing *ticks*, and other sundary data. In order to act as a fully fledged raw data format this group is required however, as the data is highly instrument dependent, the contents of this group are not described. This is not seen as a problem as only those very familiar with the raw data are likely going to work with the contents of this group. The variable dimension is ``buffer``.
+
+.. TODO::
+    :class: warning
+
+    Does the raw data variable/s include the end-of-buffer demarcations?
+
+
+
 
 .. rubric:: Footnotes
 

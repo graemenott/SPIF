@@ -9,23 +9,6 @@ Within the mandatory groups of a SPIF file additional and optional attributes an
 All of the optional groups described sit within the :ref:`instrument <spif-instrument_channel>` group.
 
 
-.. _spif-raw:
-
-Raw Data Group
---------------
-
-.. note:: The ``raw`` group is an optional SPIF feature.
-
-The instrument ``raw`` group contains data variables of the raw buffer information in the binary file. This will include buffer headers, timing *ticks*, and other sundary data.
-
-.. TODO::
-    :class: warning
-
-    Does the raw data variable/s include the end-of-buffer demarcations?
-
-
-
-
 .. _spif-aux:
 
 Auxillary Data Group

@@ -16,7 +16,7 @@ The SPIF group structure is below with optional groups shown in *italics*
     |   │
     |   ├── instrument 1
     |   │   ├── "core"
-    |   │   ├── *"raw"*
+    |   │   ├── "raw"
     |   │   ├── *"aux"*
     |   │   ├── *level-0*
     |   │   │   └── *level-1*
@@ -78,9 +78,9 @@ as independent instruments. For a probe that is made up of multiple instruments 
 
 .. _image-array-structure:
 
-=========================
-Raw Image Array Structure
-=========================
+=====================
+Image Array Structure
+=====================
 
 Flattened image data is stored in the instrument ``core`` group as a 1-dimensional array. The length of this array is the product of the number of images, given by the dimension ``image_num``, and the width and height of each image. Depending on the type of instrument, the width and/or height may be fixed or variable for each image.
 
