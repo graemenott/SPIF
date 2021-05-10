@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPIF Definition &#8212; Python  documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="SPIF File Definition" href="spif_definition.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="spif_definition.html" title="SPIF File Definition"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPIF Definition</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="spif-extensions-and-optional-extras">
+<h1>SPIF Extensions and Optional Extras<a class="headerlink" href="#spif-extensions-and-optional-extras" title="Permalink to this headline">¶</a></h1>
+<p>Within the mandatory groups of a SPIF file additional and optional attributes and/or variables may be included. In addtion to this, a SPIF file may be extended with optional groups; these groups may contain auxillary or higher level data products or data that does not belong within the <code class="docutils literal notranslate"><span class="pre">core</span></code> group but may be useful to the user of the image data. This page describes these optional groups and the parameters that may be contained within them. There are not regulated names and structures for these extended groups but following some of the guidelines here may improve the ease-of-use for other users. Some example optional parameters are given <a class="reference internal" href="spif_optional_params.html"><span class="doc">here</span></a>.</p>
+<p>All of the optional groups described sit within the <a class="reference internal" href="spif_definition.html#spif-instrument-channel"><span class="std std-ref">instrument</span></a> group.</p>
+<div class="section" id="auxillary-data-group">
+<span id="spif-aux"></span><h2>Auxillary Data Group<a class="headerlink" href="#auxillary-data-group" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">aux</span></code> group is an optional SPIF feature.</p>
+</div>
+<p>The instrument <code class="docutils literal notranslate"><span class="pre">aux</span></code> group contains auxiliary data relevant to a given instrument. This data may be included to maintain integrity of the original dataset, making SPIF a suitable format for long term archiving. This group has its own <code class="docutils literal notranslate"><span class="pre">time</span></code> coordinate; this accommodates time series data that may be transmitted in parallel to the two dimensional image data. The <code class="docutils literal notranslate"><span class="pre">aux</span></code> group is optional and may include useful data such as;</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Housekeeping data</p></li>
+<li><p>Buffer time stamps</p></li>
+<li><p>Image counters</p></li>
+<li><p>Data acquisition timing words</p></li>
+<li><p>Temperature</p></li>
+<li><p>Altitude</p></li>
+<li><p>Air speed</p></li>
+</ul>
+</div></blockquote>
+<div class="section" id="auxillary-air-speed-data">
+<span id="tas"></span><h3>Auxillary Air Speed Data<a class="headerlink" href="#auxillary-air-speed-data" title="Permalink to this headline">¶</a></h3>
+<p>The speed at which particles travel through the probe sample volume is an important parameter for further processing. It allows;</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>conversion of an OAPs slice into a physical resolution and so particle sizes to be calculated,</p></li>
+<li><p>the calculation of sample volume and so higher-order microphysical parameters like particle number concentration, liquid water content, etc.</p></li>
+</ul>
+</div></blockquote>
+<p>The true airspeed (TAS) of an OAP may set the rate at which the 1-dimensional array is read. The probe will have an internal TAS which may be set as a constant, read from an on-board pitot tube, or read from a secondary source via the aircraft data system. This internal TAS may be different from the actual air speed, for example if the set TAS does not match the actual air speed or a pitot tube freezes up. This situation will result in distorted images. Post-flight corrections may be required to the internal TAS to comensate for this.</p>
+<div class="warning admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Two options exist here, firstly a <strong>TAS_corrected</strong> variable that may not be present if no correction applicable. Or a <strong>TAS_correction</strong> variable that is alway present but which has a default of 1.</p>
+</div>
+<p>If TAS is included then it should have the following form;</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>float</em> <strong>TAS_original</strong> (time)</div>
+<div class="line-block">
+<div class="line"><strong>TAS_original</strong>:long_name = “True Air Speed (TAS) as applied by the probe at time of data acquisition” ;</div>
+<div class="line"><strong>TAS_original</strong>:units = “m/s” ;</div>
+<div class="line"><strong>TAS_original</strong>:ancillary_variables = instrument/aux/TAS_correction ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>TAS_correction</strong> (time)</div>
+<div class="line-block">
+<div class="line"><strong>TAS_correction</strong>:long_name = “Correction factor for True Air Speed (TAS) at the probe. Actual TAS is TAS_original * TAS_correction. Default is 1.” ;</div>
+<div class="line"><strong>TAS_correction</strong>:units = “dimensionless” ;</div>
+<div class="line"><strong>TAS_correction</strong>:_Fillvalue = 1 ;</div>
+<div class="line"><strong>TAS_correction</strong>:ancillary_variables = instrument/aux/TAS_original ;</div>
+</div>
+</div>
+</div></blockquote>
+<p>or</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>float</em> <strong>TAS_corrected</strong> (time)</div>
+<div class="line-block">
+<div class="line"><strong>TAS_corrected</strong>:long_name = “Corrected true air speed (TAS) at the probe.” ;</div>
+<div class="line"><strong>TAS_corrected</strong>:units = “m/s” ;</div>
+<div class="line"><strong>TAS_corrected</strong>:ancillary_variables = instrument/aux/TAS_original ;</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="level-0-processed-data-group">
+<span id="spif-level-0"></span><h2>Level-0 Processed Data Group<a class="headerlink" href="#level-0-processed-data-group" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">level-0</span></code> group is an optional SPIF feature.</p>
+</div>
+<p>Following extraction of image data from the raw binary file, images can be analyzed for information about the particle/s they contain. At the most basic level, parameters of interest describe geometric and physical measurements of the identified particles. Thus, the level 0 data contains basic information about identified particles such as;</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#diameters">Diameters</a> (more discussion on this below)</p></li>
+<li><p>Area</p></li>
+<li><p>Perimeter</p></li>
+<li><p>Bounding box within image</p></li>
+<li><p>Orientation</p></li>
+<li><p>Right edge pixel count</p></li>
+<li><p>Left edge pixel count</p></li>
+<li><p>Center-in (boolean)</p></li>
+<li><p>All-in (boolean)</p></li>
+</ul>
+</div></blockquote>
+<p>Note that the level 0 particles are sized using number of pixels—conversion to a physical size takes place in level 1.</p>
+<p>Each of the parameters discussed above applies to individual particles. For most imaging probes there can be multiple particles in a single image. Given this <em>n</em>-to-one relationship, the level 0 particle data will require use of a new dimension corresponding to the number of particles detected, which is likely to be different than the number of images captured. The <code class="docutils literal notranslate"><span class="pre">particles</span></code> dimension thus covers all parameters described in this section. With the additional dimension, there is a need for supplemental parameters which describe the relationship of detected particles to their original image, both in terms of a reference to the additional image, as well as a more exact temporal location, based on the particle’s location in the image frame.</p>
+<p>A list of possible level 0 variables are given on <a class="reference internal" href="spif_optional_params.html"><span class="doc">this page</span></a>. As an example variables in the <code class="docutils literal notranslate"><span class="pre">level-0</span></code> group may have the following form;</p>
+<p><strong>Dimensions:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">particle_num</div>
+</div>
+</div></blockquote>
+<p><strong>Variables:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>int</em> <strong>image_index</strong> (particle_num)</div>
+<div class="line-block">
+<div class="line"><strong>image_index</strong>:long_name = “Reference to image_num index of image containing current particle” ;</div>
+<div class="line"><strong>image_index</strong>:ancillary_variables = instrument/core/image_num ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>N_p</strong> (particle_num)</div>
+<div class="line-block">
+<div class="line"><strong>N_p</strong>:long_name = “Max diameter of particle in the photodiode-array dimension” ;</div>
+<div class="line"><strong>N_p</strong>:units = “pixels” ;</div>
+<div class="line"><strong>N_p</strong>:references =  ;</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="level-1-processed-data-group">
+<span id="spif-level-1"></span><h2>Level-1 Processed Data Group<a class="headerlink" href="#level-1-processed-data-group" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">level-1</span></code> group is an optional SPIF feature.</p>
+</div>
+<p>Whereas level 0 data presents particle information as simply properties of an image, level 1 contains particle properties linked to physical, real-world quantities. In level 1, there are two primary categories of data:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Particle properties scaled to physical dimensions (μm, etc.) using the resolution of the instrument,</p></li>
+<li><p>Parameters classifying particles into habits or other categories.</p></li>
+</ol>
+</div></blockquote>
+<p>As discussed in <a class="reference internal" href="#tas">tas</a>, when generating scaled particle properties, care must be taken to correct for improper scaling in the image time direction due to inconsistencies between the probe sampling rate and the speed of the aircraft. These inconsistencies can happen for various reasons the most common include; exceeding TAS limits of the probe, having incorrect or constant airspeed inputs supplied to the probe, or problems with local pitot measurements due to icing or other blockages.</p>
+<p>As the <code class="docutils literal notranslate"><span class="pre">level-1</span></code> group is a sub-group of <code class="docutils literal notranslate"><span class="pre">level-0</span></code>, the <code class="docutils literal notranslate"><span class="pre">level-1</span></code> group inherits the <code class="docutils literal notranslate"><span class="pre">particle_num</span></code> dimension. A <code class="docutils literal notranslate"><span class="pre">PAS</span></code> (or probe air speed) variable gives the correct true air speed at the probe for each particle derived from the TAS variables in the <code class="docutils literal notranslate"><span class="pre">aux</span></code> group.</p>
+<div class="warning admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">PAS</span></code> variable is just an idea to distinguish from <code class="docutils literal notranslate"><span class="pre">TAS\_corrected</span></code>. Is this a sensible thing to have PAS/TAS for each particle (derived from timeseries)?</p>
+</div>
+<p>A list of possible level 1 variables are given on <a class="reference internal" href="spif_optional_params.html"><span class="doc">this page</span></a> and may include for example;</p>
+<p><strong>Variables:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>int</em> <strong>PAS</strong> (particle_num)</div>
+<div class="line-block">
+<div class="line"><strong>PAS</strong>:long_name = “Probe Air Speed (PAS) derived from the True Air Speed (TAS) variables in the auxilary data group” ;</div>
+<div class="line"><strong>PAS</strong>:units = “m/s” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>D_p</strong> (particle_num)</div>
+<div class="line-block">
+<div class="line"><strong>D_p</strong>:long_name = “Max diameter of particle in the photodiode-array dimension” ;</div>
+<div class="line"><strong>D_p</strong>:units = “um” ;</div>
+<div class="line"><strong>D_p</strong>:equivalent_name = “D_y, L5” ;</div>
+<div class="line"><strong>D_p</strong>:references =  ;</div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="diameter-definitions">
+<span id="diameters"></span><h2>Diameter definitions<a class="headerlink" href="#diameter-definitions" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Interpretation of particle diameter presents a challenge, as there are currently several definitions of particle diameter in use by the community, and a standard definition likely isn’t reasonable, since different diameters are useful depending on the measurement scenario. Thus, to make SPIF useful to the broader community, it may include a wide set of diameters in use by the community. An additional consideration for the inclusion of various particle diameters is how these diameters are named. Throughout the literature, varying names have been given to essentially identical diameters. In the diameter definitions here, an attempt will be made to standardize the names, while referencing other names used for a given diameter definition.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Pixel Diameter</p></th>
+<th class="head"><p>Physical diameter</p></th>
+<th class="head"><p>Definition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_p\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_p\)</span></p></td>
+<td><p>Maximum diameter in the
+photodiode-array dimension.
+Equivalent to <span class="math notranslate nohighlight">\(N_y\)</span>/<span class="math notranslate nohighlight">\(D_y\)</span> <a class="footnote-reference brackets" href="#id13" id="id3">1</a>, <a class="footnote-reference brackets" href="#id14" id="id4">2</a> and <span class="math notranslate nohighlight">\(L_5\)</span> <a class="footnote-reference brackets" href="#id15" id="id5">3</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_t\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_t\)</span></p></td>
+<td><p>Maximum diameter in the time
+dimension. Equivalent to <span class="math notranslate nohighlight">\(N_x\)</span>/<span class="math notranslate nohighlight">\(D_x\)</span> <a class="footnote-reference brackets" href="#id13" id="id6">1</a>, <a class="footnote-reference brackets" href="#id14" id="id7">2</a> and <span class="math notranslate nohighlight">\(L_1\)</span> <a class="footnote-reference brackets" href="#id15" id="id8">3</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_{eq}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{eq}\)</span></p></td>
+<td><p>Diameter of circle with area
+equivalent to particle area.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_s\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_s\)</span></p></td>
+<td><p>Diameter of minimum enclosing
+circle. Equivalent to <span class="math notranslate nohighlight">\(N_{max}\)</span>/<span class="math notranslate nohighlight">\(D_{max}\)</span> <a class="footnote-reference brackets" href="#id16" id="id9">4</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_h\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_h\)</span></p></td>
+<td><p>Hypotenuse of triangle formed by
+<span class="math notranslate nohighlight">\(N_p\)</span> and <span class="math notranslate nohighlight">\(N_t\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_m\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_m\)</span></p></td>
+<td><p>Mean of <span class="math notranslate nohighlight">\(N_p\)</span> and
+<span class="math notranslate nohighlight">\(N_t\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_{\scriptsize\mbox{slice_count}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{\scriptsize\mbox{slice_count}}\)</span></p></td>
+<td><p>Diameter in slice with maximum
+number of shaded pixels. Equivalent to <span class="math notranslate nohighlight">\(L_2\)</span> <a class="footnote-reference brackets" href="#id15" id="id10">3</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_{\scriptsize\mbox{slice_diff}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{\scriptsize\mbox{slice_diff}}\)</span></p></td>
+<td><p>Diameter in slice with greatest
+pixel separation. Equivalent to <span class="math notranslate nohighlight">\(L_4\)</span> <a class="footnote-reference brackets" href="#id15" id="id11">3</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(N_{\scriptsize\mbox{reconst}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{\scriptsize\mbox{reconst}}\)</span></p></td>
+<td><p>Reconstructed circle diameter
+for center-in particles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(N_{\scriptsize\mbox{hole}}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(D_{\scriptsize\mbox{hole}}\)</span></p></td>
+<td><p>Max hole diameter as defined in
+<a class="footnote-reference brackets" href="#id17" id="id12">5</a>.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="level-2-processed-data-group">
+<span id="spif-level-2"></span><h2>Level-2 Processed Data Group<a class="headerlink" href="#level-2-processed-data-group" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">level-2</span></code> group is an optional SPIF feature.</p>
+</div>
+<p>Level 2 processed data is derived from level-1 data and may include aggregated properties such as;</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Concentration timeseries</p></li>
+<li><p>Size distributions</p></li>
+<li><p>Liquid water content timeseries</p></li>
+</ul>
+</div></blockquote>
+<p class="rubric">References</p>
+<dl class="footnote brackets">
+<dt class="label" id="id13"><span class="brackets">1</span><span class="fn-backref">(<a href="#id3">1</a>,<a href="#id6">2</a>)</span></dt>
+<dd><p>Korolev, A., Isaac, G.A. and Hallett, J. “Ice particle habits in stratiform clouds”, Q.J.R. Meteorol. Soc., 126, 2873-2902, doi: <a class="reference external" href="https://doi.org/10.1002/qj.49712656913">10.1002/qj.49712656913</a>, 2000.</p>
+</dd>
+<dt class="label" id="id14"><span class="brackets">2</span><span class="fn-backref">(<a href="#id4">1</a>,<a href="#id7">2</a>)</span></dt>
+<dd><p>Leroy, D., E. Fontaine, A. Schwarzenboeck, and J. W. Strapp. “Ice Crystal Sizes in High Ice Water Content Clouds. Part I: On the Computation of Median Mass Diameter from In Situ Measurements”, J. Atmos. Oceanic Technol., 33, 11, 2461-2476, doi: <a class="reference external" href="https://doi.org/10.1175/JTECH-D-15-0151.1">10.1175/JTECH-D-15-0151.1</a>, 2016.</p>
+</dd>
+<dt class="label" id="id15"><span class="brackets">3</span><span class="fn-backref">(<a href="#id5">1</a>,<a href="#id8">2</a>,<a href="#id10">3</a>,<a href="#id11">4</a>)</span></dt>
+<dd><p>Lawson, R. P. “Effects of ice particles shattering on the 2D-S probe”, Atmos. Meas. Tech., 4, 1361-1381, doi: <a class="reference external" href="https://doi.org/10.5194/amt-4-1361-2011">10.5194/amt-4-1361-2011</a>, 2011.</p>
+</dd>
+<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id9">4</a></span></dt>
+<dd><p>Heymsfield, A. J., Schmitt, C. and Bansemer, A. “Ice Cloud Particle Size Distributions and Pressure-Dependent Terminal Velocities from In Situ Observations at Temperatures from 0° to -86°C”, J. Atmos. Oceanic Technol., 70, 4123-4154, doi: <a class="reference external" href="https://doi.org/10.1175/JAS-D-12-0124.1">10.1175/JAS-D-12-0124.1</a>, 2013.</p>
+</dd>
+<dt class="label" id="id17"><span class="brackets"><a class="fn-backref" href="#id12">5</a></span></dt>
+<dd><p>Korolev, A. V. “Reconstruction of the sizes of spherical particles from their shadow images Part I: Theoretical considerations”, J. Atmos. Oceanic Technol., 24, 376-389, doi: <a class="reference external" href="https://doi.org/10.1175/JTECH1980.1">10.1175/JTECH1980.1</a>, 2007.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SPIF Extensions and Optional Extras</a><ul>
+<li><a class="reference internal" href="#auxillary-data-group">Auxillary Data Group</a><ul>
+<li><a class="reference internal" href="#auxillary-air-speed-data">Auxillary Air Speed Data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#level-0-processed-data-group">Level-0 Processed Data Group</a></li>
+<li><a class="reference internal" href="#level-1-processed-data-group">Level-1 Processed Data Group</a></li>
+<li><a class="reference internal" href="#diameter-definitions">Diameter definitions</a></li>
+<li><a class="reference internal" href="#level-2-processed-data-group">Level-2 Processed Data Group</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="spif_definition.html"
+                        title="previous chapter">SPIF File Definition</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/spif_extensions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="spif_definition.html" title="SPIF File Definition"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPIF Definition</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright undecided.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

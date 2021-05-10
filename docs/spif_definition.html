@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SPIF Definition &#8212; Python  documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SPIF Extensions and Optional Extras" href="spif_extensions.html" />
+    <link rel="prev" title="Structure" href="structure.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="spif_extensions.html" title="SPIF Extensions and Optional Extras"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structure.html" title="Structure"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPIF Definition</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="spif-file-definition">
+<h1>SPIF File Definition<a class="headerlink" href="#spif-file-definition" title="Permalink to this headline">¶</a></h1>
+<p>As described in <a class="reference internal" href="structure.html"><span class="doc">SPIF Structure</span></a>, in order to be SPIF-compliant, a file must have a prescribed structure and a set of included parameters. The exact list of mandatory parameters—parameters include netCDF groups, attributes, dimensions and variables—are given <a class="reference internal" href="spif_mandatory_params.html"><span class="doc">here</span></a> <a class="footnote-reference brackets" href="#paramgenerationfoot" id="id1">1</a>.</p>
+<p>On this page, the mandatory SPIF groups are described in detail. Note that although the groups are mandatory, in the examples given not all of the attributes or variables of those groups may be.</p>
+<p>Group/root attributes are defined as;</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">attribute_name</dt>
+<dd class="field-odd"><p>Short description of attribute value</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Scalar variables, that is those without a dimension, are defined as;</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>dtype</em> <strong>variable_name</strong></div>
+<div class="line-block">
+<div class="line"><strong>variable_name</strong>:attribute_1 = Short description of attribute 1 value ;</div>
+<div class="line"><strong>variable_name</strong>:attribute_2 = Short description of attribute 2 value ;</div>
+</div>
+</div>
+</div></blockquote>
+<p>Variables are defined as;</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>dtype</em> <strong>variable_name</strong> (dimension)</div>
+<div class="line-block">
+<div class="line"><strong>variable_name</strong>:attribute_1 = Short description of attribute 1 value ;</div>
+<div class="line"><strong>variable_name</strong>:attribute_2 = Short description of attribute 2 value ;</div>
+</div>
+</div>
+</div></blockquote>
+<div class="section" id="spif-root-attributes">
+<span id="spif-root"></span><h2>SPIF Root Attributes<a class="headerlink" href="#spif-root-attributes" title="Permalink to this headline">¶</a></h2>
+<p>Each SPIF file has a standardised set of attributes in the root. These attributes may include (<code class="docutils literal notranslate"><span class="pre">Conventions</span></code> and <code class="docutils literal notranslate"><span class="pre">title</span></code> are mandatory);</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">Conventions</dt>
+<dd class="field-odd"><p>“SPIF-n.m”        (where n.m is the specification version)</p>
+</dd>
+<dt class="field-even">title</dt>
+<dd class="field-even"><p>Short description of dataset contents</p>
+</dd>
+<dt class="field-odd">institution</dt>
+<dd class="field-odd"><p>Where the data orginated</p>
+</dd>
+<dt class="field-even">source</dt>
+<dd class="field-even"><p>Name and version of software/hardware used to generate this dataset</p>
+</dd>
+<dt class="field-odd">history</dt>
+<dd class="field-odd"><p>Audit trail of file modifications</p>
+</dd>
+<dt class="field-even">references</dt>
+<dd class="field-even"><p>References of any documents describing the data and production of this dataset</p>
+</dd>
+<dt class="field-odd">comment</dt>
+<dd class="field-odd"><p>Any further information pertaining to this data</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Any other attributes that apply to this dataset can be included in the root.</p>
+</div>
+<div class="section" id="instrument-channel-group">
+<span id="spif-instrument-channel"></span><h2>Instrument Channel Group<a class="headerlink" href="#instrument-channel-group" title="Permalink to this headline">¶</a></h2>
+<p>Although SPIF files will contain data from a single instrument, some instruments may have more than one independent instrument channels. Each of these instrument channels will have a separate group. The root of the <strong>instrument channel group</strong> contains attributes pertaining to that specific instrument/channel. It should also include any further information such as the probe software module that was used to create the file.</p>
+<p>Instrument group attributes are currently not mandatory but may include;</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">instrument_name</dt>
+<dd class="field-odd"><p>Short name of instrument</p>
+</dd>
+<dt class="field-even">instrument_long_name</dt>
+<dd class="field-even"><p>Full descriptive name of instrument</p>
+</dd>
+<dt class="field-odd">instrument_channel</dt>
+<dd class="field-odd"><p>Instrument channel (if applicable)</p>
+</dd>
+<dt class="field-even">instrument_serial_number</dt>
+<dd class="field-even"><p>Serial number or instrument identifier</p>
+</dd>
+<dt class="field-odd">manufacturer</dt>
+<dd class="field-odd"><p>Manufacturer of instrument</p>
+</dd>
+<dt class="field-even">instrument_firmware</dt>
+<dd class="field-even"><p>Instrument firmware version</p>
+</dd>
+<dt class="field-odd">instrument_software</dt>
+<dd class="field-odd"><p>Name and version of data acquisition software interfacing with instrument</p>
+</dd>
+<dt class="field-even">institution</dt>
+<dd class="field-even"><p>Institution operating instrument</p>
+</dd>
+<dt class="field-odd">platform</dt>
+<dd class="field-odd"><p>Name or description of platform instrument is mounted on</p>
+</dd>
+<dt class="field-even">raw_filenames</dt>
+<dd class="field-even"><p>Raw data filename(s) used to generate the current instrument dataset</p>
+</dd>
+<dt class="field-odd">references</dt>
+<dd class="field-odd"><p>Link to web, paper, document reference describing instrument</p>
+</dd>
+<dt class="field-even">comment</dt>
+<dd class="field-even"><p>Any further notes about instrument, platform, location, orientation, etc;</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Universal variables may also be included in the instrument group root. For example;</p>
+<p><strong>Dimensions:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">pixel</div>
+<div class="line">bit</div>
+</div>
+</div></blockquote>
+<p><strong>Variables:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>int</em> <strong>value</strong> (bit)</div>
+<div class="line-block">
+<div class="line"><strong>bit</strong>:long_name = “Value of shadow level in image array” ;</div>
+<div class="line"><strong>bit</strong>:ancillary_variables = shadow;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>shadow</strong> (bit)</div>
+<div class="line-block">
+<div class="line"><strong>shadow</strong>:long_name = “Fractional obscuration of photodiode array for each bit value” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>start_time</strong></div>
+<div class="line-block">
+<div class="line"><strong>start_time</strong>:long_name = “Reference datetime of image data” ;</div>
+<div class="line"><strong>start_time</strong>:units = “seconds since &lt;reference datetime&gt;” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>resolution</strong></div>
+<div class="line-block">
+<div class="line"><strong>resolution</strong>:long_name = “Physical resolution of array pixels” ;</div>
+<div class="line"><strong>resolution</strong>:units = “micrometer” ;</div>
+<div class="line"><strong>resolution</strong>:ancillary_variables = instrument/resolution_err ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>resolution_err</strong></div>
+<div class="line-block">
+<div class="line"><strong>resolution_err</strong>:long_name = “Uncertainty of physical resolution of array pixels” ;</div>
+<div class="line"><strong>resolution_err</strong>:units = “micrometer” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>array_rate</strong></div>
+<div class="line-block">
+<div class="line"><strong>array_rate</strong>:long_name = “Maximum temporal clocking rate of the imaging array.” ;</div>
+<div class="line"><strong>array_rate</strong>:units = “hertz” ;</div>
+<div class="line"><strong>array_rate</strong>:comment = “An OAP clocking rate may vary (eg with TAS) but will never be greater than array_rate. If 2d imaging probe then this defines maximum frame rate.”</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>array_size</strong></div>
+<div class="line-block">
+<div class="line"><strong>array_size</strong>:long_name = “Number of pixels across the imaging array, may be 1d or 2d.” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>image_size</strong></div>
+<div class="line-block">
+<div class="line"><strong>image_size</strong>:long_name = “Number of pixels across an image, may be 1d or 2d. If fixed size then number of pixels, if variable size then _FillValue” ;</div>
+<div class="line"><strong>image_size</strong>:_FillValue = 0 ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>wavelength</strong></div>
+<div class="line-block">
+<div class="line"><strong>wavelength</strong>:long_name = “Operating wavelength of laser used for shadowing/imaging the particles” ;</div>
+<div class="line"><strong>wavelength</strong>:units = “nanometer” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>arm_separation</strong></div>
+<div class="line-block">
+<div class="line"><strong>arm_separation</strong>:long_name = “Physical distance between probe arms” ;</div>
+<div class="line"><strong>arm_separation</strong>:units = “millimeter” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>boolean</em> <strong>antishatter_tips</strong></div>
+<div class="line-block">
+<div class="line"><strong>antishatter_tips</strong>:long_name = “Use of antishatter-, or Korolev-, tips on probe arms” ;</div>
+</div>
+</div>
+</div></blockquote>
+<div class="section" id="instrument-core-group">
+<span id="spif-core"></span><h3>Instrument Core Group<a class="headerlink" href="#instrument-core-group" title="Permalink to this headline">¶</a></h3>
+<p>The instrument <code class="docutils literal notranslate"><span class="pre">core</span></code> group isa sub-group of the <code class="docutils literal notranslate"><span class="pre">instrument</span></code> group and contains the raw image data. All image data has been extracted from the raw binary file and presented here in a more usable form, no filtering has been carried out so potentially corrupt images, repeated images, and noise are all included. Buffer headers are not included, these are contained within the <code class="docutils literal notranslate"><span class="pre">raw</span></code> group variable/s.</p>
+<div class="warning admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>The above paragraph stipulates that no image filtering is done. Are there any situations where this may <em>not</em> be the case?</p>
+</div>
+<p>The unlimited dimensions are <code class="docutils literal notranslate"><span class="pre">image_num</span></code> and <code class="docutils literal notranslate"><span class="pre">pixel</span></code> where <code class="docutils literal notranslate"><span class="pre">max(image_num)</span></code> is the number of images in the dataset and <code class="docutils literal notranslate"><span class="pre">max(pixel)</span></code> is the total number of pixels of data in the flattened image array.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each image may in fact contain multiple particles. As the <code class="docutils literal notranslate"><span class="pre">core</span></code> group is entirely raw data, there has been no processing to split out the multiple particles from a single image.</p>
+</div>
+<p>The arrival time of each image is given by <code class="docutils literal notranslate"><span class="pre">timestamp</span></code>. The units are in nanoseconds from the reference <code class="docutils literal notranslate"><span class="pre">start_time</span></code>, this is defined in the <code class="docutils literal notranslate"><span class="pre">timestamp:units</span></code> attribute using the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#time-coordinate">CF format</a>. Note that different probes may not provide image times in exactly the same way and indeed, image arrival time may in some circumstances be difficult to precisely define. However, the <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> variable will always give the image arrival time as accurately as possible, a description of how it was determined from the raw buffer data should be included in the <code class="docutils literal notranslate"><span class="pre">timestamp:comment</span></code> attribute. One may decide to add a <code class="docutils literal notranslate"><span class="pre">timestamp_flag</span></code> as an ancillary variable using the <a class="reference external" href="http://cfconventions.org/Data/cf-conventions/cf-conventions-1.8/cf-conventions.html#flags">CF flag format</a>.</p>
+<p>Variables in the <code class="docutils literal notranslate"><span class="pre">core</span></code> group include;</p>
+<p><strong>Dimensions:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">image_num</div>
+</div>
+</div></blockquote>
+<p><strong>Variables:</strong></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>int</em> <strong>image</strong> (pixel)</div>
+<div class="line-block">
+<div class="line"><strong>image</strong>:long_name = “Flattened 1d array of images” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>float</em> <strong>timestamp</strong> (image_num)</div>
+<div class="line-block">
+<div class="line"><strong>time</strong>:standard_name = “time” ;</div>
+<div class="line"><strong>time</strong>:timezone = “UTC” ;</div>
+<div class="line"><strong>time</strong>:long_name = “image arrival time in nanoseconds from reference start time” ;</div>
+<div class="line"><strong>time</strong>:units = “nanoseconds since &lt;start_time&gt;” ;</div>
+<div class="line"><strong>time</strong>:ancillary_variables = instrument/start_time ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>startpixel</strong> (image_num)</div>
+<div class="line-block">
+<div class="line"><strong>startpixel</strong>:long_name = “Array index of first image slice” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>width</strong> (image_num)</div>
+<div class="line-block">
+<div class="line"><strong>width</strong>:long_name = “Number of pixels across image” ;</div>
+<div class="line"><strong>width</strong>:units = “pixels” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>height</strong> (image_num)</div>
+<div class="line-block">
+<div class="line"><strong>height</strong>:long_name = “Number of slices/lines in image” ;</div>
+<div class="line"><strong>height</strong>:units = “lines” ;</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><em>int</em> <strong>overload</strong> (image_num)</div>
+<div class="line-block">
+<div class="line"><strong>overload</strong>:long_name = “Data quality flag for each image” ;</div>
+<div class="line"><strong>overload</strong>:flag_values = “0, 1” ;</div>
+<div class="line"><strong>overload</strong>:flag_meanings, “good bad” ;</div>
+</div>
+</div>
+</div></blockquote>
+<div class="admonition-a-word-on-data-types admonition">
+<p class="admonition-title">A word on data types</p>
+<p>The above dtypes are given in the broadest terms as the definitions do not <em>require</em> a specific type of <em>integer</em> or <em>float</em>. However, significant savings in terms of file size and memory usage can be made by using the following dtypes (given in terms of <a class="reference external" href="http://unidata.github.io/netcdf4-python/#variables-in-a-netcdf-file">netCDF</a> and <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html">numpy</a> dtypes);</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><strong>image</strong>: ‘u1’ or np.uint8</div>
+<div class="line"><strong>timestamp</strong>: ‘f4’ or np.float32</div>
+<div class="line"><strong>startpixel</strong>: ‘u8’ or np.uint64</div>
+<div class="line"><strong>width</strong>: ‘u4’ or np.uint32</div>
+<div class="line"><strong>height</strong>: ‘u4’ or np.uint32</div>
+<div class="line"><strong>flag</strong>: ‘u1’ or np.uint8</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="raw-data-group">
+<span id="spif-raw"></span><h3>Raw Data Group<a class="headerlink" href="#raw-data-group" title="Permalink to this headline">¶</a></h3>
+<p>The instrument <code class="docutils literal notranslate"><span class="pre">raw</span></code> group contains data variables of the raw buffer information in the binary file. This will include buffer headers, timing <em>ticks</em>, and other sundary data. In order to act as a fully fledged raw data format this group is required however, as the data is highly instrument dependent, the contents of this group are not described. This is not seen as a problem as only those very familiar with the raw data are likely going to work with the contents of this group. The variable dimension is <code class="docutils literal notranslate"><span class="pre">buffer</span></code>.</p>
+<div class="warning admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Does the raw data variable/s include the end-of-buffer demarcations?</p>
+</div>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="paramgenerationfoot"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>The lists of mandatory and optional SPIF file parameters are automatically generated from a configuration files. These files are also used by the SPIF compliance-checker and so should be regarded as the authoritive source for a given SPIF version.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SPIF File Definition</a><ul>
+<li><a class="reference internal" href="#spif-root-attributes">SPIF Root Attributes</a></li>
+<li><a class="reference internal" href="#instrument-channel-group">Instrument Channel Group</a><ul>
+<li><a class="reference internal" href="#instrument-core-group">Instrument Core Group</a></li>
+<li><a class="reference internal" href="#raw-data-group">Raw Data Group</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structure.html"
+                        title="previous chapter">Structure</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="spif_extensions.html"
+                        title="next chapter">SPIF Extensions and Optional Extras</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/spif_definition.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="spif_extensions.html" title="SPIF Extensions and Optional Extras"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structure.html" title="Structure"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Python  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SPIF Definition</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright undecided.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>
