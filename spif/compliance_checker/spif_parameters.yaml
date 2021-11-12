@@ -1,0 +1,489 @@
+--- # SPIF Parameters v0.1
+
+# Primary parameters of a SPIF-compliant netCDF file.
+
+# This file is the reference for parameters; dimensions, variables, attributes, 
+# that make up a SPIF-compliant netCDF file.
+
+# Indentation (2 spaces) is important and indicate hierarchy of groups and 
+# association of keys/values to others. Key/value pairs are mapped with ': '.
+
+# As an example;
+
+#     start_time:               <- parameter name is indented so in /instrument
+#                                  group
+#       nctype: variable        <- type of nc parameter
+#       dimensions: None        <- dimensions of var, is None if scalar variable
+#       mandatory: True         <- If False then is recommended
+#       dtype: float            <- data type
+#       help: Reference datetime of image data from </start_date>
+#                               <- Displayed by compliance checker if an issue
+#         long_name:            <- Indented so attribute of var </start_time>
+#           nctype: attribute
+#           mandatory: False    <- attributes of mandatory var may themselves be
+#                                  only recommended/optional
+#           dtype: string
+#         units:
+#           nctype: attribute
+#           mandatory: True
+#           dtype: string
+#           help: >-
+#               Format should adhere to standard CF string,
+#               'seconds since </start_date>'
+#         ancillary_variables:
+#           nctype: attribute
+#           mandatory: False
+#           value: <start_date> <- References to other nc parameters are
+#                                  enclosed in <>. Are parsed by docs compiler.
+
+
+
+
+################################################################################
+root:
+  attributes:
+    Conventions:
+      mandatory: True
+      dtype: string
+      value: SPIF-0.1
+      help: Compliant SPIF files must include the convention attribute
+
+  title:
+    nctype: attribute
+    mandatory: True
+    dtype: string
+    help: Short description of dataset contents
+
+  start_date:
+    nctype: attribute
+    mandatory: True
+    dtype: string
+    help: >-
+        ISO-8601-compliant date stamp used as reference for all other timestamps
+        in file
+
+  institution:
+    nctype: attribute
+    mandatory: False  # Recommended but not mandatory
+    dtype: string
+    help: Institution/organisation from where data originated
+
+  source:
+    nctype: attribute
+    mandatory: False
+    dtype: string
+    help: Software used to generate this SPIF file
+
+  source_version:
+    nctype: attribute
+    mandatory: False
+    dtype: string
+    help: Version number of software used to generate this SPIF file
+
+  history:
+    nctype: attribute
+    mandatory: False
+    dtype: string
+    help:  >-
+        String providing an audit trail of file modifications. It is recommended
+        that each entry is preceeded by a timestamp indicating date and time
+        of file modification.
+
+  references:
+    nctype: attribute
+    mandatory: False
+    dtype: string
+    help: >-
+        References to any documents describing the data and production of this
+        dataset
+
+  comment:
+    nctype: attribute
+    mandatory: False
+    dtype: string
+    help: >-
+        Any further information pertaining to the production of this dataset
+
+
+################################################################################
+# <Instrument> group
+  instrument:
+    instrument_name:
+      nctype: attribute
+      mandatory: True
+      dtype: string
+      help: Short name of instrument
+
+    instrument_long_name:
+      nctype: attribute
+      mandatory: True
+      dtype: string
+      help: Full descriptive name of instrument
+
+    instrument_serial_number:
+      nctype: attribute
+      mandatory: False
+      dtype: string
+      help: Serial number or instrument identifier
+
+    instrument_firmware:
+      nctype: attribute
+      mandatory: False
+      dtype: string
+      help: Instrument firmware version
+
+    instrument_software:
+      nctype: attribute
+      mandatory: False
+      dtype: string
+      help: >-
+          Name and version of data acquisition software interfacing with
+          instrument
+
+    institution:
+      nctype: attribute
+      mandatory: False
+      dtype: string
+      help: Institution operating instrument
+
+    platform: 
+      nctype: attribute
+      mandatory: False
+      dtype: string
+      help: Name or description of platform instrument is mounted on
+
+    raw_filenames: 
+      nctype: attribute
+      mandatory: False
+      dtype: string
+      help: Raw data filename(s) used to generate the current instrument dataset
+
+    references: 
+      nctype: attribute
+      mandatory: False
+      dtype: string
+      help: >-
+          Link to webpage, published paper, or other document reference
+          describing instrument
+
+    comment: 
+      nctype: attribute
+      mandatory: False
+      dtype: string
+      help: >-
+          Any further notes about instrument, platform, location, orientation,
+          etc
+
+    bit:
+      nctype: dimension
+      unlimited: False
+      mandatory: True
+      help: >-
+          Dimension giving bit depth used in image. Corresponds to number of
+          shadow/gray levels in image.
+
+    array_width:
+      nctype: dimension
+      unlimited: False
+      mandatory: True
+      help: >-
+          Number of pixels (usually) perpendicular to the flight direction.
+
+    array_height:
+      nctype: dimension
+      unlimited: False
+      mandatory: True
+      help: >-
+          Number of pixels (usually) along the flight direction. For an OAP
+          this will be 1.
+
+*    pixel: 
+*      nctype: dimension 
+*      mandatory: True
+*      dtype: uint
+*      help: Dimension giving number of pixels across imaging array dimension 
+
+*    array_rate:
+*      nctype: variable
+*      dimensions: None
+*      mandatory: True
+*      dtype: float
+*      help: Not sure what this is actually...
+*        long_name:
+*          nctype: attribute
+*          mandatory: False
+*          dtype: string
+*        units:
+*          nctype: attribute
+*          mandatory: False
+
+    array_size:
+      nctype: variable
+      dimensions: array_width, array_height
+      mandatory: True
+      dtype: int
+      help: >-
+          Number of pixels on the detector, may be 1d or 2d.
+        long_name:
+          nctype: attribute
+          mandatory: False
+          dtype: string
+        units:
+          nctype: attribute
+          mandatory: False
+          value: dimensionless
+
+    image_size:
+      nctype: variable
+      dimensions: array_width, array_height
+      mandatory: True
+      dtype: int
+      help: >-
+          Number of pixels across an image. If fixed size then number of 
+          pixels, if variable size then use _FillValue.
+        long_name:
+          nctype: attribute
+          mandatory: False
+          dtype: string
+        units:
+          nctype: attribute
+          mandatory: False
+          value: dimensionless
+
+    resolution:
+      nctype: variable
+      dimensions: array_width, array_height
+      mandatory: True
+      dtype: float
+      help: Image resolution of instrument
+        long_name:
+          nctype: attribute
+          mandatory: False
+          dtype: string
+        units:
+          nctype: attribute
+          mandatory: False
+          help: Length units of resolution, usually micrometres
+
+    shadow:
+      nctype: variable
+      dimensions: bit
+      mandatory: True
+      dtype: float
+      help: >-
+          Lower bound of fractional obscuration of photodiode array for each bit
+          value corresponding to n-th bit value
+        long_name:
+          nctype: attribute
+          mandatory: False
+          dtype: string
+        units:
+          nctype: attribute
+          mandatory: False
+
+    start_time:
+      nctype: variable
+      dimensions: None
+      mandatory: True
+      dtype: float
+      help: Reference datetime of image data from </start_date>
+        long_name:
+          nctype: attribute
+          mandatory: False
+          dtype: string
+        units:
+          nctype: attribute
+          mandatory: True
+          dtype: string
+          help: >-
+              Format should adhere to standard CF string,
+              'seconds since </start_date>'
+        ancillary_variables:
+          nctype: attribute
+          mandatory: False
+          value: <start_date>
+
+    bpp:
+      nctype: variable
+      dimensions: None
+      mandatory: True
+      dtype: int
+      help: Bits per pixel used in image data
+        long_name:
+          nctype: attribute
+          mandatory: False
+          dtype: string
+        units:
+          nctype: attribute
+          mandatory: False
+          value: bits
+
+    wavelength:
+      nctype: variable
+      dimensions: None
+      mandatory: True
+      dtype: float
+      help: >-
+          Operating wavelength of laser used for shadowing/imaging
+          the particles
+        long_name:
+          nctype: attribute
+          mandatory: False
+          dtype: string
+        units:
+          nctype: attribute
+          mandatory: False
+          value: nm
+
+    pathlength:
+      nctype: variable
+      dimensions: None
+      mandatory: True
+      dtype: float
+      help: Optical path length of imaging region
+        long_name:
+          nctype: attribute
+          mandatory: False
+          dtype: string
+        units:
+          nctype: attribute
+          mandatory: False
+          help: Length units of pathlength, usually millimetres
+
+
+################################################################################
+# <Instrument/core> group
+    core:
+      pixel:
+        nctype: dimension
+        unlimited: True
+        mandatory: True
+
+      image_num:
+        nctype: dimension
+        unlimited: True
+        mandatory: True
+        help: dimension of images, length is total number of images in <image>
+
+      image:
+        nctype: variable
+        dimensions: pixel
+        mandatory: True
+        dtype: byte
+        help: Flattened 1d array of images
+          long_name:
+            nctype: attribute
+            mandatory: False
+            dtype: string
+
+      timestamp:
+        nctype: variable
+        dimensions: image_num
+        mandatory: True
+        dtype: int32
+        help: >-
+            image arrival time in nanoseconds from reference
+            <instrument/start_time>
+        attributes:
+          standard_name:
+            mandatory: True
+            value: time
+          long_name:
+            mandatory: False
+            dtype: string
+          units:
+            mandatory: True
+            help: >-
+                Format should adhere to standard CF string,
+                'nanoseconds since <instrument/start_time>'
+          timezone:
+            mandatory: True
+            dtype: string
+          comment:
+            mandatory: False
+            help: >-
+                Due to potential difficulties in determination of an accurate
+                timestamp for each image, a comment could be included describing
+                how it was determined from the raw buffer.
+          ancillary_variables:
+            mandatory: False
+            value: <instrument/start_time> <timestamp_flag>
+
+      timestamp_flag:
+        nctype: variable
+        dimensions: image_num
+        mandatory: False
+        dtype: byte
+        help: Flag indicating surety in determination of image arrival
+            timestamp
+          long_name:
+            nctype: attribute
+            mandatory: False
+            dtype: string
+          flag_values:
+            nctype: attribute
+            mandatory: True
+            value: 0b, 1b
+          flag_meanings:
+            nctype: attribute
+            mandatory: True
+            value: normal, overload
+
+      startpixel:
+        nctype: variable
+        dimensions: image_num
+        mandatory: True
+        dtype: int
+        help: Array index for the first slice of each image in <image>
+          long_name:
+            nctype: attribute
+            mandatory: False
+            dtype: string
+          units:
+            nctype: attribute
+            mandatory: False
+            value: dimensionless
+
+      width:
+        nctype: variable
+        dimensions: image_num
+        mandatory: True
+        dtype: int
+        help: Number of pixels across image
+          long_name:
+            nctype: attribute
+            mandatory: False
+            dtype: string
+
+      height:
+        nctype: variable
+        dimensions: image_num
+        mandatory: True
+        dtype: int
+        help: Number of slices/lines in image
+          long_name:
+            nctype: attribute
+            mandatory: False
+            dtype: string
+
+      overload_flag:
+        nctype: variable
+        dimensions: image_num
+        mandatory: True
+        dtype: byte
+        help: Data quality flag for each image 
+          long_name:
+            nctype: attribute
+            mandatory: False
+            dtype: string
+          flag_values:
+            nctype: attribute
+            mandatory: True
+            value: 0b, 1b
+          flag_meanings:
+            nctype: attribute
+            mandatory: True
+            value: normal, overload
+
+
+
