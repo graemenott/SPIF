@@ -30,7 +30,8 @@
 #     variables:                <- list of variables of group /instrument
 #       start_time:             <- name of variable
 #       dimensions: None        <- dimensions of <start_time>. Is None if scalar
-#                                  variable, otherwise is comma-delineated list
+#                                  variable, otherwise is comma-delineated list.
+#                                  If same as var name then is coordinate var.
 #       help: Reference datetime of image data from </start_date>
 #       attributes:             <- indented so list of attributes of variable
 #         long_name:            <- name of attribute
@@ -170,13 +171,6 @@ root:
             orientation, etc
 
     coordinates:
-      bit:
-        unlimited: False
-        mandatory: True
-        help: >-
-            Dimension giving bit depth used in image. Corresponds to number of
-            shadow/gray levels in image.
-
       array_width:
         unlimited: False
         mandatory: True
@@ -192,6 +186,21 @@ root:
             direction. For an OAP this will be 1.
 
     variables:
+      image_level:
+        dimensions: image_levels
+        mandatory: True
+        dtype: float
+        help: >-
+            Lower bound of fractional obscuration of photodiode array for each
+            bit value corresponding to n-th bit value. Gives number of
+            shadow/gray levels in image.
+        attributes:
+          long_name:
+            mandatory: False
+            dtype: string
+          units:
+            mandatory: False
+
       array_size:
         dimensions: array_width, array_height
         mandatory: True
@@ -245,20 +254,6 @@ root:
           units:
             mandatory: False
             help: Length units of resolution, usually micrometres
-
-      shadow:
-        dimensions: bit
-        mandatory: True
-        dtype: float
-        help: >-
-            Lower bound of fractional obscuration of photodiode array for each
-            bit value corresponding to n-th bit value
-        attributes:
-          long_name:
-            mandatory: False
-            dtype: string
-          units:
-            mandatory: False
 
       start_time:
         dimensions: None
@@ -321,8 +316,8 @@ root:
             help: Length units of path length, usually millimetres
 
 
-################################################################################
-# <Instrument/core> group
+    ############################################################################
+    # <Instrument/core> group
     core:
       coordinates:
         pixel:
@@ -380,7 +375,7 @@ root:
         timestamp_flag:
           dimensions: image_num
           mandatory: False
-          dtype: byte
+          dtype: ubyte
           help: >-
               Flag indicating surety in determination of image arrival
               timestamp
