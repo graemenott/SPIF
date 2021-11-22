@@ -5,15 +5,15 @@ restructured text for integration into documentation
 
 """
 
-import configparser
+import yaml
 import os.path
 import re
 import pdb
 
 
 __author__ = 'graeme.nott@faam.ac.uk'
-__date__ = '2021 03 14'
-__version__ = '0.1'
+__date__ = '2021 11 18'
+__version__ = '0.2'
 __all__ = ['ncParam',
            'cfg2rst',
            'mandatory_params',
@@ -204,15 +204,33 @@ def cfg2rst(cfg_file):
     return '\n\n'.join(rst_list)
 
 
+def parse_yaml(yaml_file):
+    """ Parse yaml parameters file
+
+    """
+
+    with open(yaml_file) as f:
+        cfg = yaml.load(f, Loader=yaml.SafeLoader)
+    print(data)
+
+
+class ComplianceParams(yaml.YAMLObject):
+    """
+    Do I need this/can I use this. This is for defining yaml objects?
+    """
+    pass
+
+
+
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
 if __name__=='__main__':
 
-    default_cfg = '../docsrc/spif_mandatory.cfg'
+    default_cfg = 'spif_parameters.yaml'
 
-
+    pdb.set_trace()
     try:
-        test = cfg2rst(default_cfg)
+        test = parse_yaml(default_cfg)
     except:
         pdb.post_mortem()
 
