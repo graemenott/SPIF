@@ -1,0 +1,154 @@
+netcdf spif_std_test {
+
+// This cdl file can be used to create a standard SPIF netCDF for testing
+//
+// To create netCDF, spif_std_test.nc, run:
+// $ ncgen -k 3 -b spif_std_test.cdl
+//
+//
+// author = G. Nott
+// email = graeme.nott@faam.ac.uk
+// creation = Nov 2021
+
+// global attributes:
+
+:Conventions = "SPIF-0.9" ;
+:_Format = "netCDF-4" ;
+:title = "Test SPIF file for compliance code checking" ;
+:institution = "FAAM" ;
+:address = "Building 146, Cranfield University, Cranfield MK43 0AL UK" ;
+:source = "spif_std_test.cdl" ;
+:source_version = "0.9" ;
+:references = "https://github.com/graemenott/SPIF" ;
+:creator = "Graeme Nott";
+:history = "20211123: Initial creation";
+:comment = "Everything in this file is SPIF-0.9 compliant. Not all of it is mandatory however." ;
+
+variables:
+    uint start_time ;
+        start_time:long_name = "Reference datetime of image data" ;
+        start_time:timezone = "UTC" ;
+        start_time:units = "hours since 1970-01-01T00:00:00Z" ;
+        start_time:strftime_format = "hours since %Y-%m-%d %H:%M:%S" ;
+
+data:
+    start_time = 439212 ;
+
+
+group: CIP100 {
+    // Group information for a fictional CIP100
+
+    :instrument_name = "CIP100" ;
+    :instrument_long_name = "Cloud Imaging Probe, 100um resolution" ;
+    :instrument_serial_number = "1234/1" ;
+    :instrument_manufacturer = "DMT" ;
+    :instrument_software = "PADS 3.9" ;
+    :instrument_position = "Portside pylon, upper-inner canister" ;
+    :instrument_orientation = "Vertical" ;
+    :platform = "Aircraft" ;
+    :raw_filenames = "Imagefile_3CIP Grayscale_20200208124441" ;
+
+
+    // Define dimensions for instrument group.
+    dimensions:
+        array_dimensions = 1 ;
+        bpp = 4 ;
+
+    // Define group variables
+    variables:
+        byte bit_value(bpp) ;
+            bit_value:long_name = "Value of each bit in image." ;
+            bit_value:comment = "Gives the bit values expected to be found in core/image. Usually these will be contiguous but do not have to be." ;
+
+        float bit_level(bpp) ;
+            bit_level:long_name = "Lower bound of fractional obscuration of photodiode array for each bit value" ;
+            bit_level:comment = "Gives number of shadow/gray levels in image." ;
+
+        int array_size(array_dimensions) ;
+            array_size:long_name = "Number of pixels on the detector" ;
+
+        int image_size(array_dimensions) ;
+            image_size:long_name = "Number of pixels across an image." ;
+
+        float resolution(array_dimensions) ;
+            resolution:long_name = "Image resolution of instrument" ;
+            resolution:units = "um" ;
+            resolution:ancillary_variables = "resolution_error" ;
+
+        float resolution_error(array_dimensions) ;
+            resolution_error:long_name = "Uncertainty of image resolution of instrument" ;
+            resolution_error:units = "um" ;
+
+        float wavelength ;
+            wavelength:long_name = "Operating wavelength of laser used for shadowing/imaging the particles" ;
+            wavelength:units = "nm" ;
+
+        float pathlength ;
+            pathlength:long_name = "Optical path length of imaging region" ;
+            pathlength:units = "mm" ;
+
+    data:
+        bit_value = 0b, 1b, 2b, 3b ;
+        bit_level = 0, 0.25, 0.50, 0.75 ;
+        array_size = 10 ;
+        image_size = 10 ;
+        resolution = 100 ;
+        resolution_error = 20 ;
+        wavelength = 658 ;
+        pathlength = 70 ;
+
+
+    group: core {
+        // core instrument group for raw data
+
+        // Define dimensions for instrument/core group.
+        dimensions:
+            pixel = UNLIMITED ;
+            image_num = UNLIMITED ;
+
+        // Define group variables
+        variables:
+            ubyte image(pixel) ;
+                image:long_name = "Flattened 1d array of images" ;
+
+            uint64 timestamp(image_num) ;
+                timestamp:standard_name = "time" ;
+                timestamp:long_name = "image arrival time in nanoseconds from reference </start_time>" ;
+                timestamp:units = "nanoseconds since 2020-02-08T12:00:00" ;
+                timestamp:timezone = "UTC" ;
+                timestamp:comment = "Comment about how timestamp was determined" ;
+                timestamp:ancillary_variables = "start_time timestamp_flag" ;
+
+            ubyte timestamp_flag(image_num) ;
+                timestamp_flag:long_name = "Flag indicating surety in determination of image arrival timestamp" ;
+                timestamp_flag:flag_values = 0b, 1b ;
+                timestamp_flag:flag_meanings = "good, bad" ;
+
+            uint startpixel(image_num) ;
+              startpixel:long_name = "Array index for the first slice of each image in <image> " ;
+
+            uint width(image_num) ;
+              width:long_name = "Number of pixels across image" ;
+
+            uint height(image_num) ;
+              height:long_name = "Number of slices/lines in image" ;
+
+            ubyte overload(image_num) ;
+                overload:standard_name = "status_flag" ;
+                overload:long_name = "Data quality flag for each image" ;
+                overload:flag_values = 0b, 1b ;
+                overload:flag_meanings = "normal, overload" ;
+
+        data:
+            // Artificial 10 x 5 slices image
+            image = 0b, 0b, 0b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 2b, 2b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 2b, 3b, 3b, 3b, 2b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 2b, 2b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 0b, 0b, 0b, 0b ;
+            timestamp = 2681000000000 ;
+            timestamp_flag = 0b ;
+            startpixel = 0 ;
+            width = 10 ;
+            height = 5 ;
+            overload = 0b ;
+
+        } // End group instrument/core
+    } // End group instrument
+} // EOF
