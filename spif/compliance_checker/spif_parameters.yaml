@@ -29,7 +29,7 @@
 #   instrument:                 <- group indented from root
 #     variables:                <- list of variables of group /instrument
 #       start_time:             <- name of variable
-#       dimensions: None        <- dimensions of <start_time>. Is None if scalar
+#       variable_dims: None        <- dimensions of <start_time>. Is None if scalar
 #                                  variable, otherwise is comma-delineated list.
 #                                  If same as var name then is coordinate var.
 #       help: Reference datetime of image data from </start_date>
@@ -65,13 +65,6 @@ root:
       dtype: string
       help: Short description of dataset contents
 
-    start_date:
-      mandatory: True
-      dtype: string
-      help: >-
-          ISO-8601-compliant date stamp used as reference for all other
-          timestamps in file
-
     institution:
       mandatory: False  # Recommended but not mandatory
       dtype: string
@@ -87,6 +80,13 @@ root:
       dtype: string
       help: Version number of software used to generate this SPIF file
 
+    references:
+      mandatory: False
+      dtype: string
+      help: >-
+          References to any documents describing the data and production of
+          this dataset
+
     history:
       mandatory: False
       dtype: string
@@ -95,18 +95,30 @@ root:
           recommended that each entry is preceeded by a timestamp indicating
           date and time of file modification.
 
-    references:
-      mandatory: False
-      dtype: string
-      help: >-
-          References to any documents describing the data and production of
-          this dataset
-
     comment:
       mandatory: False
       dtype: string
       help: >-
           Any further information pertaining to the production of this dataset
+
+  variables:
+    start_time:
+      variable_dims: None
+      mandatory: True
+      dtype: uint32
+      help: >-
+          ISO-8601-compliant datetime stamp used as reference for all other
+          timestamps in file
+      attributes:
+        long_name:
+          mandatory: False
+          dtype: string
+        units:
+          mandatory: True
+          dtype: string
+          help: >-
+              Format should adhere to standard UDUNITS string format, eg
+              'hours since 1970-01-01'
 
 
   ##############################################################################
@@ -140,11 +152,6 @@ root:
             Name and version of data acquisition software interfacing with
             instrument
 
-      institution:
-        mandatory: False
-        dtype: string
-        help: Institution operating instrument
-
       platform:
         mandatory: False
         dtype: string
@@ -170,42 +177,50 @@ root:
             Any further notes about instrument, platform, location,
             orientation, etc
 
-    coordinates:
-      array_width:
+    dimensions:
+      array_dimensions:
         unlimited: False
         mandatory: True
         help: >-
-            Number of pixels (usually) perpendicular to the particle
-            flow direction.
+          Number of dimensions of imaging array. OAPs will be 1, CCDs will be 2,
+          multi-colour images may be n.
 
-      array_height:
+      bpp:
         unlimited: False
         mandatory: True
-        help: >-
-            Number of pixels (usually) parallel to the particle flow
-            direction. For an OAP this will be 1.
+        help: Bits per pixel used in image data.
 
     variables:
-      image_level:
-        dimensions: image_levels
+      bit_value:
+        variable_dims: bpp
         mandatory: True
-        dtype: float
+        dtype: byte
         help: >-
-            Lower bound of fractional obscuration of photodiode array for each
-            bit value corresponding to n-th bit value. Gives number of
-            shadow/gray levels in image.
+            Value of each bit in image. Usually these will be contiguous but
+            do not have to be.
         attributes:
           long_name:
             mandatory: False
             dtype: string
-          units:
+
+      bit_level:
+        variable_dims: bpp
+        mandatory: True
+        dtype: float
+        help: >-
+            Lower bound of fractional obscuration/grayscale level of photodiode
+            array for each bit value. Gives number of shadow/gray levels in
+            the image.
+        attributes:
+          long_name:
             mandatory: False
+            dtype: string
 
       array_size:
-        dimensions: array_width, array_height
+        variable_dims: array_dimensions
         mandatory: True
         dtype: int
-        help: Number of pixels on the detector. For an OAP will be [n, 1]
+        help: Number of pixels on the detector.
         attribues:
           long_name:
             mandatory: False
@@ -215,7 +230,7 @@ root:
             value: dimensionless
 
       image_size:
-        dimensions: array_width, array_height
+        variable_dims: array_dimensions
         mandatory: True
         dtype: int
         help: >-
@@ -230,7 +245,7 @@ root:
             value: dimensionless
 
       resolution:
-        dimensions: array_width, array_height
+        variable_dims: array_dimensions
         mandatory: True
         dtype: float
         help: Image resolution of instrument
@@ -241,9 +256,12 @@ root:
           units:
             mandatory: False
             help: Length units of resolution, usually micrometres
+          ancillary_variables:
+            mandatory: False
+            value: resolution_error
 
       resolution_error:
-        dimensions: array_width, array_height
+        variable_dims: array_dimensions
         mandatory: False
         dtype: float
         help: Uncertainty of image resolution of instrument
@@ -255,40 +273,8 @@ root:
             mandatory: False
             help: Length units of resolution, usually micrometres
 
-      start_time:
-        dimensions: None
-        mandatory: True
-        dtype: float
-        help: Reference datetime of image data from </start_date>
-        attributes:
-          long_name:
-            mandatory: False
-            dtype: string
-          units:
-            mandatory: True
-            dtype: string
-            help: >-
-                Format should adhere to standard CF string,
-                'seconds since </start_date>'
-          ancillary_variables:
-            mandatory: False
-            value: <start_date>
-
-      bpp:
-        dimensions: None
-        mandatory: True
-        dtype: int
-        help: Bits per pixel used in image data
-        attributes:
-          long_name:
-            mandatory: False
-            dtype: string
-          units:
-            mandatory: False
-            value: bits
-
       wavelength:
-        dimensions: None
+        variable_dims: None
         mandatory: True
         dtype: float
         help: >-
@@ -300,10 +286,10 @@ root:
             dtype: string
           units:
             mandatory: False
-            value: nm
+            help: Length units of wavelength, usually um or nm
 
       pathlength:
-        dimensions: None
+        variable_dims: None
         mandatory: True
         dtype: float
         help: Optical path length of imaging region
@@ -319,7 +305,7 @@ root:
     ############################################################################
     # <Instrument/core> group
     core:
-      coordinates:
+      dimensions:
         pixel:
           unlimited: True
           mandatory: True
@@ -331,7 +317,7 @@ root:
 
       variables:
         image:
-          dimensions: pixel
+          variable_dims: pixel
           mandatory: True
           dtype: ubyte
           help: Flattened 1d array of images
@@ -341,12 +327,12 @@ root:
               dtype: string
 
         timestamp:
-          dimensions: image_num
+          variable_dims: image_num
           mandatory: True
-          dtype: uint32
+          dtype: uint64
           help: >-
               image arrival time in nanoseconds from reference
-              <instrument/start_time>
+              </start_time>
           attributes:
             standard_name:
               mandatory: True
@@ -358,7 +344,7 @@ root:
               mandatory: True
               help: >-
                   Format should adhere to standard UDUNITS string format,
-                  'nanoseconds since <instrument/start_time>'
+                  'nanoseconds since </start_time>'
             timezone:
               mandatory: False
               dtype: string
@@ -370,10 +356,10 @@ root:
                   describing how it was determined from the raw buffer.
             ancillary_variables:
               mandatory: False
-              value: <instrument/start_time> <timestamp_flag>
+              value: </start_time> <timestamp_flag>
 
         timestamp_flag:
-          dimensions: image_num
+          variable_dims: image_num
           mandatory: False
           dtype: ubyte
           help: >-
@@ -391,7 +377,7 @@ root:
               value: good, bad
 
         startpixel:
-          dimensions: image_num
+          variable_dims: image_num
           mandatory: True
           dtype: int
           help: Array index for the first slice of each image in <image>
@@ -404,7 +390,7 @@ root:
               value: dimensionless
 
         width:
-          dimensions: image_num
+          variable_dims: image_num
           mandatory: True
           dtype: int
           help: Number of pixels across image
@@ -414,7 +400,7 @@ root:
               dtype: string
 
         height:
-          dimensions: image_num
+          variable_dims: image_num
           mandatory: True
           dtype: int
           help: Number of slices/lines in image
@@ -424,7 +410,7 @@ root:
               dtype: string
 
         overload:
-          dimensions: image_num
+          variable_dims: image_num
           mandatory: True
           dtype: byte
           help: Data quality flag for each image
