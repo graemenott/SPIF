@@ -1,20 +1,24 @@
 --- # SPIF Parameters v0.9
 
+################################################################################
 # Primary parameters of a SPIF-compliant netCDF file.
-
+#
 # This file is the reference for parameters; dimensions, variables, attributes, 
 # that make up a SPIF-compliant netCDF file.
-
+#
 # Indentation (2 spaces) is important and indicate hierarchy of groups and 
 # association of keys/values to others. Key/value pairs are mapped with ': '.
-
+#
+# References to other parameters within the file are enclosed in '< >',
+# eg </start_time>. Include full path so that correctly parsed by docs compiler.
+#
 # Reserved keynames are;
 #   - 'attributes' or 'attrs'
-#   - 'coordinates' or 'coords'
+#   - 'dimensions' or 'dims'
 #   - 'variables' or 'vars'
 # Any other keynames are a parameter with the name given as the key.
 # The top level group is always called 'root'.
-
+#
 # As an example;
 #
 # root:                         <- root group, no indentation
@@ -28,31 +32,25 @@
 #
 #   instrument:                 <- group indented from root
 #     variables:                <- list of variables of group /instrument
-#       start_time:             <- name of variable
-#       variable_dims: None        <- dimensions of <start_time>. Is None if scalar
+#        array_size:
+#          variable_dims: array_dimensions
+#                               ^- dimensions of variable. Is None if scalar
 #                                  variable, otherwise is comma-delineated list.
 #                                  If same as var name then is coordinate var.
-#       help: Reference datetime of image data from </start_date>
-#       attributes:             <- indented so list of attributes of variable
-#         long_name:            <- name of attribute
-#           mandatory: False    <- attributes of mandatory var may themselves be
-#                                  only recommended/optional
-#           dtype: string
-#         units:
-#           mandatory: True
-#           dtype: string
-#           help: >-
-#               Format should adhere to standard CF string,
-#               'seconds since </start_date>'
-#         ancillary_variables:
-#           mandatory: False
-#           value: <start_date> <- References to other nc parameters are
-#                                  enclosed in <>. Are parsed by docs compiler.
-
-
-
-
+#          mandatory: True
+#          dtype: int
+#          help: Number of pixels on the detector.
+#          attribues:
+#            long_name:         <- name of attribute
+#              mandatory: False <- attributes of mandatory var may themselves
+#                                  be only recommended/optional
+#              dtype: string
+#            units:
+#              mandatory: False
+#              value: dimensionless
+#
 ################################################################################
+
 root:
   attributes:
     Conventions:
@@ -121,8 +119,7 @@ root:
               'hours since 1970-01-01'
 
 
-  ##############################################################################
-  # <Instrument> group
+  ### <Instrument> group
   instrument:
     attributes:
       instrument_name:
@@ -302,8 +299,7 @@ root:
             help: Length units of path length, usually millimetres
 
 
-    ############################################################################
-    # <Instrument/core> group
+    ### <Instrument/core> group
     core:
       dimensions:
         pixel:
