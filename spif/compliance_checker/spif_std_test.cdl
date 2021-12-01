@@ -20,7 +20,8 @@ netcdf spif_std_test {
 :source = "spif_std_test.cdl" ;
 :source_version = "0.9" ;
 :references = "https://github.com/graemenott/SPIF" ;
-:creator = "Graeme Nott";
+:creator_name = "Graeme Nott" ;
+:creator_email = "graeme.nott@faam.ac.uk" ;
 :history = "20211123: Initial creation";
 :comment = "Everything in this file is SPIF-0.9 compliant. Not all of it is mandatory however." ;
 
