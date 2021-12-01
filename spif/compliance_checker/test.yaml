@@ -1,0 +1,31 @@
+root:
+  attributes:
+
+    Conventions: #!ncattr
+      mandatory: True
+      value: SPIF-0.9
+      help: Compliant SPIF files must include the Conventions attribute
+
+    title: #!ncattr
+      mandatory: True
+      dtype: string
+      help: Short description of dataset contents
+
+  variables:
+    start_time: #!ncvar
+      variable_dims: None
+      mandatory: True
+      dtype: uint32
+      help: >-
+          ISO-8601-compliant datetime stamp used as reference for all other
+          timestamps in file
+      attributes:
+        long_name: #!ncattr
+          mandatory: False
+          dtype: string
+        units: #!ncattr
+          mandatory: True
+          dtype: string
+          help: >-
+              Format should adhere to standard UDUNITS string format, eg
+              'hours since 1970-01-01'
