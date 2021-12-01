@@ -120,7 +120,7 @@ root:
 
 
   ### <Instrument> group
-  instrument:
+  <instrument>:
     attributes:
       instrument_name:
         mandatory: True
