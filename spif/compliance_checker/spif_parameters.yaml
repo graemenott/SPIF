@@ -88,7 +88,7 @@ root:
       dtype: string
       help: >-
           References to any documents describing the data and production of
-          this dataset [ACDD(s), CF(r)]
+          this dataset. May include link or DOI to source code [ACDD(s), CF(r)]
 
     history:
       mandatory: False
