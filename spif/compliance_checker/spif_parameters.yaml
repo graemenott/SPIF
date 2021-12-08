@@ -49,6 +49,11 @@
 #              mandatory: False
 #              value: dimensionless
 #
+#
+# Attribute names have been made consistent with CF and ACDD guidlines.
+# Importance to each of these is indicated in help string. 'm': mandatory,
+# 'hr': highly recommended, 'r': recommended.
+#
 ################################################################################
 
 root:
@@ -56,22 +61,22 @@ root:
     Conventions:
       mandatory: True
       value: SPIF-0.9
-      help: Compliant SPIF files must include the Conventions attribute
+      help: Compliant SPIF files must include the Conventions attribute [ACDD(hr), CF(m)]
 
     title:
       mandatory: True
       dtype: string
-      help: Short description of dataset contents
+      help: Short description of dataset contents [ACDD(hr), CF(r)]
 
     institution:
       mandatory: False  # Recommended but not mandatory
       dtype: string
-      help: Institution/organisation from where data originated
+      help: Institution/organisation from where data originated [ACDD(r), CF(r)]
 
     source:
       mandatory: False
       dtype: string
-      help: Software used to generate this SPIF file
+      help: Software used to generate this SPIF file [ACDD(r), CF(r)]
 
     source_version:
       mandatory: False
@@ -83,21 +88,22 @@ root:
       dtype: string
       help: >-
           References to any documents describing the data and production of
-          this dataset
+          this dataset [ACDD(s), CF(r)]
 
     history:
       mandatory: False
       dtype: string
       help:  >-
           String providing an audit trail of file modifications. It is
-          recommended that each entry is preceeded by a timestamp indicating
-          date and time of file modification.
+          recommended that each entry is on a new line, is preceeded by a
+          timestamp indicating date and time of file modification, then
+          includes information, username, program and arguments. [ACDD(r), CF(r)]
 
     comment:
       mandatory: False
       dtype: string
       help: >-
-          Any further information pertaining to the production of this dataset
+          Any further information pertaining to the production of this dataset [ACDD(r), CF(r)]
 
   variables:
     start_time:
