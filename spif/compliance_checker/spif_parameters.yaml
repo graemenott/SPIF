@@ -64,12 +64,12 @@ root:
       help: Compliant SPIF files must include the Conventions attribute [ACDD(hr), CF(m)]
 
     title:
-      mandatory: True
+      mandatory: False  # Recommended but not mandatory
       dtype: string
       help: Short description of dataset contents [ACDD(hr), CF(r)]
 
     institution:
-      mandatory: False  # Recommended but not mandatory
+      mandatory: False
       dtype: string
       help: Institution/organisation from where data originated [ACDD(r), CF(r)]
 
@@ -95,7 +95,7 @@ root:
       dtype: string
       help:  >-
           String providing an audit trail of file modifications. It is
-          recommended that each entry is on a new line, is preceeded by a
+          recommended that each entry is on a new line, is proceeded by a
           timestamp indicating date and time of file modification, then
           includes information, username, program and arguments. [ACDD(r), CF(r)]
 
