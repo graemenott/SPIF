@@ -8,11 +8,11 @@ netcdf spif_std_test {
 //
 // author = G. Nott
 // email = graeme.nott@faam.ac.uk
-// creation = Nov 2021
+// creation = Dec 2021
 
 // global attributes:
 
-:Conventions = "SPIF-0.9" ;
+:Conventions = "SPIF-0.9 CF-1.8" ;
 :_Format = "netCDF-4" ;
 :title = "Test SPIF file for compliance code checking" ;
 :institution = "FAAM" ;
@@ -22,7 +22,7 @@ netcdf spif_std_test {
 :references = "https://github.com/graemenott/SPIF" ;
 :creator_name = "Graeme Nott" ;
 :creator_email = "graeme.nott@faam.ac.uk" ;
-:history = "20211123: Initial creation";
+:history = "20211213: Initial creation";
 :comment = "Everything in this file is SPIF-0.9 compliant. Not all of it is mandatory however." ;
 
 variables:
@@ -53,17 +53,17 @@ group: CIP100 {
     // Define dimensions for instrument group.
     dimensions:
         array_dimensions = 1 ;
-        bpp = 4 ;
+        image_colors = 4 ;
 
     // Define group variables
     variables:
-        byte bit_value(bpp) ;
-            bit_value:long_name = "Value of each bit in image." ;
-            bit_value:comment = "Gives the bit values expected to be found in core/image. Usually these will be contiguous but do not have to be." ;
+        byte color_value(image_colors) ;
+            color_value:long_name = "Value of each color in image." ;
+            color_value:comment = "Gives the bit values expected to be found in core/image. Usually these will be contiguous but do not have to be." ;
 
-        float bit_level(bpp) ;
-            bit_level:long_name = "Lower bound of fractional obscuration of photodiode array for each bit value" ;
-            bit_level:comment = "Gives number of shadow/gray levels in image." ;
+        float color_level(image_colors) ;
+            color_level:long_name = "Lower bound of fractional obscuration of photodiode array for each bit value" ;
+            color_level:comment = "Gives number of shadow/gray levels in image." ;
 
         int array_size(array_dimensions) ;
             array_size:long_name = "Number of pixels on the detector" ;
@@ -89,8 +89,8 @@ group: CIP100 {
             pathlength:units = "mm" ;
 
     data:
-        bit_value = 0b, 1b, 2b, 3b ;
-        bit_level = 0, 0.25, 0.50, 0.75 ;
+        color_value = 0b, 1b, 2b, 3b ;
+        color_level = 0, 0.25, 0.50, 0.75 ;
         array_size = 10 ;
         image_size = 10 ;
         resolution = 100 ;
