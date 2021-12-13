@@ -188,32 +188,32 @@ root:
           Number of dimensions of imaging array. OAPs will be 1, CCDs will be 2,
           multi-colour images may be n.
 
-      bpp:
+      image_colors:
         unlimited: False
         mandatory: True
-        help: Bits per pixel used in image data.
+        help: Number of gray levels or colors possible in image. Is 2^color depth.
 
     variables:
-      bit_value:
-        variable_dims: bpp
+      color_level:
+        variable_dims: image_colors
         mandatory: True
-        dtype: byte
+        dtype: float
         help: >-
-            Value of each bit in image. Usually these will be contiguous but
-            do not have to be.
+            Lower bound of fractional obscuration/grayscale/color level of
+            photodiode array for each color_value. Gives number of shadow/gray/
+            color levels in the image.
         attributes:
           long_name:
             mandatory: False
             dtype: string
 
-      bit_level:
-        variable_dims: bpp
-        mandatory: True
-        dtype: float
+      color_value:
+        variable_dims: image_colors
+        mandatory: False
+        dtype: byte
         help: >-
-            Lower bound of fractional obscuration/grayscale level of photodiode
-            array for each bit value. Gives number of shadow/gray levels in
-            the image.
+            Value of each color in image. Usually these will be contiguous but
+            does not have to be.
         attributes:
           long_name:
             mandatory: False
