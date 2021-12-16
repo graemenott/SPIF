@@ -83,6 +83,16 @@ root:
       dtype: string
       help: Version number of software used to generate this SPIF file
 
+    time_coverage_start:
+      mandatory: False
+      dtype: string
+      help: Time of the first data point. String in ISO 8601:2004 format [ACDD(r)]
+
+    time_coverage_end:
+      mandatory: False
+      dtype: string
+      help: Time of the final data point. String in ISO 8601:2004 format [ACDD(r)]
+
     references:
       mandatory: False
       dtype: string
@@ -134,6 +144,11 @@ root:
         help: >-
             Name and version of data acquisition software interfacing with
             instrument
+
+      instrument_manufacturer:
+        mandatory: False
+        dtype: string
+        help: Name of instrument manufacturer
 
       platform:
         mandatory: False
@@ -362,7 +377,7 @@ root:
         startpixel:
           variable_dims: image_num
           mandatory: True
-          dtype: int
+          dtype: uint
           help: >-
               Array index for the first slice of each image in <image>.
               Cross-referencing <startpixel> with <width> and <height> gives
@@ -378,7 +393,7 @@ root:
         width:
           variable_dims: image_num
           mandatory: True
-          dtype: int
+          dtype: uint
           help: Number of pixels across image
           attributes:
             long_name:
@@ -388,7 +403,7 @@ root:
         height:
           variable_dims: image_num
           mandatory: True
-          dtype: int
+          dtype: uint
           help: Number of slices/lines in image
           attributes:
             long_name:
@@ -399,7 +414,7 @@ root:
           variable_dims: image_num
           mandatory: True
           dtype: byte
-          help: Data quality flag for each image
+          help: Image overload flag for each image
           attributes:
             standard_name:
               mandatory: True
