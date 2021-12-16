@@ -22,19 +22,8 @@ netcdf spif_std_test {
 :references = "https://github.com/graemenott/SPIF" ;
 :creator_name = "Graeme Nott" ;
 :creator_email = "graeme.nott@faam.ac.uk" ;
-:history = "20211213: Initial creation";
+:history = "20211216: Initial creation" ;
 :comment = "Everything in this file is SPIF-0.9 compliant. Not all of it is mandatory however." ;
-
-variables:
-    uint start_time ;
-        start_time:long_name = "Reference datetime of image data" ;
-        start_time:timezone = "UTC" ;
-        start_time:units = "hours since 1970-01-01T00:00:00Z" ;
-        start_time:strftime_format = "hours since %Y-%m-%d %H:%M:%S" ;
-
-data:
-    start_time = 439212 ;
-
 
 group: CIP100 {
     // Group information for a fictional CIP100
@@ -53,15 +42,15 @@ group: CIP100 {
     // Define dimensions for instrument group.
     dimensions:
         array_dimensions = 1 ;
-        image_colors = 4 ;
+        pixel_colors = 4 ;
 
     // Define group variables
     variables:
-        byte color_value(image_colors) ;
+        byte color_value(pixel_colors) ;
             color_value:long_name = "Value of each color in image." ;
             color_value:comment = "Gives the bit values expected to be found in core/image. Usually these will be contiguous but do not have to be." ;
 
-        float color_level(image_colors) ;
+        float color_level(pixel_colors) ;
             color_level:long_name = "Lower bound of fractional obscuration of photodiode array for each bit value" ;
             color_level:comment = "Gives number of shadow/gray levels in image." ;
 
@@ -114,7 +103,7 @@ group: CIP100 {
 
             uint64 timestamp(image_num) ;
                 timestamp:standard_name = "time" ;
-                timestamp:long_name = "image arrival time in nanoseconds from reference </start_time>" ;
+                timestamp:long_name = "image arrival time in nanoseconds from reference time" ;
                 timestamp:units = "nanoseconds since 2020-02-08T12:00:00" ;
                 timestamp:timezone = "UTC" ;
                 timestamp:comment = "Comment about how timestamp was determined" ;
@@ -141,14 +130,14 @@ group: CIP100 {
                 overload:flag_meanings = "normal, overload" ;
 
         data:
-            // Artificial 10 x 5 slices image
-            image = 0b, 0b, 0b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 2b, 2b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 2b, 3b, 3b, 3b, 2b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 2b, 2b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 0b, 0b, 0b, 0b ;
-            timestamp = 2681000000000 ;
-            timestamp_flag = 0b ;
-            startpixel = 0 ;
-            width = 10 ;
-            height = 5 ;
-            overload = 0b ;
+            // Artificial 10 x 5 slices image + 10 x 2 image 1us later
+            image = 0b, 0b, 0b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 2b, 2b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 2b, 3b, 3b, 3b, 2b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 2b, 2b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 1b, 0b, 0b, 0b, 0b, 0b, 1b, 2b, 1b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 0b, 2b, 2b, 1b, 0b, 0b, 0b, 0b, 0b ;
+            timestamp = 2681000000000, 2681000001000 ;
+            timestamp_flag = 0b, 0b ;
+            startpixel = 0, 50;
+            width = 10, 10 ;
+            height = 5, 2 ;
+            overload = 0b, 0b ;
 
         } // End group instrument/core
     } // End group instrument
