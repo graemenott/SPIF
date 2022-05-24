@@ -1,0 +1,63 @@
+meta:
+  file_pattern: *.nc
+  canonical_name: SPIF data file
+  description: >-
+    This dataset contains particle image data that conforms to the
+    SPIF-Single Particle Image Format standard.
+  references:
+      - ['SPIF Repository', 'https://github.com/FAAM-146/SPIF']
+      - ['SPIF paper', 'doi:fingers-crossed']
+attributes:
+  title: '<str: derived_from_file>'
+  comment: '<str: derived_from_file>'
+  institution: '<str: derived_from_file>'
+  creator_institution: '<str: derived_from_file>'
+  creator_address: '<str: derived_from_file>'
+  creator_type: '<str: derived_from_file>'
+  creator_name: '<str: derived_from_file>'
+  creator_email: '<str: derived_from_file>'
+  processing_software: '<str: derived_from_file>'
+  processing_software_version: '<str: derived_from_file>'
+  processing_software_url: '<str: derived_from_file>'
+  references: '<str: derived_from_file>'
+  time_coverage_start: '<str: derived_from_file>'
+  time_coverage_end: '<str: derived_from_file>'
+  history: '<str: derived_from_file>'
+
+groups:
+  - meta:
+    name: '<str: derived_from_file>'
+
+
+
+
+      mandatory: False
+      dtype: string
+      help: Time of the first data point. String in ISO 8601:2004 format [ACDD(r)]
+
+    time_coverage_end:
+      mandatory: False
+      dtype: string
+      help: Time of the final data point. String in ISO 8601:2004 format [ACDD(r)]
+
+    references:
+      mandatory: False
+      dtype: string
+      help: >-
+          References to any documents describing the data and production of
+          this dataset. May include link or DOI to source code [ACDD(s), CF(r)]
+
+    history:
+      mandatory: False
+      dtype: string
+      help:  >-
+          String providing an audit trail of file modifications. It is
+          recommended that each entry is on a new line, is proceeded by a
+          timestamp indicating date and time of file modification, then
+          includes information, username, program and arguments. [ACDD(r), CF(r)]
+
+    comment:
+      mandatory: False
+      dtype: string
+      help: >-
+          Any further information pertaining to the production of this dataset [ACDD(r), CF(r)]
