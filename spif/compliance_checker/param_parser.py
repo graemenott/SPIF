@@ -335,7 +335,7 @@ class stdParams(ncParams):
 
         pass
 
-    def get_vars(self, param)
+    def get_vars(self, param):
         """ Find all variables of group, param
         """
 
