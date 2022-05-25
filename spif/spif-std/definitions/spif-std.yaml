@@ -26,8 +26,16 @@ attributes:
 
 groups:
   - meta:
-    name: '<str: derived_from_file>'
+      name: '<str: derived_from_file>'
 
+    attributes:
+
+    variables:
+
+
+    groups:
+      - meta:
+          name: 'core'
 
 
 
