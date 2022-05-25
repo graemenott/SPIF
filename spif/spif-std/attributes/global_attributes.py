@@ -3,6 +3,7 @@ from typing import Optional
 import datetime
 
 from pydantic import Field, BaseModel
+from pydantic import root_validator
 
 from ..constants import *
 
@@ -97,5 +98,6 @@ class GlobalAttributes(BaseModel):
     )
 
 
-
+ # Allow the use of placeholders, which will be subbed out with examples
+subs_placeholders = root_validator(pre=True, allow_reuse=True)(substitute_placeholders)
 
