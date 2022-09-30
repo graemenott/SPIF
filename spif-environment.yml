@@ -1,8 +1,8 @@
 # conda environment for SPIF repository
 name: spif
 channels:
-  - defaults
   - conda-forge
+  - defaults
 dependencies:
   - python>=3.10
   - Cython
