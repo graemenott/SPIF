@@ -520,109 +520,528 @@
 	"buffers":
 	[
 		{
-			"file": "spif/compliance_checker/spif_globals.py",
+			"file": "spif/spif-std/definitions/spif-std.yaml",
 			"settings":
 			{
-				"buffer_size": 15914,
-				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
-		},
-		{
-			"file": "spif/compliance_checker/attributes/variable_attributes.py",
-			"settings":
-			{
-				"buffer_size": 7282,
-				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
-		},
-		{
-			"file": "spif/compliance_checker/attributes/global_attributes.py",
-			"settings":
-			{
-				"buffer_size": 16851,
+				"buffer_size": 2202,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			},
 			"undo_stack":
 			[
 				[
-					5,
+					6,
+					1,
+					"reindent",
+					null,
+					"AQAAACwEAAAAAAAAMAQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAsBAAAAAAAACwEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					7,
+					2,
+					"left_delete",
+					null,
+					"AgAAAC4EAAAAAAAALgQAAAAAAAACAAAAICAsBAAAAAAAACwEAAAAAAAAAgAAACAg",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAwBAAAAAAAADAEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					8,
 					1,
 					"insert",
 					{
-						"characters": "SPIF"
+						"characters": "`"
 					},
-					"BQAAAGABAAAAAAAAYQEAAAAAAAAAAAAAYQEAAAAAAABhAQAAAAAAAAQAAABGQUFNYQEAAAAAAABiAQAAAAAAAAAAAABiAQAAAAAAAGMBAAAAAAAAAAAAAGMBAAAAAAAAZAEAAAAAAAAAAAAA",
-					"AwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAGABAAAAAAAAZAEAAAAAAAAAAAAAAADwvw"
+					"AQAAACwEAAAAAAAALQQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAsBAAAAAAAACwEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					9,
+					1,
+					"left_delete",
+					null,
+					"AQAAACwEAAAAAAAALAQAAAAAAAABAAAAYA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAtBAAAAAAAAC0EAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					10,
+					1,
+					"insert",
+					{
+						"characters": "variables:"
+					},
+					"CgAAACwEAAAAAAAALQQAAAAAAAAAAAAALQQAAAAAAAAuBAAAAAAAAAAAAAAuBAAAAAAAAC8EAAAAAAAAAAAAAC8EAAAAAAAAMAQAAAAAAAAAAAAAMAQAAAAAAAAxBAAAAAAAAAAAAAAxBAAAAAAAADIEAAAAAAAAAAAAADIEAAAAAAAAMwQAAAAAAAAAAAAAMwQAAAAAAAA0BAAAAAAAAAAAAAA0BAAAAAAAADUEAAAAAAAAAAAAADUEAAAAAAAANgQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAsBAAAAAAAACwEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					12,
+					1,
+					"insert",
+					{
+						"characters": "\t"
+					},
+					"AQAAACwEAAAAAAAALgQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAsBAAAAAAAACwEAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					14,
+					1,
+					"insert",
+					{
+						"characters": "\n\n"
+					},
+					"BgAAADgEAAAAAAAAOQQAAAAAAAAAAAAAOQQAAAAAAAA7BAAAAAAAAAAAAAA7BAAAAAAAAD0EAAAAAAAAAAAAAD0EAAAAAAAAPgQAAAAAAAAAAAAAPgQAAAAAAABCBAAAAAAAAAAAAAA5BAAAAAAAADkEAAAAAAAABAAAACAgICA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA4BAAAAAAAADgEAAAAAAAA////////738"
+				],
+				[
+					17,
+					1,
+					"insert",
+					{
+						"characters": "attribue"
+					},
+					"CQAAACsEAAAAAAAALAQAAAAAAAAAAAAAOwQAAAAAAAA7BAAAAAAAAAQAAAAgICAgLAQAAAAAAAAtBAAAAAAAAAAAAAAtBAAAAAAAAC4EAAAAAAAAAAAAAC4EAAAAAAAALwQAAAAAAAAAAAAALwQAAAAAAAAwBAAAAAAAAAAAAAAwBAAAAAAAADEEAAAAAAAAAAAAADEEAAAAAAAAMgQAAAAAAAAAAAAAMgQAAAAAAAAzBAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAArBAAAAAAAACsEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					18,
+					1,
+					"left_delete",
+					null,
+					"AQAAADIEAAAAAAAAMgQAAAAAAAABAAAAZQ",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAzBAAAAAAAADMEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					19,
+					1,
+					"insert",
+					{
+						"characters": "tes:"
+					},
+					"BAAAADIEAAAAAAAAMwQAAAAAAAAAAAAAMwQAAAAAAAA0BAAAAAAAAAAAAAA0BAAAAAAAADUEAAAAAAAAAAAAADUEAAAAAAAANgQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAyBAAAAAAAADIEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					20,
+					1,
+					"indent",
+					null,
+					"AQAAACsEAAAAAAAALQQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA2BAAAAAAAADYEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					21,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AwAAADgEAAAAAAAAOQQAAAAAAAAAAAAAOQQAAAAAAAA7BAAAAAAAAAAAAAA7BAAAAAAAAD0EAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA4BAAAAAAAADgEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					23,
+					1,
+					"insert",
+					{
+						"characters": "\n\ng"
+					},
+					"BAAAAEwEAAAAAAAATQQAAAAAAAAAAAAAOQQAAAAAAAA5BAAAAAAAAAQAAAAgICAgSQQAAAAAAABKBAAAAAAAAAAAAABKBAAAAAAAAEsEAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABMBAAAAAAAAEwEAAAAAAAAAAAAAAAAQkA"
+				],
+				[
+					24,
+					1,
+					"insert",
+					{
+						"characters": "roips"
+					},
+					"BQAAAEsEAAAAAAAATAQAAAAAAAAAAAAATAQAAAAAAABNBAAAAAAAAAAAAABNBAAAAAAAAE4EAAAAAAAAAAAAAE4EAAAAAAAATwQAAAAAAAAAAAAATwQAAAAAAABQBAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABLBAAAAAAAAEsEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					25,
+					3,
+					"left_delete",
+					null,
+					"AwAAAE8EAAAAAAAATwQAAAAAAAABAAAAc04EAAAAAAAATgQAAAAAAAABAAAAcE0EAAAAAAAATQQAAAAAAAABAAAAaQ",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABQBAAAAAAAAFAEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					26,
+					1,
+					"insert",
+					{
+						"characters": "upo"
+					},
+					"AwAAAE0EAAAAAAAATgQAAAAAAAAAAAAATgQAAAAAAABPBAAAAAAAAAAAAABPBAAAAAAAAFAEAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABNBAAAAAAAAE0EAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					27,
+					2,
+					"left_delete",
+					null,
+					"AgAAAE8EAAAAAAAATwQAAAAAAAABAAAAb04EAAAAAAAATgQAAAAAAAABAAAAcA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABQBAAAAAAAAFAEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					28,
+					1,
+					"insert",
+					{
+						"characters": "ps:"
+					},
+					"AwAAAE4EAAAAAAAATwQAAAAAAAAAAAAATwQAAAAAAABQBAAAAAAAAAAAAABQBAAAAAAAAFEEAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABOBAAAAAAAAE4EAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					30,
+					1,
+					"indent",
+					null,
+					"AQAAAEoEAAAAAAAATAQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABRBAAAAAAAAFEEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					40,
+					1,
+					"insert",
+					{
+						"characters": "\t"
+					},
+					"AQAAAC0EAAAAAAAALwQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAtBAAAAAAAAC0EAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					43,
+					1,
+					"insert",
+					{
+						"characters": "\t"
+					},
+					"AQAAAD4EAAAAAAAAQAQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA+BAAAAAAAAD4EAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					48,
+					1,
+					"insert",
+					{
+						"characters": "\t"
+					},
+					"AQAAAFAEAAAAAAAAUgQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABQBAAAAAAAAFAEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					55,
+					1,
+					"insert",
+					{
+						"characters": "\t"
+					},
+					"AQAAAAkEAAAAAAAACwQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAJBAAAAAAAAAkEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					58,
+					1,
+					"reindent",
+					null,
+					"AQAAAE4EAAAAAAAAVAQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABOBAAAAAAAAE4EAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					59,
+					2,
+					"left_delete",
+					null,
+					"AgAAAFIEAAAAAAAAUgQAAAAAAAACAAAAICBQBAAAAAAAAFAEAAAAAAAAAgAAACAg",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABUBAAAAAAAAFQEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					60,
+					1,
+					"insert",
+					{
+						"characters": "-meta"
+					},
+					"BQAAAFAEAAAAAAAAUQQAAAAAAAAAAAAAUQQAAAAAAABSBAAAAAAAAAAAAABSBAAAAAAAAFMEAAAAAAAAAAAAAFMEAAAAAAAAVAQAAAAAAAAAAAAAVAQAAAAAAABVBAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABQBAAAAAAAAFAEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					62,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAAFEEAAAAAAAAUgQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABRBAAAAAAAAFEEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					64,
+					1,
+					"insert",
+					{
+						"characters": ":"
+					},
+					"AQAAAFYEAAAAAAAAVwQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABWBAAAAAAAAFYEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					66,
+					1,
+					"reindent",
+					null,
+					"AQAAAFgEAAAAAAAAXAQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABYBAAAAAAAAFgEAAAAAAAAAAAAAABAVEA"
+				],
+				[
+					67,
+					1,
+					"insert",
+					{
+						"characters": "\tname:L"
+					},
+					"BwAAAFwEAAAAAAAAXgQAAAAAAAAAAAAAXgQAAAAAAABfBAAAAAAAAAAAAABfBAAAAAAAAGAEAAAAAAAAAAAAAGAEAAAAAAAAYQQAAAAAAAAAAAAAYQQAAAAAAABiBAAAAAAAAAAAAABiBAAAAAAAAGMEAAAAAAAAAAAAAGMEAAAAAAAAZAQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABcBAAAAAAAAFwEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					68,
+					2,
+					"left_delete",
+					null,
+					"AgAAAGMEAAAAAAAAYwQAAAAAAAABAAAATGIEAAAAAAAAYgQAAAAAAAABAAAAOg",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABkBAAAAAAAAGQEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					69,
+					1,
+					"insert",
+					{
+						"characters": "L:"
+					},
+					"AgAAAGIEAAAAAAAAYwQAAAAAAAAAAAAAYwQAAAAAAABkBAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABiBAAAAAAAAGIEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					70,
+					2,
+					"left_delete",
+					null,
+					"AgAAAGMEAAAAAAAAYwQAAAAAAAABAAAAOmIEAAAAAAAAYgQAAAAAAAABAAAATA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABkBAAAAAAAAGQEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					71,
+					1,
+					"insert",
+					{
+						"characters": ":"
+					},
+					"AQAAAGIEAAAAAAAAYwQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABiBAAAAAAAAGIEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					72,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AwAAAGMEAAAAAAAAZAQAAAAAAAAAAAAAZAQAAAAAAABqBAAAAAAAAAAAAABqBAAAAAAAAGwEAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABjBAAAAAAAAGMEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					80,
+					1,
+					"cut",
+					null,
+					"AQAAAE4EAAAAAAAATgQAAAAAAAAWAAAAICAtIG1ldGE6CiAgICAgIG5hbWU6Cg",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABOBAAAAAAAAGQEAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					81,
+					1,
+					"right_delete",
+					null,
+					"AQAAAE4EAAAAAAAATgQAAAAAAAACAAAAICA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABOBAAAAAAAAE4EAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					83,
+					1,
+					"insert",
+					{
+						"characters": "\n\n"
+					},
+					"AwAAAGEEAAAAAAAAYgQAAAAAAAAAAAAATgQAAAAAAABOBAAAAAAAAAYAAAAgICAgICBcBAAAAAAAAF0EAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABhBAAAAAAAAGEEAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					85,
+					1,
+					"paste",
+					null,
+					"AQAAAFsEAAAAAAAAcQQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABbBAAAAAAAAFsEAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					87,
+					1,
+					"insert",
+					{
+						"characters": "\t\t"
+					},
+					"AgAAAFsEAAAAAAAAXQQAAAAAAAAAAAAAXQQAAAAAAABfBAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABbBAAAAAAAAFsEAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					89,
+					1,
+					"insert",
+					{
+						"characters": "\t\t"
+					},
+					"AgAAAG0EAAAAAAAAbwQAAAAAAAAAAAAAbwQAAAAAAABxBAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABtBAAAAAAAAG0EAAAAAAAAAAAAAAAAQkA"
+				],
+				[
+					94,
+					1,
+					"insert",
+					{
+						"characters": " 'IOn"
+					},
+					"BQAAAHgEAAAAAAAAeQQAAAAAAAAAAAAAeQQAAAAAAAB6BAAAAAAAAAAAAAB6BAAAAAAAAHsEAAAAAAAAAAAAAHsEAAAAAAAAfAQAAAAAAAAAAAAAfAQAAAAAAAB9BAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAB4BAAAAAAAAHgEAAAAAAAA////////738"
+				],
+				[
+					95,
+					3,
+					"left_delete",
+					null,
+					"AwAAAHwEAAAAAAAAfAQAAAAAAAABAAAAbnsEAAAAAAAAewQAAAAAAAABAAAAT3oEAAAAAAAAegQAAAAAAAABAAAASQ",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAB9BAAAAAAAAH0EAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					96,
+					1,
+					"insert",
+					{
+						"characters": "Instrument"
+					},
+					"CgAAAHoEAAAAAAAAewQAAAAAAAAAAAAAewQAAAAAAAB8BAAAAAAAAAAAAAB8BAAAAAAAAH0EAAAAAAAAAAAAAH0EAAAAAAAAfgQAAAAAAAAAAAAAfgQAAAAAAAB/BAAAAAAAAAAAAAB/BAAAAAAAAIAEAAAAAAAAAAAAAIAEAAAAAAAAgQQAAAAAAAAAAAAAgQQAAAAAAACCBAAAAAAAAAAAAACCBAAAAAAAAIMEAAAAAAAAAAAAAIMEAAAAAAAAhAQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAB6BAAAAAAAAHoEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					97,
+					1,
+					"insert",
+					{
+						"characters": " 1'"
+					},
+					"AwAAAIQEAAAAAAAAhQQAAAAAAAAAAAAAhQQAAAAAAACGBAAAAAAAAAAAAACGBAAAAAAAAIcEAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACEBAAAAAAAAIQEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					99,
+					1,
+					"left_delete",
+					null,
+					"AQAAAIQEAAAAAAAAhAQAAAAAAAABAAAAIA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACFBAAAAAAAAIUEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					100,
+					1,
+					"insert",
+					{
+						"characters": "-"
+					},
+					"AQAAAIQEAAAAAAAAhQQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACEBAAAAAAAAIQEAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					103,
+					1,
+					"insert",
+					{
+						"characters": "core"
+					},
+					"BQAAAHoEAAAAAAAAewQAAAAAAAAAAAAAewQAAAAAAAB7BAAAAAAAAAwAAABJbnN0cnVtZW50LTF7BAAAAAAAAHwEAAAAAAAAAAAAAHwEAAAAAAAAfQQAAAAAAAAAAAAAfQQAAAAAAAB+BAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAB6BAAAAAAAAIYEAAAAAAAAAAAAAAAA8L8"
 				]
 			]
 		},
 		{
-			"file": "/home/graeme/git/faam-data/faam_data/definitions/core_faam_YYYYmmdd_v005_rN_xNNN_1hz.yaml",
+			"file": "spif/spif-std/defaults.py",
 			"settings":
 			{
-				"buffer_size": 100970,
+				"buffer_size": 504,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "spif/spif-std/attributes/global_attributes.py",
+			"settings":
+			{
+				"buffer_size": 3420,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			},
 			"undo_stack":
 			[
+				[
+					7,
+					1,
+					"",
+					null,
+					"AQAAAJYMAAAAAAAAOg0AAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA6AgAAAAAAADoCAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					11,
+					1,
+					"left_delete",
+					null,
+					"AQAAAN8MAAAAAAAA3wwAAAAAAAAEAAAAICAgIA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADjDAAAAAAAAOMMAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					12,
+					1,
+					"",
+					null,
+					"AQAAAFQAAAAAAAAAdwAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADfDAAAAAAAAN8MAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					13,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AQAAAHcAAAAAAAAAeAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAB3AAAAAAAAAHcAAAAAAAAAAAAAAAAA8L8"
+				]
 			]
 		},
 		{
-			"file": "/home/graeme/git/faam-data/faam_data/validation.py",
+			"file": "spif/spif-std/attributes/group_attributes.py",
 			"settings":
 			{
-				"buffer_size": 1351,
+				"buffer_size": 2458,
 				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
+			}
 		},
 		{
-			"file": "/home/graeme/git/faam-data/faam_data/defaults.py",
+			"file": "spif/spif-std/attributes/variable_attributes.py",
 			"settings":
 			{
-				"buffer_size": 2135,
-				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
-		},
-		{
-			"file": "/home/graeme/git/faam-data/faam_data/constants.py",
-			"settings":
-			{
-				"buffer_size": 1222,
-				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
-		},
-		{
-			"file": "/home/graeme/git/vocal/vocal_help.rst",
-			"settings":
-			{
-				"buffer_size": 1530,
-				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
-		},
-		{
-			"file": "spif/compliance_checker/spif_parameters2.yaml",
-			"settings":
-			{
-				"buffer_size": 13184,
+				"buffer_size": 1256,
 				"line_ending": "Unix"
 			}
 		}
@@ -663,6 +1082,16 @@
 	},
 	"file_history":
 	[
+		"/home/graeme/git/spif/spif-vocal.sublime-project",
+		"/home/graeme/git/spif/spif/compliance_checker/spif_parameters2.yaml",
+		"/home/graeme/git/vocal/vocal_help.rst",
+		"/home/graeme/git/faam-data/faam_data/constants.py",
+		"/home/graeme/git/faam-data/faam_data/defaults.py",
+		"/home/graeme/git/faam-data/faam_data/validation.py",
+		"/home/graeme/git/faam-data/faam_data/definitions/core_faam_YYYYmmdd_v005_rN_xNNN_1hz.yaml",
+		"/home/graeme/git/spif/spif/compliance_checker/attributes/global_attributes.py",
+		"/home/graeme/git/spif/spif/compliance_checker/spif_globals.py",
+		"/home/graeme/git/spif/spif/compliance_checker/attributes/variable_attributes.py",
 		"/home/graeme/git/spif-std/definitions/spif-std.yaml",
 		"/home/graeme/git/spif/spif/compliance_checker/attributes/group_attributes.py",
 		"/home/graeme/git/faam-data/faam_data/attributes/group.py",
@@ -672,7 +1101,6 @@
 		"/home/graeme/Documents/work/gdrive/Instruments/PCASP/calibrations/PCASP-1&2_20220420_postACAO/PCASP1_dehs_times_20220421.txt",
 		"/home/graeme/Documents/work/gdrive/Instruments/PCASP/calibrations/PCASP-1&2_20220420_postACAO/PCASP2_dehs_times_20220421.txt",
 		"/home/graeme/Documents/work/ARNA-2/data/calibrations/CDP_cals/Master/ACSIS-6_ARNA-2_master_scs_binboundaries.csv",
-		"/home/graeme/git/spif/spif/compliance_checker/spif_globals.py",
 		"/home/graeme/git/faam-docs/FAAM_StdDoc/FAAM_StdDoc.sty",
 		"/home/graeme/git/spif/spif/docsrc/Makefile",
 		"/home/graeme/git/cf-checker/src/cfchecker/cfchecks.py",
@@ -781,20 +1209,11 @@
 		"/home/graeme/git/cpps/cpps/processors/register.py",
 		"/home/graeme/git/cpps/cpps/processors/dmt/__init__.py",
 		"/home/graeme/git/cpps/cpps/processors/dmt/cas.py",
-		"/home/graeme/git/cpps/cpps/processors/__init__.py",
-		"/home/graeme/git/cpps/cpps/accessors/__init__.py",
-		"/home/graeme/git/cpps/cpps/accessors/models_nc.py",
-		"/home/graeme/git/cpps/cpps/process.py",
-		"/home/graeme/git/cpps/cpps/accessors/readers_dmt.py",
-		"/home/graeme/Documents/work/ARNA-2/data/C223/flight-sum_faam_20200211_r0_c223.csv",
-		"/home/graeme/git/cpps/cpps/processors/general/probe.py",
-		"/home/graeme/git/cpps/testing/cpps_test.py",
-		"/home/graeme/git/cpps/cpps/readme.rst",
-		"/home/graeme/git/faam-docs/FAAM_DataLevels/FAAM_DataLevels.tex"
+		"/home/graeme/git/cpps/cpps/processors/__init__.py"
 	],
 	"find":
 	{
-		"height": 43.0
+		"height": 27.0
 	},
 	"find_in_files":
 	{
@@ -900,86 +1319,27 @@
 			[
 				{
 					"buffer": 0,
-					"file": "spif/compliance_checker/spif_globals.py",
+					"file": "spif/spif-std/definitions/spif-std.yaml",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15914,
+						"buffer_size": 2202,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7,
-								15
+								1151,
+								1151
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
+							"syntax": "Packages/YAML/YAML.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 164.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"stack_multiselect": false,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "spif/compliance_checker/attributes/variable_attributes.py",
-					"selected": true,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7282,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1829,
-								2042
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 3696.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"stack_multiselect": false,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "spif/compliance_checker/attributes/global_attributes.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 16851,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6851,
-								6992
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1017.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -987,109 +1347,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "/home/graeme/git/faam-data/faam_data/definitions/core_faam_YYYYmmdd_v005_rN_xNNN_1hz.yaml",
+					"buffer": 1,
+					"file": "spif/spif-std/defaults.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 100970,
+						"buffer_size": 504,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1474,
-								1474
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/YAML/YAML.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 198.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"stack_multiselect": false,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/home/graeme/git/faam-data/faam_data/validation.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1351,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								476,
-								476
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"stack_multiselect": false,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/home/graeme/git/faam-data/faam_data/defaults.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2135,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1884,
-								1884
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"stack_multiselect": false,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/home/graeme/git/faam-data/faam_data/constants.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1222,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								932,
-								932
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1105,64 +1376,90 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "/home/graeme/git/vocal/vocal_help.rst",
+					"buffer": 2,
+					"file": "spif/spif-std/attributes/global_attributes.py",
+					"selected": true,
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1530,
+						"buffer_size": 3420,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1444,
-								1444
+								3420,
+								3420
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/RestructuredText/reStructuredText.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 462.0,
+						"translation.y": 1311.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 0,
 					"stack_multiselect": false,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
-					"file": "spif/compliance_checker/spif_parameters2.yaml",
+					"buffer": 3,
+					"file": "spif/spif-std/attributes/group_attributes.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13184,
+						"buffer_size": 2458,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3670,
-								3670
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/YAML/YAML.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2008.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "spif/spif-std/attributes/variable_attributes.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1256,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"stack_multiselect": false,
 					"type": "text"
 				}
@@ -1171,7 +1468,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 31.0
+		"height": 27.0
 	},
 	"input":
 	{
@@ -1212,7 +1509,7 @@
 	"project": "spif-vocal.sublime-project",
 	"replace":
 	{
-		"height": 58.0
+		"height": 50.0
 	},
 	"save_all_on_build": true,
 	"select_file":
